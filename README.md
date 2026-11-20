@@ -90,25 +90,21 @@ Renovate's custom datasource ignores the extra fields (`seed`, `immutable`,
 `retagged`, `floating`); it reads `version`, `releaseTimestamp`, `digest` and
 `isDeprecated`.
 
-### Renovate settings for floating tags
+### Renovate and floating tags
 
-Renovate ages a digest update against the newest _version_ matching the
-current value. For `4` or `4.16` that is the ledger entry itself, whose date is
-already soaked, so the normal `minimumReleaseAge` passes. For `latest` or
-`beta` nothing matches, and under `timestamp-required` Renovate holds the
-update forever. **Only for images backed by this ledger**, set
-`minimumReleaseAge: "0"` for those tags: the ledger has already soaked the
-digest it exposes. Never do this for an image that isn't in `images.txt`.
-
-```json5
-{
-  matchPackageNames: ["ghcr.io/home-assistant/home-assistant"],
-  overrideDatasource: "custom.first-seen",
-  versioning: "docker",
-  matchCurrentValue: "/^(latest|beta)$/",
-  minimumReleaseAge: "0",
-}
-```
+- **Numeric floating tags (`4`, `4.16`) work.** Docker versioning treats them
+  as versions, so Renovate reads them from `releases`: the digest update takes
+  the ledger's soaked `digest` for that tag (`resolveUpdateDigest`), and ages
+  it against that entry's `releaseTimestamp`, which is already past the soak.
+  The normal `minimumReleaseAge` passes; no extra setting is needed.
+- **Named floating tags (`latest`, `beta`) can't use the ledger yet.** Docker
+  versioning doesn't treat them as versions, so Renovate skips the release
+  lookup and asks the datasource for the digest directly, and the custom
+  datasource's `getDigest()` returns nothing. The ledger still records their
+  soaked digests (`releases`, `floating`) for reporting, but **don't point a
+  `latest`/`beta` dependency at `custom.first-seen`**: it would never update.
+  Keep those on the docker datasource and treat their soak as an open gap
+  until Renovate offers a lookup path for them.
 
 ## Trust model
 
