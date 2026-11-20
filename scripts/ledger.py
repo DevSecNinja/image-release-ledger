@@ -237,6 +237,7 @@ def update_image(
     # When each digest was first seen under any tag of the image.
     first_seen: dict[str, str] = {}
     sightings = [(e["digest"], e["releaseTimestamp"]) for e in releases.values()]
+    sightings += [(r["to"], r["seen"]) for e in releases.values() for r in e.get("retagged", [])]
     sightings += [(h["digest"], h["seen"]) for history in floating.values() for h in history]
     for digest, seen in sightings:
         first_seen[digest] = min(seen, first_seen.get(digest, seen))
@@ -245,15 +246,20 @@ def update_image(
             h["seen"] = first_seen[h["digest"]]
     cutoff = shift(now, soak_days)
     exposed = []
-    for tag in sorted(t for t in current if not VERSION_TAG.match(t)):
-        digest = digest_of(tag)
+    for tag in sorted(floating.keys() | {t for t in current if not VERSION_TAG.match(t)}):
         history = floating.setdefault(tag, [])
-        if not history or history[-1]["digest"] != digest:
-            history.append({"digest": digest, "seen": min(now, first_seen.get(digest, now))})
-            first_seen.setdefault(digest, history[-1]["seen"])
+        if tag in current:
+            digest = digest_of(tag)
+            if not history or history[-1]["digest"] != digest:
+                history.append({"digest": digest, "seen": min(now, first_seen.get(digest, now))})
+                first_seen.setdefault(digest, history[-1]["seen"])
         soaked = next((h for h in reversed(history) if h["seen"] <= cutoff), None)
         if soaked:
-            exposed.append({"version": tag, "releaseTimestamp": soaked["seen"], "digest": soaked["digest"]})
+            entry = {"version": tag, "releaseTimestamp": soaked["seen"], "digest": soaked["digest"]}
+            if tag not in current:
+                # Gone from the registry: keep it visible, like an exact tag.
+                entry["isDeprecated"] = True
+            exposed.append(entry)
 
     entries = sorted([*releases.values(), *exposed], key=lambda r: (r["releaseTimestamp"], r["version"]))
     ledger = {"releases": entries}
@@ -319,6 +325,24 @@ class GitHub:
             if len(releases) < 100:
                 break
         return found
+
+    def open_issues_by_title(self) -> dict[str, str]:
+        """Title -> URL of every open issue (not pull request), all pages."""
+        titles: dict[str, str] = {}
+        for page in range(1, 51):
+            _, issues = self.rest("GET", f"repos/{self.repository}/issues?state=open&per_page=100&page={page}")
+            for issue in issues:
+                if not issue.get("pull_request"):
+                    titles.setdefault(issue["title"], issue.get("html_url", ""))
+            if len(issues) < 100:
+                return titles
+        raise LedgerError("more than 5000 open issues")
+
+    def comment_issue(self, url: str, body: str) -> None:
+        match = re.search(r"/issues/(\d+)$", url)
+        if not match:
+            raise LedgerError(f"not an issue URL: {url}")
+        self.rest("POST", f"repos/{self.repository}/issues/{match[1]}/comments", {"body": body}, ok=(201,))
 
     def open_issue(self, title: str, body: str) -> str:
         _, issue = self.rest("POST", f"repos/{self.repository}/issues", {"title": title, "body": body}, ok=(201,))
@@ -428,11 +452,10 @@ def notify_retags(github: GitHub, ledgers: list[tuple[dict, dict]], apply: bool)
             print(f"would open an issue for {image['name']}:{entry['version']} ({record['to']})")
         return 0
     try:
-        _, open_issues = github.rest("GET", f"repos/{github.repository}/issues?state=open&per_page=100")
+        by_title = github.open_issues_by_title()
     except (LedgerError, OSError) as error:
         print(f"::error::could not list issues, moved-tag notifications retry next run: {error}")
         return 1
-    by_title = {i["title"]: i.get("html_url", "") for i in open_issues if not i.get("pull_request")}
     failed = 0
     for image, entry, record in pending:
         title = "Tag moved: " + image["name"] + ":" + entry["version"]
@@ -445,8 +468,12 @@ def notify_retags(github: GitHub, ledgers: list[tuple[dict, dict]], apply: bool)
             "Check the upstream project before trusting the new digest."
         )
         try:
-            record["issue"] = by_title.get(title) or github.open_issue(title, body)
-            by_title[title] = record["issue"]
+            if title in by_title:
+                # Still open from an earlier move: add this transition to it.
+                github.comment_issue(by_title[title], body)
+                record["issue"] = by_title[title]
+            else:
+                record["issue"] = by_title[title] = github.open_issue(title, body)
             print(f"Moved-tag issue: {record['issue']}")
         except (LedgerError, OSError) as error:
             print(f"::error::could not open an issue for {image['name']}:{entry['version']}: {error}")
