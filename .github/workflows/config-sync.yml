@@ -29,5 +29,9 @@ jobs:
     # and needs no "Allow GitHub Actions to create and approve pull requests"
     # setting. The App ID is read from the AUTOMATION_APP_ID variable; pass
     # the key. See https://github.com/DevSecNinja/.github/blob/main/docs/automation-app.md
+    with:
+      # Also create the missing templates (.mise.toml, ruff.toml, CODEOWNERS);
+      # existing files are never overwritten.
+      sync-templates: true
     secrets:
       AUTOMATION_APP_PRIVATE_KEY: ${{ secrets.AUTOMATION_APP_PRIVATE_KEY }}

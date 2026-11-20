@@ -29,13 +29,16 @@ concurrency:
 
 jobs:
   lint:
-    uses: DevSecNinja/.github/.github/workflows/lint.yml@c93b7670605e165cc757724b690deb130784e803 # v4.4.0
+    uses: DevSecNinja/.github/.github/workflows/lint.yml@5ea4b82920af1094deb93888e21bc200852eb74c # v4.9.1
     permissions:
       contents: read
       security-events: write
     with:
       # renovate: datasource=github-releases depName=jdx/mise
       mise-version: "2026.11.9"
+      # Fail the run when a linter fails (the reusable workflow defaults to a
+      # report-only run).
+      lint-fail-on-error: true
       # The linters run from the repo's own mise config (.mise.toml): pin the
       # tools it needs there. Every linter is on by default; turning off
       # gitleaks, trivy, zizmor or checkov needs a repo-steward exception
