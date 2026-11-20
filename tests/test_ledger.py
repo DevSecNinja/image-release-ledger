@@ -8,6 +8,7 @@ import io
 import json
 import sys
 import unittest
+import urllib.error
 from contextlib import redirect_stdout
 from pathlib import Path
 
@@ -184,12 +185,27 @@ class RunTest(unittest.TestCase):
             routes[("GET", f"{API}/repos/DevSecNinja/ledger/contents/{path}?ref=data")] = file_route(existing)
         return routes, commits
 
-    def run_ledger(self, routes, apply=True):
+    def run_ledger(self, routes, apply=True, images=None):
         fake = Fake(routes)
         github = ledger.GitHub(fake, "token", "DevSecNinja/ledger")
         with redirect_stdout(io.StringIO()) as out:
-            code = ledger.run(ledger.parse_images(self.IMAGES), github, fake, "data", NOW, apply)
+            code = ledger.run(ledger.parse_images(images or self.IMAGES), github, fake, "data", NOW, apply)
         return code, fake, out.getvalue()
+
+    def test_a_network_error_skips_only_that_image(self):
+        routes, commits = self.routes()
+
+        def unreachable(_data):
+            raise urllib.error.URLError("name resolution failed")
+
+        routes[("GET", "https://ghcr.io/v2/example/down/tags/list?n=1000")] = unreachable
+        code, _fake, out = self.run_ledger(
+            routes, images="ghcr.io/example/down\nghcr.io/example/app seed=github-releases:example/app\n"
+        )
+        self.assertEqual(code, 1)
+        self.assertIn("::error::ghcr.io/example/down", out)
+        (addition,) = commits[0]["variables"]["input"]["fileChanges"]["additions"]
+        self.assertEqual(addition["path"], "images/ghcr.io/example/app.json")
 
     def test_commits_good_images_signed_on_the_data_branch_and_fails_for_broken_ones(self):
         routes, commits = self.routes()

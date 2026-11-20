@@ -273,7 +273,7 @@ def run(images: list[dict], github: GitHub, transport: Transport, branch: str, n
                 return registry.digest(repo, tag)
 
             ledger = update_image(existing, tags, digest_of, now, seed, source)
-        except (LedgerError, ValueError, KeyError) as error:
+        except (LedgerError, ValueError, KeyError, OSError) as error:
             print(f"::error::{image['name']}: {error}")
             failures += 1
             continue
