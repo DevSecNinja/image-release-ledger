@@ -37,6 +37,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import copy
 import json
 import os
 import re
@@ -178,7 +179,9 @@ def update_image(
     """
     tags = [t for t in tags if not ARTIFACT_TAG.match(t)]
     releases = {
-        r["version"]: dict(r) for r in (existing or {}).get("releases", []) if not ARTIFACT_TAG.match(r["version"])
+        r["version"]: copy.deepcopy(r)
+        for r in (existing or {}).get("releases", [])
+        if not ARTIFACT_TAG.match(r["version"])
     }
     seeding = existing is None
     current = set(tags)
@@ -296,8 +299,7 @@ def ledger_path(image: dict) -> str:
 
 def run(images: list[dict], github: GitHub, transport: Transport, branch: str, now: str, apply: bool) -> int:
     head = github.branch_head(branch) if apply else ""
-    changed: dict[str, str] = {}
-    added: list[str] = []
+    results: list[tuple[dict, str, dict | None, dict, set[str]]] = []
     events: list[dict] = []
     failures = 0
     for image in images:
@@ -320,49 +322,86 @@ def run(images: list[dict], github: GitHub, transport: Transport, branch: str, n
             failures += 1
             continue
         events += [{"image": image["name"], **e} for e in image_events]
+        results.append((image, path, existing, ledger, known))
+    for event in events:
+        print(f"::warning::{event['image']}:{event['tag']} moved from {event['from']} to {event['to']}")
+    write_summary(events)
+    # Before the commit, so the issue URLs are stored with the records; a record
+    # without one is retried on the next run.
+    failures += notify_retags(github, [(image, ledger) for image, _, _, ledger, _ in results], apply)
+    changed: dict[str, str] = {}
+    added: list[str] = []
+    for image, path, existing, ledger, known in results:
         if existing is None or dump(ledger) != dump(existing):
             changed[path] = dump(ledger)
             added += [f"{image['name']}:{r['version']}" for r in ledger["releases"] if r["version"] not in known]
-    for event in events:
-        print(f"::warning::{event['image']}:{event['tag']} moved from {event['from']} to {event['to']}")
     if not changed:
         print("No new tags.")
     elif apply:
         lines = [f"- {tag}" for tag in added[:200]] + [f"- retagged {e['image']}:{e['tag']}" for e in events]
-        body = "\n".join(lines) or "Deprecation flags only."
+        body = "\n".join(lines) or "Deprecation flags and notifications only."
         oid = github.commit(branch, head, changed, f"chore(data): record {len(added)} first-seen tag(s)", body)
         print(f"Committed {len(changed)} file(s) to {branch}: {oid}")
-        failures += report_retags(github, events)
     else:
         for path, content in changed.items():
             print(f"would write {path} ({len(json.loads(content)['releases'])} releases)")
     return 1 if failures else 0
 
 
-def report_retags(github: GitHub, events: list[dict]) -> int:
-    """A job summary line and an issue per new retag record; returns the number of failed issues."""
-    if not events:
-        return 0
+def write_summary(events: list[dict]) -> None:
     summary = os.environ.get("GITHUB_STEP_SUMMARY")
-    if summary:
-        with open(summary, "a", encoding="utf-8") as handle:
-            handle.write("## Moved tags\n\n")
-            handle.writelines(
-                f"- `{e['image']}:{e['tag']}`: `{e['from']}` → `{e['to']}` (seen {e['seen']})\n" for e in events
-            )
+    if not events or not summary:
+        return
+    with open(summary, "a", encoding="utf-8") as handle:
+        handle.write("## Moved tags\n\n")
+        handle.writelines(
+            f"- `{e['image']}:{e['tag']}`: `{e['from']}` → `{e['to']}` (seen {e['seen']})\n" for e in events
+        )
+
+
+def notify_retags(github: GitHub, ledgers: list[tuple[dict, dict]], apply: bool) -> int:
+    """Open one issue per retag record that has none yet; returns the number of failures.
+
+    The issue URL is stored on the record (`issue`), so a failed request is
+    retried on the next run, and an open issue with the same title is reused
+    instead of opening a duplicate.
+    """
+    pending = [
+        (image, entry, record)
+        for image, ledger in ledgers
+        for entry in ledger["releases"]
+        for record in entry.get("retagged", [])
+        if not record.get("issue")
+    ]
+    if not pending:
+        return 0
+    if not apply:
+        for image, entry, record in pending:
+            print(f"would open an issue for {image['name']}:{entry['version']} ({record['to']})")
+        return 0
+    try:
+        _, open_issues = github.rest("GET", f"repos/{github.repository}/issues?state=open&per_page=100")
+    except (LedgerError, OSError) as error:
+        print(f"::error::could not list issues, moved-tag notifications retry next run: {error}")
+        return 1
+    by_title = {i["title"]: i.get("html_url", "") for i in open_issues if not i.get("pull_request")}
     failed = 0
-    for e in events:
+    for image, entry, record in pending:
+        title = "Tag moved: " + image["name"] + ":" + entry["version"]
         body = (
-            f"The tag `{e['image']}:{e['tag']}` now points at another image.\n\n"
-            f"- First seen digest (still used by Renovate): `{e['from']}`\n"
-            f"- New digest: `{e['to']}`\n- Seen: {e['seen']}\n\n"
+            f"The tag `{image['name']}:{entry['version']}` now points at another image.\n\n"
+            f"- First-seen digest (Renovate keeps using it): `{entry['digest']}`\n"
+            f"- Previous digest: `{record['from']}`\n"
+            f"- New digest: `{record['to']}`\n- Seen: {record['seen']}\n\n"
             "A moved version tag can be a re-release or a supply-chain compromise. "
-            "The ledger keeps the original digest; check the upstream project before trusting the new one."
+            "Check the upstream project before trusting the new digest."
         )
         try:
-            print(f"Opened {github.open_issue(f'Tag moved: {e["image"]}:{e["tag"]}', body)}")
+            record["issue"] = by_title.get(title) or github.open_issue(title, body)
+            by_title[title] = record["issue"]
+            print(f"Moved-tag issue: {record['issue']}")
         except (LedgerError, OSError) as error:
-            print(f"::error::could not open an issue for {e['image']}:{e['tag']}: {error}")
+            print(f"::error::could not open an issue for {image['name']}:{entry['version']}: {error}")
             failed += 1
     return failed
 

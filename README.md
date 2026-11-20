@@ -54,7 +54,9 @@ Rules:
   ```
 
   The run lists it in the job summary and opens an issue, because a moved
-  version tag is a supply-chain signal. Rolling tags (`latest`, `4.16`) move
+  version tag is a supply-chain signal. The issue URL is stored on the record
+  (`issue`); a record without one is retried on the next run, and an open
+  issue with the same title is reused. Rolling tags (`latest`, `4.16`) move
   by design and are not re-checked.
 - **Immutable releases.** When `images.txt` names the GitHub source repo, a new
   tag with a matching release records the release's `immutable` flag. GitHub

@@ -295,12 +295,25 @@ class RunTest(unittest.TestCase):
         self.assertFalse([c for c in fake.calls if "/releases" in c[1]])
         self.assertIn("No new tags.", out)
 
+    def issue_routes(self, routes, open_issues=(), status=201):
+        issues = []
+        routes[("GET", f"{API}/repos/DevSecNinja/ledger/issues?state=open&per_page=100")] = (
+            200,
+            {},
+            json.dumps(list(open_issues)).encode(),
+        )
+        routes[("POST", f"{API}/repos/DevSecNinja/ledger/issues")] = lambda data: (
+            issues.append(json.loads(data)) or (status, {}, b'{"html_url": "https://x/issues/9"}')
+        )
+        return issues
+
+    def written(self, commits):
+        (addition,) = commits[0]["variables"]["input"]["fileChanges"]["additions"]
+        return json.loads(base64.b64decode(addition["contents"]))
+
     def test_a_moved_tag_is_committed_summarised_and_opens_one_issue(self):
         routes, commits = self.routes(existing=self.existing(first_digest=digest(7)))
-        issues = []
-        routes[("POST", f"{API}/repos/DevSecNinja/ledger/issues")] = lambda data: (
-            issues.append(json.loads(data)) or (201, {}, b'{"html_url": "https://x/issues/9"}')
-        )
+        issues = self.issue_routes(routes)
         with tempfile.TemporaryDirectory() as tmp:
             summary = Path(tmp) / "summary.md"
             with mock.patch.dict("os.environ", {"GITHUB_STEP_SUMMARY": str(summary)}):
@@ -310,21 +323,40 @@ class RunTest(unittest.TestCase):
             text = summary.read_text(encoding="utf-8")
         self.assertEqual(code, 0)
         self.assertIn("::warning::ghcr.io/example/app:1.0.0 moved", out)
-        (addition,) = commits[0]["variables"]["input"]["fileChanges"]["additions"]
-        written = json.loads(base64.b64decode(addition["contents"]))
-        self.assertEqual(written["releases"][0]["digest"], digest(7))
-        self.assertEqual(written["releases"][0]["retagged"], [{"from": digest(7), "to": digest(1), "seen": NOW}])
+        entry = self.written(commits)["releases"][0]
+        self.assertEqual(entry["digest"], digest(7))
+        self.assertEqual(
+            entry["retagged"], [{"from": digest(7), "to": digest(1), "seen": NOW, "issue": "https://x/issues/9"}]
+        )
         self.assertIn("`ghcr.io/example/app:1.0.0`", text)
         (issue,) = issues
         self.assertEqual(issue["title"], "Tag moved: ghcr.io/example/app:1.0.0")
-        self.assertIn(digest(7), issue["body"])
+        self.assertIn(f"First-seen digest (Renovate keeps using it): `{digest(7)}`", issue["body"])
 
-    def test_a_failed_issue_fails_the_run_after_the_commit(self):
+    def test_a_failed_issue_is_committed_unnotified_and_retried_next_run(self):
         routes, commits = self.routes(existing=self.existing(first_digest=digest(7)))
-        routes[("POST", f"{API}/repos/DevSecNinja/ledger/issues")] = (403, {}, b"{}")
+        self.issue_routes(routes, status=403)
         code, _fake, out = self.run_ledger(routes, images="ghcr.io/example/app\n")
         self.assertEqual((code, len(commits)), (1, 1))
         self.assertIn("::error::could not open an issue", out)
+        pending = self.written(commits)
+
+        routes, commits = self.routes(existing=pending)
+        issues = self.issue_routes(routes)
+        code, _fake, _out = self.run_ledger(routes, images="ghcr.io/example/app\n")
+        self.assertEqual((code, len(issues)), (0, 1))
+        self.assertEqual(self.written(commits)["releases"][0]["retagged"][0]["issue"], "https://x/issues/9")
+
+    def test_a_second_move_names_the_first_seen_digest_and_reuses_the_open_issue(self):
+        moved = self.existing(first_digest=digest(7))
+        moved["releases"][0]["retagged"] = [{"from": digest(7), "to": digest(8), "seen": NOW, "issue": "https://x/1"}]
+        routes, commits = self.routes(existing=moved)
+        title = "Tag moved: ghcr.io/example/app:1.0.0"
+        issues = self.issue_routes(routes, open_issues=[{"title": title, "html_url": "https://x/1"}])
+        code, _fake, _out = self.run_ledger(routes, images="ghcr.io/example/app\n")
+        self.assertEqual((code, issues), (0, []))
+        second = self.written(commits)["releases"][0]["retagged"][1]
+        self.assertEqual((second["from"], second["to"], second["issue"]), (digest(8), digest(1), "https://x/1"))
 
     def test_dry_run_writes_nothing(self):
         routes, commits = self.routes()
