@@ -1,0 +1,5 @@
+# Images on registries without release dates (ghcr.io, lscr.io, quay.io, dhi.io, mcr.microsoft.com).
+# One per line: <registry>/<repository> [seed=github-releases:<owner>/<repo>]
+# seed is read only when an image is added: its existing tags take the date of
+# the matching GitHub release instead of "now". Tags seen later are first-seen.
+ghcr.io/italypaleale/traefik-forward-auth seed=github-releases:italypaleale/traefik-forward-auth

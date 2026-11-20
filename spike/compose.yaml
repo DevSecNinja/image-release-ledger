@@ -1,0 +1,6 @@
+---
+# Spike fixture (not deployed): Renovate updates this image from the
+# first-seen ledger instead of the docker datasource. See README.md.
+services:
+  traefik-forward-auth:
+    image: ghcr.io/italypaleale/traefik-forward-auth:4.14.1@sha256:fc39385b74aba58ed84cd03659bcde371f860378b6d90369d8c7d3e10c7f5295
