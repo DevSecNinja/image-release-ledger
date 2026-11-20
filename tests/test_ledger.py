@@ -7,10 +7,12 @@ import importlib.util
 import io
 import json
 import sys
+import tempfile
 import unittest
 import urllib.error
 from contextlib import redirect_stdout
 from pathlib import Path
+from unittest import mock
 
 sys.dont_write_bytecode = True
 SPEC = importlib.util.spec_from_file_location(
@@ -105,9 +107,18 @@ class RegistryTest(unittest.TestCase):
             ledger.Registry(fake, "ghcr.io").digest("example/app", "1.0.0")
 
 
+def update(*args, **kwargs):
+    """update_image's ledger only."""
+    return ledger.update_image(*args, **kwargs)[0]
+
+
+def release(published_at, immutable=None):
+    return {"published_at": published_at, "immutable": immutable}
+
+
 class UpdateImageTest(unittest.TestCase):
     def test_new_image_records_now_and_each_digest(self):
-        result = ledger.update_image(None, ["1.0.0", "1.1.0"], {"1.0.0": digest(1), "1.1.0": digest(2)}.get, NOW)
+        result = update(None, ["1.0.0", "1.1.0"], {"1.0.0": digest(1), "1.1.0": digest(2)}.get, NOW)
         self.assertEqual(
             result["releases"],
             [
@@ -116,17 +127,20 @@ class UpdateImageTest(unittest.TestCase):
             ],
         )
 
-    def test_known_tags_are_never_looked_up_or_changed(self):
-        existing = {"releases": [{"version": "1.0.0", "releaseTimestamp": "2026-01-01T00:00:00Z", "digest": digest(1)}]}
+    def test_known_rolling_tags_are_never_looked_up_or_changed(self):
+        existing = {"releases": [{"version": "1.0", "releaseTimestamp": "2026-01-01T00:00:00Z", "digest": digest(1)}]}
         looked_up = []
-        result = ledger.update_image(existing, ["1.0.0", "1.1.0"], lambda t: looked_up.append(t) or digest(9), NOW)
+        result, events = ledger.update_image(
+            existing, ["1.0", "1.1.0"], lambda t: looked_up.append(t) or digest(9), NOW
+        )
         self.assertEqual(looked_up, ["1.1.0"])
         self.assertEqual(result["releases"][0], existing["releases"][0])
         self.assertEqual(result["releases"][1]["releaseTimestamp"], NOW)
+        self.assertEqual(events, [])
 
     def test_seed_dates_apply_only_to_a_new_image_and_never_lie_in_the_future(self):
-        seed = {"1.0.0": "2026-10-01T00:00:00Z", "1.1.0": "2026-12-01T00:00:00Z"}
-        result = ledger.update_image(None, ["1.0.0", "1.1.0", "1"], lambda t: digest(1), NOW, seed)
+        info = {"1.0.0": release("2026-10-01T00:00:00Z"), "1.1.0": release("2026-12-01T00:00:00Z")}
+        result = update(None, ["1.0.0", "1.1.0", "1"], lambda t: digest(1), NOW, info)
         by_tag = {r["version"]: r for r in result["releases"]}
         self.assertEqual(by_tag["1.0.0"]["releaseTimestamp"], "2026-10-01T00:00:00Z")
         self.assertEqual(by_tag["1.0.0"]["seed"], "github-release")
@@ -135,19 +149,51 @@ class UpdateImageTest(unittest.TestCase):
         self.assertEqual(by_tag["1"]["releaseTimestamp"], NOW)
 
         existing = {"releases": [{"version": "1", "releaseTimestamp": NOW, "digest": digest(1)}]}
-        later = ledger.update_image(existing, ["1", "1.0.0"], lambda t: digest(2), "2026-11-21T00:00:00Z", seed)
+        later = update(existing, ["1", "1.0.0"], lambda t: digest(2), "2026-11-21T00:00:00Z", info)
         self.assertEqual(later["releases"][1]["releaseTimestamp"], "2026-11-21T00:00:00Z")
+        self.assertNotIn("seed", later["releases"][1])
+
+    def test_new_tags_record_the_release_immutable_flag(self):
+        info = {"1.0.0": release("2026-10-01T00:00:00Z", True), "1.1.0": release("2026-10-02T00:00:00Z", False)}
+        existing = {"releases": []}
+        result = update(existing, ["1.0.0", "1.1.0", "1.2.0"], lambda t: digest(1), NOW, info)
+        by_tag = {r["version"]: r for r in result["releases"]}
+        self.assertIs(by_tag["1.0.0"]["immutable"], True)
+        self.assertIs(by_tag["1.1.0"]["immutable"], False)
+        self.assertNotIn("immutable", by_tag["1.2.0"])
+        self.assertEqual(by_tag["1.0.0"]["releaseTimestamp"], NOW)
+
+    def test_a_moved_version_tag_keeps_its_first_digest_and_is_reported_once(self):
+        first = {"version": "1.0.0", "releaseTimestamp": "2026-10-01T00:00:00Z", "digest": digest(1)}
+        moved, events = ledger.update_image({"releases": [first]}, ["1.0.0"], lambda t: digest(2), NOW)
+        (entry,) = moved["releases"]
+        self.assertEqual((entry["digest"], entry["releaseTimestamp"]), (digest(1), "2026-10-01T00:00:00Z"))
+        self.assertEqual(entry["retagged"], [{"from": digest(1), "to": digest(2), "seen": NOW}])
+        self.assertEqual(events, [{"tag": "1.0.0", "from": digest(1), "to": digest(2), "seen": NOW}])
+
+        again, events = ledger.update_image(moved, ["1.0.0"], lambda t: digest(2), "2026-11-21T00:00:00Z")
+        self.assertEqual((again, events), (moved, []))
+
+        back, events = ledger.update_image(moved, ["1.0.0"], lambda t: digest(1), "2026-11-22T00:00:00Z")
+        self.assertEqual(len(back["releases"][0]["retagged"]), 2)
+        self.assertEqual(events[0]["to"], digest(1))
+
+    def test_signature_and_attestation_tags_are_left_out(self):
+        sig = "sha256-" + "a" * 64
+        existing = {"releases": [{"version": f"{sig}.sig", "releaseTimestamp": NOW, "digest": digest(1)}]}
+        result = update(existing, ["1.0.0", sig, f"{sig}.sig", f"{sig}.att"], lambda t: digest(2), NOW)
+        self.assertEqual([r["version"] for r in result["releases"]], ["1.0.0"])
 
     def test_removed_tags_are_kept_as_deprecated_until_they_return(self):
         existing = {"releases": [{"version": "1.0.0", "releaseTimestamp": NOW, "digest": digest(1)}]}
-        gone = ledger.update_image(existing, [], lambda t: digest(2), NOW)
+        gone = update(existing, [], lambda t: digest(2), NOW)
         self.assertTrue(gone["releases"][0]["isDeprecated"])
-        back = ledger.update_image(gone, ["1.0.0"], lambda t: digest(2), NOW)
+        back = update(gone, ["1.0.0"], lambda t: digest(1), NOW)
         self.assertNotIn("isDeprecated", back["releases"][0])
         self.assertEqual(back["releases"][0]["digest"], digest(1))
 
     def test_source_url_is_kept(self):
-        result = ledger.update_image(None, [], lambda t: digest(1), NOW, source_url="https://github.com/example/app")
+        result = update(None, [], lambda t: digest(1), NOW, source_url="https://github.com/example/app")
         self.assertEqual(list(result), ["sourceUrl", "releases"])
 
 
@@ -232,19 +278,53 @@ class RunTest(unittest.TestCase):
         self.assertEqual(json.loads(create[0][3]), {"ref": "refs/heads/data", "sha": "m1"})
         self.assertEqual(commits[0]["variables"]["input"]["expectedHeadOid"], "m1")
 
-    def test_no_new_tags_means_no_commit_and_no_lookups(self):
-        existing = {
+    def existing(self, first_digest=None):
+        return {
             "sourceUrl": "https://github.com/example/app",
             "releases": [
-                {"version": "1.0.0", "releaseTimestamp": "2026-10-01T00:00:00Z", "digest": digest(1)},
+                {"version": "1.0.0", "releaseTimestamp": "2026-10-01T00:00:00Z", "digest": first_digest or digest(1)},
                 {"version": "1.1.0", "releaseTimestamp": NOW, "digest": digest(2)},
             ],
         }
-        routes, commits = self.routes(existing=existing)
-        _, fake, out = self.run_ledger(routes)
+
+    def test_no_new_tags_means_no_commit_and_no_release_reads(self):
+        routes, commits = self.routes(existing=self.existing())
+        _, fake, out = self.run_ledger(routes, images="ghcr.io/example/app seed=github-releases:example/app\n")
         self.assertEqual(commits, [])
-        self.assertEqual(fake.heads(), [])
+        self.assertEqual(sorted(fake.heads()), [f"{REG}/manifests/1.0.0", f"{REG}/manifests/1.1.0"])
+        self.assertFalse([c for c in fake.calls if "/releases" in c[1]])
         self.assertIn("No new tags.", out)
+
+    def test_a_moved_tag_is_committed_summarised_and_opens_one_issue(self):
+        routes, commits = self.routes(existing=self.existing(first_digest=digest(7)))
+        issues = []
+        routes[("POST", f"{API}/repos/DevSecNinja/ledger/issues")] = lambda data: (
+            issues.append(json.loads(data)) or (201, {}, b'{"html_url": "https://x/issues/9"}')
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            summary = Path(tmp) / "summary.md"
+            with mock.patch.dict("os.environ", {"GITHUB_STEP_SUMMARY": str(summary)}):
+                code, _fake, out = self.run_ledger(
+                    routes, images="ghcr.io/example/app seed=github-releases:example/app\n"
+                )
+            text = summary.read_text(encoding="utf-8")
+        self.assertEqual(code, 0)
+        self.assertIn("::warning::ghcr.io/example/app:1.0.0 moved", out)
+        (addition,) = commits[0]["variables"]["input"]["fileChanges"]["additions"]
+        written = json.loads(base64.b64decode(addition["contents"]))
+        self.assertEqual(written["releases"][0]["digest"], digest(7))
+        self.assertEqual(written["releases"][0]["retagged"], [{"from": digest(7), "to": digest(1), "seen": NOW}])
+        self.assertIn("`ghcr.io/example/app:1.0.0`", text)
+        (issue,) = issues
+        self.assertEqual(issue["title"], "Tag moved: ghcr.io/example/app:1.0.0")
+        self.assertIn(digest(7), issue["body"])
+
+    def test_a_failed_issue_fails_the_run_after_the_commit(self):
+        routes, commits = self.routes(existing=self.existing(first_digest=digest(7)))
+        routes[("POST", f"{API}/repos/DevSecNinja/ledger/issues")] = (403, {}, b"{}")
+        code, _fake, out = self.run_ledger(routes, images="ghcr.io/example/app\n")
+        self.assertEqual((code, len(commits)), (1, 1))
+        self.assertIn("::error::could not open an issue", out)
 
     def test_dry_run_writes_nothing(self):
         routes, commits = self.routes()
