@@ -1,5 +1,8 @@
 # Images on registries without release dates (ghcr.io, lscr.io, quay.io, dhi.io, mcr.microsoft.com).
-# One per line: <registry>/<repository> [seed=github-releases:<owner>/<repo>]
-# seed is read only when an image is added: its existing tags take the date of
-# the matching GitHub release instead of "now". Tags seen later are first-seen.
+# One per line: <registry>/<repository> [seed=github-releases:<owner>/<repo>] [soak-days=<n>]
+# seed names the GitHub source repo: when an image is added, its existing tags
+# take the date of the matching GitHub release instead of "now" (tags seen later
+# are first-seen), and each new tag records the release's immutable flag.
+# soak-days (default 14) is how old a floating tag's digest must be before
+# Renovate sees it.
 ghcr.io/italypaleale/traefik-forward-auth seed=github-releases:italypaleale/traefik-forward-auth
