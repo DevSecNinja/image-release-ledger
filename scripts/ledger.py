@@ -17,8 +17,14 @@ The files live on the `data` branch. Rules:
 - Version tags (x.y.z, optional pre-release) are re-checked on every run. If
   one now points at another digest, its entry keeps the first digest and gets
   a `retagged` record ({from, to, seen}); the run reports it in the job summary
-  and opens an issue. Rolling tags (latest, 4.16) move by design and are not
-  re-checked.
+  and opens an issue.
+- Floating tags (latest, beta, 4, 4.16) move by design. Each keeps a digest
+  history under the top-level `floating` key, where a digest is "seen" at the
+  earliest time it appeared under any tag of the image. `releases` exposes a
+  floating tag only with its newest digest that is at least `soak-days` old
+  (images.txt option, default 14), dated by that digest's first sight; with no
+  such digest the tag is left out. Renovate therefore only ever sees soaked
+  digests for these tags.
 - Signature and attestation tags (sha256-<digest>[.sig|.att|.sbom]) are not
   versions and are left out.
 - When images.txt names the GitHub source repo, a new tag that has a release
@@ -46,7 +52,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from collections.abc import Callable
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 API = "https://api.github.com"
@@ -61,6 +67,8 @@ IMAGE = re.compile(
 VERSION_TAG = re.compile(r"^v?\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$")
 # Cosign signatures, attestations and SBOMs stored as tags: not versions.
 ARTIFACT_TAG = re.compile(r"^sha256-[0-9a-f]{64}(?:\.(?:sig|att|sbom))?$")
+SOAK = re.compile(r"^\d{1,3}$")
+DEFAULT_SOAK_DAYS = 14
 SEED = re.compile(r"^github-releases:(?P<repo>[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)$")
 LINK_NEXT = re.compile(r'<([^>]+)>\s*;\s*rel="?next"?')
 
@@ -99,12 +107,15 @@ def parse_images(text: str) -> list[dict]:
         if not match or match["host"] == "docker.io" or ".." in name:
             raise LedgerError(f"images.txt line {number}: {name!r} is not a non-Docker-Hub image with a registry host")
         image = {"name": name, "host": match["host"], "repo": match["repo"], "seed": None}
+        image["soak_days"] = DEFAULT_SOAK_DAYS
         for option in options:
             key, _, value = option.partition("=")
-            seed = SEED.match(value) if key == "seed" else None
-            if not seed:
+            if key == "seed" and SEED.match(value):
+                image["seed"] = SEED.match(value)["repo"]
+            elif key == "soak-days" and SOAK.match(value):
+                image["soak_days"] = int(value)
+            else:
                 raise LedgerError(f"images.txt line {number}: unknown option {option!r}")
-            image["seed"] = seed["repo"]
         images.append(image)
     return images
 
@@ -163,6 +174,12 @@ class Registry:
         return digest
 
 
+def shift(timestamp: str, days: int) -> str:
+    """`timestamp` (YYYY-MM-DDTHH:MM:SSZ) moved back by `days`."""
+    moment = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=UTC)
+    return (moment - timedelta(days=days)).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
 def update_image(
     existing: dict | None,
     tags: list[str],
@@ -170,34 +187,39 @@ def update_image(
     now: str,
     releases_info: dict[str, dict] | None = None,
     source_url: str | None = None,
+    soak_days: int = DEFAULT_SOAK_DAYS,
 ) -> tuple[dict, list[dict]]:
     """The image's new ledger and its new retag events.
 
-    New tags and exact version tags are looked up; other known tags are not.
+    New tags, exact version tags and floating tags are looked up; nothing else.
     `releases_info` maps a tag to its GitHub release ({"published_at",
     "immutable"}); its date seeds tags only for a new image (`existing` None).
     """
     tags = [t for t in tags if not ARTIFACT_TAG.match(t)]
-    releases = {
-        r["version"]: copy.deepcopy(r)
-        for r in (existing or {}).get("releases", [])
-        if not ARTIFACT_TAG.match(r["version"])
-    }
+    releases = {}
+    floating = copy.deepcopy((existing or {}).get("floating", {}))
+    for r in copy.deepcopy((existing or {}).get("releases", [])):
+        if ARTIFACT_TAG.match(r["version"]):
+            continue
+        if VERSION_TAG.match(r["version"]):
+            releases[r["version"]] = r
+        elif r["version"] not in floating:
+            # An entry written before floating tags had a history.
+            floating[r["version"]] = [{"digest": r["digest"], "seen": r["releaseTimestamp"]}]
     seeding = existing is None
     current = set(tags)
     events: list[dict] = []
-    for tag in tags:
+    for tag in (t for t in tags if VERSION_TAG.match(t)):
         entry = releases.get(tag)
         if entry is not None:
             entry.pop("isDeprecated", None)
-            if VERSION_TAG.match(tag):
-                digest = digest_of(tag)
-                history = entry.get("retagged", [])
-                last = history[-1]["to"] if history else entry["digest"]
-                if digest != last:
-                    record = {"from": last, "to": digest, "seen": now}
-                    entry["retagged"] = [*history, record]
-                    events.append({"tag": tag, **record})
+            digest = digest_of(tag)
+            history = entry.get("retagged", [])
+            last = history[-1]["to"] if history else entry["digest"]
+            if digest != last:
+                record = {"from": last, "to": digest, "seen": now}
+                entry["retagged"] = [*history, record]
+                events.append({"tag": tag, **record})
             continue
         entry = {"version": tag, "releaseTimestamp": now, "digest": digest_of(tag)}
         release = (releases_info or {}).get(tag)
@@ -211,7 +233,38 @@ def update_image(
     for tag, entry in releases.items():
         if tag not in current:
             entry["isDeprecated"] = True
-    ledger = {"releases": sorted(releases.values(), key=lambda r: (r["releaseTimestamp"], r["version"]))}
+
+    # When each digest was first seen under any tag of the image.
+    first_seen: dict[str, str] = {}
+    sightings = [(e["digest"], e["releaseTimestamp"]) for e in releases.values()]
+    sightings += [(r["to"], r["seen"]) for e in releases.values() for r in e.get("retagged", [])]
+    sightings += [(h["digest"], h["seen"]) for history in floating.values() for h in history]
+    for digest, seen in sightings:
+        first_seen[digest] = min(seen, first_seen.get(digest, seen))
+    for history in floating.values():
+        for h in history:
+            h["seen"] = first_seen[h["digest"]]
+    cutoff = shift(now, soak_days)
+    exposed = []
+    for tag in sorted(floating.keys() | {t for t in current if not VERSION_TAG.match(t)}):
+        history = floating.setdefault(tag, [])
+        if tag in current:
+            digest = digest_of(tag)
+            if not history or history[-1]["digest"] != digest:
+                history.append({"digest": digest, "seen": min(now, first_seen.get(digest, now))})
+                first_seen.setdefault(digest, history[-1]["seen"])
+        soaked = next((h for h in reversed(history) if h["seen"] <= cutoff), None)
+        if soaked:
+            entry = {"version": tag, "releaseTimestamp": soaked["seen"], "digest": soaked["digest"]}
+            if tag not in current:
+                # Gone from the registry: keep it visible, like an exact tag.
+                entry["isDeprecated"] = True
+            exposed.append(entry)
+
+    entries = sorted([*releases.values(), *exposed], key=lambda r: (r["releaseTimestamp"], r["version"]))
+    ledger = {"releases": entries}
+    if floating:
+        ledger["floating"] = dict(sorted(floating.items()))
     source_url = source_url or (existing or {}).get("sourceUrl")
     return ({"sourceUrl": source_url, **ledger} if source_url else ledger), events
 
@@ -347,6 +400,7 @@ def run(images: list[dict], github: GitHub, transport: Transport, branch: str, n
             registry = Registry(transport, image["host"])
             tags = registry.tags(image["repo"])
             known = {r["version"] for r in (existing or {}).get("releases", [])}
+            known |= set((existing or {}).get("floating", {}))
             new_tags = [t for t in tags if t not in known and not ARTIFACT_TAG.match(t)]
             info = github.releases(image["seed"]) if image["seed"] and new_tags else None
             source = f"https://github.com/{image['seed']}" if image["seed"] else None
@@ -354,7 +408,7 @@ def run(images: list[dict], github: GitHub, transport: Transport, branch: str, n
             def digest_of(tag: str, registry: Registry = registry, repo: str = image["repo"]) -> str:
                 return registry.digest(repo, tag)
 
-            ledger, image_events = update_image(existing, tags, digest_of, now, info, source)
+            ledger, image_events = update_image(existing, tags, digest_of, now, info, source, image["soak_days"])
         except (LedgerError, ValueError, KeyError, OSError) as error:
             print(f"::error::{image['name']}: {error}")
             failures += 1

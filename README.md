@@ -56,8 +56,21 @@ Rules:
   The run lists it in the job summary and opens an issue, because a moved
   version tag is a supply-chain signal. The issue URL is stored on the record
   (`issue`); a record without one is retried on the next run, and an open
-  issue with the same title is reused. Rolling tags (`latest`, `4.16`) move
-  by design and are not re-checked.
+  issue with the same title is reused.
+- **Floating tags** (`latest`, `beta`, `4`, `4.16`) move by design, so a move
+  is history, not an alarm. Each keeps a digest history under the top-level
+  `floating` key:
+
+  ```json
+  "floating": { "latest": [{ "digest": "sha256:…", "seen": "2026-11-13T05:32:35Z" }] }
+  ```
+
+  A digest is "seen" at the earliest time it appeared under **any** tag of the
+  image, so `latest` pointing at 4.16.0's image inherits 4.16.0's date.
+  `releases` lists a floating tag only with its **newest digest that is at
+  least `soak-days` old** (`images.txt` option, default 14), dated by that
+  digest's first sight. If no digest is old enough, the tag is left out, so
+  Renovate never sees an unsoaked digest.
 - **Immutable releases.** When `images.txt` names the GitHub source repo, a new
   tag with a matching release records the release's `immutable` flag. GitHub
   immutable releases lock the tag and assets, so `"immutable": true` means
@@ -74,8 +87,28 @@ Rules:
   upstream instead of from us.
 
 Renovate's custom datasource ignores the extra fields (`seed`, `immutable`,
-`retagged`); it reads `version`, `releaseTimestamp`, `digest` and
+`retagged`, `floating`); it reads `version`, `releaseTimestamp`, `digest` and
 `isDeprecated`.
+
+### Renovate settings for floating tags
+
+Renovate ages a digest update against the newest _version_ matching the
+current value. For `4` or `4.16` that is the ledger entry itself, whose date is
+already soaked, so the normal `minimumReleaseAge` passes. For `latest` or
+`beta` nothing matches, and under `timestamp-required` Renovate holds the
+update forever. **Only for images backed by this ledger**, set
+`minimumReleaseAge: "0"` for those tags: the ledger has already soaked the
+digest it exposes. Never do this for an image that isn't in `images.txt`.
+
+```json5
+{
+  matchPackageNames: ["ghcr.io/home-assistant/home-assistant"],
+  overrideDatasource: "custom.first-seen",
+  versioning: "docker",
+  matchCurrentValue: "/^(latest|beta)$/",
+  minimumReleaseAge: "0",
+}
+```
 
 ## Trust model
 
