@@ -362,8 +362,15 @@ class RunTest(unittest.TestCase):
         self.assertFalse([c for c in fake.calls if "/releases" in c[1]])
         self.assertIn("No new tags.", out)
 
-    def issue_routes(self, routes, open_issues=(), status=201, second_page=()):
+    def issue_routes(self, routes, open_issues=(), status=201, second_page=(), issue_body=""):
         issues = []
+        routes[("GET", f"{API}/repos/DevSecNinja/ledger/issues/1")] = (
+            200,
+            {},
+            json.dumps({"body": issue_body}).encode(),
+        )
+        comments = f"{API}/repos/DevSecNinja/ledger/issues/1/comments?per_page=100&page=1"
+        routes[("GET", comments)] = (200, {}, b"[]")
         listing = f"{API}/repos/DevSecNinja/ledger/issues?state=open&per_page=100&page="
         routes[("GET", f"{listing}1")] = (200, {}, json.dumps(list(open_issues)).encode())
         routes[("GET", f"{listing}2")] = (200, {}, json.dumps(list(second_page)).encode())
@@ -399,6 +406,7 @@ class RunTest(unittest.TestCase):
         self.assertIn("`ghcr.io/example/app:1.0.0`", text)
         (issue,) = issues
         self.assertEqual(issue["title"], "Tag moved: ghcr.io/example/app:1.0.0")
+        self.assertIn(f"<!-- ledger-transition ghcr.io/example/app:1.0.0 {digest(7)} {digest(1)} -->", issue["body"])
         self.assertIn(f"First-seen digest (Renovate keeps using it): `{digest(7)}`", issue["body"])
 
     def test_a_failed_issue_is_committed_unnotified_and_retried_next_run(self):
@@ -432,6 +440,17 @@ class RunTest(unittest.TestCase):
         (comment,) = self.comments
         self.assertIn(f"Previous digest: `{digest(8)}`", comment["body"])
         self.assertIn(f"First-seen digest (Renovate keeps using it): `{digest(7)}`", comment["body"])
+
+    def test_a_delivered_transition_is_not_posted_again_after_a_failed_commit(self):
+        routes, commits = self.routes(existing=self.existing(first_digest=digest(7)))
+        marker = f"<!-- ledger-transition ghcr.io/example/app:1.0.0 {digest(7)} {digest(1)} -->"
+        title = "Tag moved: ghcr.io/example/app:1.0.0"
+        issues = self.issue_routes(
+            routes, open_issues=[{"title": title, "html_url": "https://x/issues/1"}], issue_body=f"...\n\n{marker}"
+        )
+        code, _fake, _out = self.run_ledger(routes, images="ghcr.io/example/app\n")
+        self.assertEqual((code, issues, self.comments), (0, [], []))
+        self.assertEqual(self.written(commits)["releases"][0]["retagged"][0]["issue"], "https://x/issues/1")
 
     def test_an_open_issue_on_a_later_page_is_found(self):
         routes, commits = self.routes(existing=self.existing(first_digest=digest(7)))
