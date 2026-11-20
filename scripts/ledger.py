@@ -285,11 +285,31 @@ class GitHub:
                 return titles
         raise LedgerError("more than 5000 open issues")
 
-    def comment_issue(self, url: str, body: str) -> None:
+    @staticmethod
+    def issue_number(url: str) -> str:
         match = re.search(r"/issues/(\d+)$", url)
         if not match:
             raise LedgerError(f"not an issue URL: {url}")
-        self.rest("POST", f"repos/{self.repository}/issues/{match[1]}/comments", {"body": body}, ok=(201,))
+        return match[1]
+
+    def issue_mentions(self, url: str, text: str) -> bool:
+        """Whether the issue's body or any of its comments contains `text`."""
+        number = self.issue_number(url)
+        _, issue = self.rest("GET", f"repos/{self.repository}/issues/{number}")
+        if text in (issue.get("body") or ""):
+            return True
+        for page in range(1, 51):
+            path = f"repos/{self.repository}/issues/{number}/comments?per_page=100&page={page}"
+            _, comments = self.rest("GET", path)
+            if any(text in (c.get("body") or "") for c in comments):
+                return True
+            if len(comments) < 100:
+                return False
+        raise LedgerError(f"issue {number} has more than 5000 comments")
+
+    def comment_issue(self, url: str, body: str) -> None:
+        path = f"repos/{self.repository}/issues/{self.issue_number(url)}/comments"
+        self.rest("POST", path, {"body": body}, ok=(201,))
 
     def open_issue(self, title: str, body: str) -> str:
         _, issue = self.rest("POST", f"repos/{self.repository}/issues", {"title": title, "body": body}, ok=(201,))
@@ -413,10 +433,15 @@ def notify_retags(github: GitHub, ledgers: list[tuple[dict, dict]], apply: bool)
             "A moved version tag can be a re-release or a supply-chain compromise. "
             "Check the upstream project before trusting the new digest."
         )
+        # A stable marker per transition, so a delivered alert whose ledger
+        # commit failed is recognised on the retry instead of posted again.
+        marker = f"<!-- ledger-transition {image['name']}:{entry['version']} {record['from']} {record['to']} -->"
+        body += "\n\n" + marker
         try:
             if title in by_title:
-                # Still open from an earlier move: add this transition to it.
-                github.comment_issue(by_title[title], body)
+                # Still open from an earlier move: add this transition to it once.
+                if not github.issue_mentions(by_title[title], marker):
+                    github.comment_issue(by_title[title], body)
                 record["issue"] = by_title[title]
             else:
                 record["issue"] = by_title[title] = github.open_issue(title, body)
