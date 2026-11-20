@@ -127,32 +127,81 @@ class UpdateImageTest(unittest.TestCase):
             ],
         )
 
-    def test_known_rolling_tags_are_never_looked_up_or_changed(self):
-        existing = {"releases": [{"version": "1.0", "releaseTimestamp": "2026-01-01T00:00:00Z", "digest": digest(1)}]}
-        looked_up = []
-        result, events = ledger.update_image(
-            existing, ["1.0", "1.1.0"], lambda t: looked_up.append(t) or digest(9), NOW
-        )
-        self.assertEqual(looked_up, ["1.1.0"])
-        self.assertEqual(result["releases"][0], existing["releases"][0])
-        self.assertEqual(result["releases"][1]["releaseTimestamp"], NOW)
-        self.assertEqual(events, [])
-
     def test_seed_dates_apply_only_to_a_new_image_and_never_lie_in_the_future(self):
         info = {"1.0.0": release("2026-10-01T00:00:00Z"), "1.1.0": release("2026-12-01T00:00:00Z")}
-        result = update(None, ["1.0.0", "1.1.0", "1"], lambda t: digest(1), NOW, info)
+        result = update(None, ["1.0.0", "1.1.0"], lambda t: digest(1), NOW, info)
         by_tag = {r["version"]: r for r in result["releases"]}
         self.assertEqual(by_tag["1.0.0"]["releaseTimestamp"], "2026-10-01T00:00:00Z")
         self.assertEqual(by_tag["1.0.0"]["seed"], "github-release")
         self.assertEqual(by_tag["1.1.0"]["releaseTimestamp"], NOW)
         self.assertNotIn("seed", by_tag["1.1.0"])
-        self.assertEqual(by_tag["1"]["releaseTimestamp"], NOW)
 
-        existing = {"releases": [{"version": "1", "releaseTimestamp": NOW, "digest": digest(1)}]}
-        later = update(existing, ["1", "1.0.0"], lambda t: digest(2), "2026-11-21T00:00:00Z", info)
+        existing = {"releases": [{"version": "1.2.0", "releaseTimestamp": NOW, "digest": digest(1)}]}
+        later = update(existing, ["1.2.0", "1.0.0"], lambda t: digest(2), "2026-11-21T00:00:00Z", info)
         self.assertEqual(later["releases"][1]["releaseTimestamp"], "2026-11-21T00:00:00Z")
         self.assertNotIn("seed", later["releases"][1])
 
+
+class FloatingTagTest(unittest.TestCase):
+    OLD = "2026-10-01T00:00:00Z"
+
+    def test_a_floating_tag_inherits_the_first_sight_of_its_digest(self):
+        info = {"1.0.0": release(self.OLD)}
+        result = update(None, ["1.0.0", "latest", "1"], lambda t: digest(1), NOW, info)
+        by_tag = {r["version"]: r for r in result["releases"]}
+        self.assertEqual(by_tag["latest"], {"version": "latest", "releaseTimestamp": self.OLD, "digest": digest(1)})
+        self.assertEqual(result["floating"]["1"], [{"digest": digest(1), "seen": self.OLD}])
+
+    def test_an_unsoaked_floating_tag_is_left_out(self):
+        result = update(None, ["beta"], lambda t: digest(5), NOW)
+        self.assertEqual(result["releases"], [])
+        self.assertEqual(result["floating"], {"beta": [{"digest": digest(5), "seen": NOW}]})
+
+    def test_a_move_keeps_exposing_the_newest_soaked_digest_until_the_new_one_soaks(self):
+        existing = {"releases": [], "floating": {"latest": [{"digest": digest(1), "seen": self.OLD}]}}
+        moved, events = ledger.update_image(existing, ["latest"], lambda t: digest(2), NOW)
+        self.assertEqual(events, [])
+        self.assertEqual(moved["releases"][0]["digest"], digest(1))
+        self.assertEqual(moved["floating"]["latest"][-1], {"digest": digest(2), "seen": NOW})
+
+        later = "2026-12-04T08:00:00Z"
+        soaked = update(moved, ["latest"], lambda t: digest(2), later)
+        self.assertEqual(soaked["releases"][0], {"version": "latest", "releaseTimestamp": NOW, "digest": digest(2)})
+
+    def test_moving_back_to_a_known_digest_keeps_its_original_sight(self):
+        history = [{"digest": digest(1), "seen": self.OLD}, {"digest": digest(2), "seen": NOW}]
+        result = update({"releases": [], "floating": {"latest": history}}, ["latest"], lambda t: digest(1), NOW)
+        self.assertEqual(result["floating"]["latest"][-1], {"digest": digest(1), "seen": self.OLD})
+        self.assertEqual(result["releases"][0]["digest"], digest(1))
+
+    def test_the_soak_window_is_configurable(self):
+        result = update(None, ["beta"], lambda t: digest(5), NOW, soak_days=0)
+        self.assertEqual(result["releases"][0]["digest"], digest(5))
+        (image,) = ledger.parse_images("ghcr.io/a/b soak-days=7\n")
+        self.assertEqual(image["soak_days"], 7)
+        for bad in ("soak-days=-1", "soak-days=7d", "soak-days=1000"):
+            with self.subTest(bad), self.assertRaises(ledger.LedgerError):
+                ledger.parse_images(f"ghcr.io/a/b {bad}\n")
+
+    def test_legacy_floating_entries_move_into_the_history(self):
+        existing = {"releases": [{"version": "latest", "releaseTimestamp": self.OLD, "digest": digest(1)}]}
+        result = update(existing, ["latest"], lambda t: digest(1), NOW)
+        self.assertEqual(result["floating"], {"latest": [{"digest": digest(1), "seen": self.OLD}]})
+        self.assertEqual(result["releases"][0]["releaseTimestamp"], self.OLD)
+
+    def test_a_legacy_entry_takes_the_earlier_sight_of_the_same_digest_under_a_version_tag(self):
+        existing = {
+            "releases": [
+                {"version": "1.0.0", "releaseTimestamp": self.OLD, "digest": digest(1)},
+                {"version": "latest", "releaseTimestamp": NOW, "digest": digest(1)},
+            ]
+        }
+        result = update(existing, ["1.0.0", "latest"], lambda t: digest(1), NOW)
+        self.assertEqual(result["floating"]["latest"], [{"digest": digest(1), "seen": self.OLD}])
+        self.assertIn({"version": "latest", "releaseTimestamp": self.OLD, "digest": digest(1)}, result["releases"])
+
+
+class MoreUpdateImageTest(unittest.TestCase):
     def test_new_tags_record_the_release_immutable_flag(self):
         info = {"1.0.0": release("2026-10-01T00:00:00Z", True), "1.1.0": release("2026-10-02T00:00:00Z", False)}
         existing = {"releases": []}
