@@ -20,10 +20,25 @@
       "seed": "github-release"
     },
     {
+      "version": "2",
+      "releaseTimestamp": "2023-12-11T16:43:03Z",
+      "digest": "sha256:5c0917dcb7056c862a1669d41bd084e64bec24361c742c8babf5413433bae7fa"
+    },
+    {
+      "version": "2.3",
+      "releaseTimestamp": "2023-12-11T16:43:03Z",
+      "digest": "sha256:5c0917dcb7056c862a1669d41bd084e64bec24361c742c8babf5413433bae7fa"
+    },
+    {
       "version": "2.3.3",
       "releaseTimestamp": "2023-12-11T16:43:03Z",
       "digest": "sha256:5c0917dcb7056c862a1669d41bd084e64bec24361c742c8babf5413433bae7fa",
       "seed": "github-release"
+    },
+    {
+      "version": "3.0",
+      "releaseTimestamp": "2024-01-14T20:01:05Z",
+      "digest": "sha256:401199adc2c5d76c99a54109f6f324f1a05966075455990e0eb1a498b800d3ab"
     },
     {
       "version": "3.0.0",
@@ -62,10 +77,20 @@
       "seed": "github-release"
     },
     {
+      "version": "3.1",
+      "releaseTimestamp": "2024-10-21T00:00:48Z",
+      "digest": "sha256:fc717ff42f367f5bc5f0101880cd488d46acd56c7fd3a6094c78a414e58c183d"
+    },
+    {
       "version": "3.1.5",
       "releaseTimestamp": "2024-10-21T00:00:48Z",
       "digest": "sha256:fc717ff42f367f5bc5f0101880cd488d46acd56c7fd3a6094c78a414e58c183d",
       "seed": "github-release"
+    },
+    {
+      "version": "3.2",
+      "releaseTimestamp": "2025-03-09T01:38:39Z",
+      "digest": "sha256:3942ad1e29b29592a7bc49272c8153d10afaa19d3d3dfbc1e0edfce15f48024a"
     },
     {
       "version": "3.2.0",
@@ -74,10 +99,20 @@
       "seed": "github-release"
     },
     {
+      "version": "3.3",
+      "releaseTimestamp": "2025-03-16T04:30:24Z",
+      "digest": "sha256:599582b028c862c365270a3e97c79dec73565f20efc5d194062b482a46fce54a"
+    },
+    {
       "version": "3.3.0",
       "releaseTimestamp": "2025-03-16T04:30:24Z",
       "digest": "sha256:599582b028c862c365270a3e97c79dec73565f20efc5d194062b482a46fce54a",
       "seed": "github-release"
+    },
+    {
+      "version": "3.4",
+      "releaseTimestamp": "2025-03-16T22:09:11Z",
+      "digest": "sha256:145381b61008485ab578edc56fd1fcb826966d386096c608edc3a2c5a9626431"
     },
     {
       "version": "3.4.0",
@@ -98,10 +133,25 @@
       "seed": "github-release"
     },
     {
+      "version": "3.5",
+      "releaseTimestamp": "2025-05-10T00:06:32Z",
+      "digest": "sha256:1a582590167877ce74bb744fc106136d4ad413a11618fef3ed7ea9a84699e655"
+    },
+    {
       "version": "3.5.2",
       "releaseTimestamp": "2025-05-10T00:06:32Z",
       "digest": "sha256:1a582590167877ce74bb744fc106136d4ad413a11618fef3ed7ea9a84699e655",
       "seed": "github-release"
+    },
+    {
+      "version": "3",
+      "releaseTimestamp": "2025-08-08T02:53:24Z",
+      "digest": "sha256:e76ca5f507d29ca7d5aea38c49f384ea3da4b5b48873dfb77e8b3b2217bd824b"
+    },
+    {
+      "version": "3.6",
+      "releaseTimestamp": "2025-08-08T02:53:24Z",
+      "digest": "sha256:e76ca5f507d29ca7d5aea38c49f384ea3da4b5b48873dfb77e8b3b2217bd824b"
     },
     {
       "version": "3.6.0",
@@ -134,16 +184,31 @@
       "seed": "github-release"
     },
     {
+      "version": "4.0",
+      "releaseTimestamp": "2025-09-14T21:00:43Z",
+      "digest": "sha256:cffd543df892b22fa1c997f0a6b984d00b9565b65bfdfc1e43f38de7d3e2bc3e"
+    },
+    {
       "version": "4.0.0",
       "releaseTimestamp": "2025-09-14T21:00:43Z",
       "digest": "sha256:cffd543df892b22fa1c997f0a6b984d00b9565b65bfdfc1e43f38de7d3e2bc3e",
       "seed": "github-release"
     },
     {
+      "version": "4.1",
+      "releaseTimestamp": "2025-10-13T15:31:46Z",
+      "digest": "sha256:1d01039c168dd88308b670ff2823798f0acbdd1661870cbcb0f46ea46518344c"
+    },
+    {
       "version": "4.1.0",
       "releaseTimestamp": "2025-10-13T15:31:46Z",
       "digest": "sha256:1d01039c168dd88308b670ff2823798f0acbdd1661870cbcb0f46ea46518344c",
       "seed": "github-release"
+    },
+    {
+      "version": "4.2",
+      "releaseTimestamp": "2025-11-16T23:05:38Z",
+      "digest": "sha256:216d2e02e48838743e89c48e898595e2621b17e01aed8907720f4df833d5bf6e"
     },
     {
       "version": "4.2.0",
@@ -158,16 +223,31 @@
       "seed": "github-release"
     },
     {
+      "version": "4.3",
+      "releaseTimestamp": "2025-11-26T04:41:06Z",
+      "digest": "sha256:00822205b2901d5ed04420bb0a6eafa815a628f6449317fe60058b08d339b58c"
+    },
+    {
       "version": "4.3.1",
       "releaseTimestamp": "2025-11-26T04:41:06Z",
       "digest": "sha256:00822205b2901d5ed04420bb0a6eafa815a628f6449317fe60058b08d339b58c",
       "seed": "github-release"
     },
     {
+      "version": "4.4",
+      "releaseTimestamp": "2025-12-19T04:55:52Z",
+      "digest": "sha256:d012b79e6a7494c94577c7da2566fd31d12ae337b908cc724ed0df10d5ab1c36"
+    },
+    {
       "version": "4.4.0",
       "releaseTimestamp": "2025-12-19T04:55:52Z",
       "digest": "sha256:d012b79e6a7494c94577c7da2566fd31d12ae337b908cc724ed0df10d5ab1c36",
       "seed": "github-release"
+    },
+    {
+      "version": "4.5",
+      "releaseTimestamp": "2026-01-03T14:12:35Z",
+      "digest": "sha256:4bc20751924975b6c06589efdb4bbf8db98768abcea361f0d6484873f707ccbc"
     },
     {
       "version": "4.5.0",
@@ -182,10 +262,20 @@
       "seed": "github-release"
     },
     {
+      "version": "4.6",
+      "releaseTimestamp": "2026-02-13T04:07:00Z",
+      "digest": "sha256:dfbce2959ea91ad6855918bf6b41417b6f5b512b23d4bd67f78cc0a62d23f375"
+    },
+    {
       "version": "4.6.1",
       "releaseTimestamp": "2026-02-13T04:07:00Z",
       "digest": "sha256:dfbce2959ea91ad6855918bf6b41417b6f5b512b23d4bd67f78cc0a62d23f375",
       "seed": "github-release"
+    },
+    {
+      "version": "4.7",
+      "releaseTimestamp": "2026-02-21T18:10:39Z",
+      "digest": "sha256:3979655b0e3adb3ab3fbbe56c3bf0fd11626c124956400cac753107b0a4e6ee6"
     },
     {
       "version": "4.7.0",
@@ -194,10 +284,20 @@
       "seed": "github-release"
     },
     {
+      "version": "4.8",
+      "releaseTimestamp": "2026-03-08T00:17:34Z",
+      "digest": "sha256:797fbc78ec85c807057cb8257be44c1a8bcfd2d47526f982023eb8e6a80a414c"
+    },
+    {
       "version": "4.8.0",
       "releaseTimestamp": "2026-03-08T00:17:34Z",
       "digest": "sha256:797fbc78ec85c807057cb8257be44c1a8bcfd2d47526f982023eb8e6a80a414c",
       "seed": "github-release"
+    },
+    {
+      "version": "4.9",
+      "releaseTimestamp": "2026-04-29T02:24:45Z",
+      "digest": "sha256:0408714b1117207b352e452e1c6f86e7ec20f6a9b374dc890ffa335bbd02af43"
     },
     {
       "version": "4.9.0",
@@ -212,6 +312,11 @@
       "seed": "github-release"
     },
     {
+      "version": "4.10",
+      "releaseTimestamp": "2026-05-08T15:37:31Z",
+      "digest": "sha256:0876f75e13fce1afbd10af19a79de1373f650b32a3080c95a4422b7cb9313ef0"
+    },
+    {
       "version": "4.10.1",
       "releaseTimestamp": "2026-05-08T15:37:31Z",
       "digest": "sha256:0876f75e13fce1afbd10af19a79de1373f650b32a3080c95a4422b7cb9313ef0",
@@ -224,16 +329,31 @@
       "seed": "github-release"
     },
     {
+      "version": "4.11",
+      "releaseTimestamp": "2026-06-27T13:23:57Z",
+      "digest": "sha256:3f9d3df338d70dabb9b7d6a39bd82a773e819fd9e1397fa9fd4af648968c47f3"
+    },
+    {
       "version": "4.11.1",
       "releaseTimestamp": "2026-06-27T13:23:57Z",
       "digest": "sha256:3f9d3df338d70dabb9b7d6a39bd82a773e819fd9e1397fa9fd4af648968c47f3",
       "seed": "github-release"
     },
     {
+      "version": "4.12",
+      "releaseTimestamp": "2026-07-06T04:07:51Z",
+      "digest": "sha256:f9ada1c47a52814cb1426d132f8b89db02c07e114555e4c8015f85bce09e2466"
+    },
+    {
       "version": "4.12.0",
       "releaseTimestamp": "2026-07-06T04:07:51Z",
       "digest": "sha256:f9ada1c47a52814cb1426d132f8b89db02c07e114555e4c8015f85bce09e2466",
       "seed": "github-release"
+    },
+    {
+      "version": "4.13",
+      "releaseTimestamp": "2026-07-25T21:31:22Z",
+      "digest": "sha256:5cede6008f8e3677edd56b4313102a755bbe06c3d975f115a9b33400e25d2f51"
     },
     {
       "version": "4.13.0",
@@ -260,6 +380,11 @@
       "seed": "github-release"
     },
     {
+      "version": "4.14",
+      "releaseTimestamp": "2026-10-21T12:51:55Z",
+      "digest": "sha256:99c106f89f78329344ea3c0027ca4e32c35b2e641d0300b36372704eae80711f"
+    },
+    {
       "version": "4.14.4",
       "releaseTimestamp": "2026-10-21T12:51:55Z",
       "digest": "sha256:99c106f89f78329344ea3c0027ca4e32c35b2e641d0300b36372704eae80711f",
@@ -278,26 +403,6 @@
       "seed": "github-release"
     },
     {
-      "version": "2",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:5c0917dcb7056c862a1669d41bd084e64bec24361c742c8babf5413433bae7fa"
-    },
-    {
-      "version": "2.3",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:5c0917dcb7056c862a1669d41bd084e64bec24361c742c8babf5413433bae7fa"
-    },
-    {
-      "version": "3",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:e76ca5f507d29ca7d5aea38c49f384ea3da4b5b48873dfb77e8b3b2217bd824b"
-    },
-    {
-      "version": "3.0",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:401199adc2c5d76c99a54109f6f324f1a05966075455990e0eb1a498b800d3ab"
-    },
-    {
       "version": "3.0.0-alpha.1",
       "releaseTimestamp": "2026-11-20T09:25:46Z",
       "digest": "sha256:b665190c53f0938d1c5be9d4f36b602ecc8bdd3d60db00ebaa469c75519de030"
@@ -308,389 +413,191 @@
       "digest": "sha256:a70ff17958a0e3d5ffc26a223780979dbe33f92d8041d6abb3c5bd9b6086babb"
     },
     {
-      "version": "3.1",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:fc717ff42f367f5bc5f0101880cd488d46acd56c7fd3a6094c78a414e58c183d"
-    },
-    {
-      "version": "3.2",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:3942ad1e29b29592a7bc49272c8153d10afaa19d3d3dfbc1e0edfce15f48024a"
-    },
-    {
-      "version": "3.3",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:599582b028c862c365270a3e97c79dec73565f20efc5d194062b482a46fce54a"
-    },
-    {
-      "version": "3.4",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:145381b61008485ab578edc56fd1fcb826966d386096c608edc3a2c5a9626431"
-    },
-    {
-      "version": "3.5",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:1a582590167877ce74bb744fc106136d4ad413a11618fef3ed7ea9a84699e655"
-    },
-    {
-      "version": "3.6",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:e76ca5f507d29ca7d5aea38c49f384ea3da4b5b48873dfb77e8b3b2217bd824b"
-    },
-    {
-      "version": "4",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:c37ee10e045d1c294a790a8cd4116f9812cfbedd6bd4214a13650a6dcb70b055"
-    },
-    {
-      "version": "4.0",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:cffd543df892b22fa1c997f0a6b984d00b9565b65bfdfc1e43f38de7d3e2bc3e"
-    },
-    {
-      "version": "4.1",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:1d01039c168dd88308b670ff2823798f0acbdd1661870cbcb0f46ea46518344c"
-    },
-    {
-      "version": "4.10",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:0876f75e13fce1afbd10af19a79de1373f650b32a3080c95a4422b7cb9313ef0"
-    },
-    {
-      "version": "4.11",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:3f9d3df338d70dabb9b7d6a39bd82a773e819fd9e1397fa9fd4af648968c47f3"
-    },
-    {
-      "version": "4.12",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:f9ada1c47a52814cb1426d132f8b89db02c07e114555e4c8015f85bce09e2466"
-    },
-    {
-      "version": "4.13",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:5cede6008f8e3677edd56b4313102a755bbe06c3d975f115a9b33400e25d2f51"
-    },
-    {
-      "version": "4.14",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:99c106f89f78329344ea3c0027ca4e32c35b2e641d0300b36372704eae80711f"
-    },
-    {
       "version": "4.14.0",
       "releaseTimestamp": "2026-11-20T09:25:46Z",
       "digest": "sha256:9a16997b3f76b3c3babb2457a22464242fdd8a5383d4b1b74ac0a469c928bc29"
-    },
-    {
-      "version": "4.15",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:984997d82894de00e8be3d4346d9ee16b5deb62c54b4a334a42fde01aa7c9fd6"
-    },
-    {
-      "version": "4.16",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:c37ee10e045d1c294a790a8cd4116f9812cfbedd6bd4214a13650a6dcb70b055"
-    },
-    {
-      "version": "4.2",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:216d2e02e48838743e89c48e898595e2621b17e01aed8907720f4df833d5bf6e"
-    },
-    {
-      "version": "4.3",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:00822205b2901d5ed04420bb0a6eafa815a628f6449317fe60058b08d339b58c"
-    },
-    {
-      "version": "4.4",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:d012b79e6a7494c94577c7da2566fd31d12ae337b908cc724ed0df10d5ab1c36"
-    },
-    {
-      "version": "4.5",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:4bc20751924975b6c06589efdb4bbf8db98768abcea361f0d6484873f707ccbc"
-    },
-    {
-      "version": "4.6",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:dfbce2959ea91ad6855918bf6b41417b6f5b512b23d4bd67f78cc0a62d23f375"
-    },
-    {
-      "version": "4.7",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:3979655b0e3adb3ab3fbbe56c3bf0fd11626c124956400cac753107b0a4e6ee6"
-    },
-    {
-      "version": "4.8",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:797fbc78ec85c807057cb8257be44c1a8bcfd2d47526f982023eb8e6a80a414c"
-    },
-    {
-      "version": "4.9",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:0408714b1117207b352e452e1c6f86e7ec20f6a9b374dc890ffa335bbd02af43"
-    },
-    {
-      "version": "edge",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:46bc03ac6137cf8eb64968b465bf4a7b4e02989eb44bbac66cd84d48e5fdc2db"
-    },
-    {
-      "version": "latest",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:c37ee10e045d1c294a790a8cd4116f9812cfbedd6bd4214a13650a6dcb70b055"
-    },
-    {
-      "version": "sha256-000009195738acdbdceb7fdef81e05bd2aaf8f3bf3f3159f368d327fbdc5f3a9",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:1adfd67329976d743e907e66f1f3f75eddce6ba4e20f648f1569fa3f07940bf4"
-    },
-    {
-      "version": "sha256-00822205b2901d5ed04420bb0a6eafa815a628f6449317fe60058b08d339b58c",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:6ba237f64daf3b758b4638fe9a98fca5fe00dc250a28f44fbd978703e38c3fe0"
-    },
-    {
-      "version": "sha256-02cd57e208b923d1d6978c66bd56e73d109a8a9d2926a15a5530cb938d7da911",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:7cc863bfc46cbbfa986119c2e67a0e4046dcfe8aa3d7c099efa7e223f68ce2d7"
-    },
-    {
-      "version": "sha256-0408714b1117207b352e452e1c6f86e7ec20f6a9b374dc890ffa335bbd02af43",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:ade1a3567977ce3ef83f3098be92bed951ad1b729e1dbfa46f876efd5659e45d"
-    },
-    {
-      "version": "sha256-0876f75e13fce1afbd10af19a79de1373f650b32a3080c95a4422b7cb9313ef0",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:f2b738f44b42e89258e16189606961dc86bc2392571585cc630d0698946d6a20"
-    },
-    {
-      "version": "sha256-0dae3bed51348406140b7626974b85ec845266f65756e0f8e39ed107594a424d",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:a43513c613463b4a546a10aab24dd1f1b4a8dc17c30e884dd116efc5d903382d"
-    },
-    {
-      "version": "sha256-145381b61008485ab578edc56fd1fcb826966d386096c608edc3a2c5a9626431",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:2231ab88d6f8edea5b8e7a1a3c96794931204d0c7ec7236a27e7b01f9600a0dd"
-    },
-    {
-      "version": "sha256-1915c3fcc450875e6c1c817a140feb7cd0ed4a85c6383fa4ab601efc547853f3",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:34a7d00cb82b8fa9e163788b9c224d1750eae10f3606b8c60da6d2a61e019faa"
-    },
-    {
-      "version": "sha256-1a582590167877ce74bb744fc106136d4ad413a11618fef3ed7ea9a84699e655",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:b2262658059bf2da923f7c6aad020bdec81aaf4f890083dd3ead260969bb0d73"
-    },
-    {
-      "version": "sha256-1cfd82497d6eb84af292be11367847204894ead6f49ca48aa9a5b74a41c02e45",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:037d24d385decc7fc3cd9cccda04b8c8885044130289f88f17dcc54d9757004d"
-    },
-    {
-      "version": "sha256-1d01039c168dd88308b670ff2823798f0acbdd1661870cbcb0f46ea46518344c",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:537f28eec2ca3a87330b51da236daf6c0b4ebbaaf2c238965cb494ba10d0470d"
-    },
-    {
-      "version": "sha256-216d2e02e48838743e89c48e898595e2621b17e01aed8907720f4df833d5bf6e",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:0045f22d65109d9293fc71533b3b2f013e89533885b947f4dd005d899383581f"
-    },
-    {
-      "version": "sha256-285589f9e75bd1d8ba7d036dad0b0849731560dbbc4623ca5bb4d5cd74e243fc",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:580d8e727d3be34b52d20f7546105dde5670a296a210bceb360eed1611785250"
-    },
-    {
-      "version": "sha256-3942ad1e29b29592a7bc49272c8153d10afaa19d3d3dfbc1e0edfce15f48024a",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:002aa744984cd1e243c7ed146b783051363848aa6e5351ae2a99fbc1cfc7a3ea"
-    },
-    {
-      "version": "sha256-3979655b0e3adb3ab3fbbe56c3bf0fd11626c124956400cac753107b0a4e6ee6",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:a89df0335edd0d3df86d5bae2a6873165fd8b51b7f93c05f83fac3861a7735dc"
-    },
-    {
-      "version": "sha256-3ed7852aedda66cda7293310d870007f9693df5d986be36eeba01dc2a56602a9",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:cb81a0a9306ec3bb8be5138f15bc5ca7aac4a29039149b9e3b7bb0ab27d07392"
-    },
-    {
-      "version": "sha256-3f9d3df338d70dabb9b7d6a39bd82a773e819fd9e1397fa9fd4af648968c47f3",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:5cbfa72d3761f7ead7f361e9343b8ecb569906ccb85daa01e988d23394d268a7"
-    },
-    {
-      "version": "sha256-401199adc2c5d76c99a54109f6f324f1a05966075455990e0eb1a498b800d3ab.sig",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:b1abf465d4a69349f58879b650604fd8ed2ed5a3c6d9e46aa4f6548a738cdc8b"
-    },
-    {
-      "version": "sha256-4bc20751924975b6c06589efdb4bbf8db98768abcea361f0d6484873f707ccbc",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:1f2b2c6f60b473a344a235d77648dc577e7f001f3ff12eea7109cebf15574b0f"
-    },
-    {
-      "version": "sha256-599582b028c862c365270a3e97c79dec73565f20efc5d194062b482a46fce54a",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:11522d9120a3389033f63ce9092f449afd5f9e24432c7ae5c0752c58325273dc"
-    },
-    {
-      "version": "sha256-5cede6008f8e3677edd56b4313102a755bbe06c3d975f115a9b33400e25d2f51",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:4aef340b98ab624ac5c0da5b0e0af5c5c6cf53adb735b6878b9202205c848170"
-    },
-    {
-      "version": "sha256-7008a2017836aa6dc4baeed9df852fc0aa0d0e670976b0c8a0e5b10d9a837292",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:8e2b661ff3c67707ab185ea82909f697e9595df8e1d73935df673c3b4f539a51"
-    },
-    {
-      "version": "sha256-73869dfb0a59e3a1021f642f3d44ebca6c77d95179963a0f75192c2cbeca54bd",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:2312f44e7cd27eae8b7dfbea493b09d1b0eb3993b1652565f815b4c4a178d484"
-    },
-    {
-      "version": "sha256-797fbc78ec85c807057cb8257be44c1a8bcfd2d47526f982023eb8e6a80a414c",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:e9d1173dfdad2139cfab738b1585bb47436d1a90174ae3cdd8dd9954ff754b55"
-    },
-    {
-      "version": "sha256-8affbf54279bce87ebb306250e602b97482f5f5cf2dbc81b6ecdc22e95233365",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:b3ed73f407c8e66a4f73ac6739e6f2083cdd478f8671fa20bf25a921cde42830"
-    },
-    {
-      "version": "sha256-902ffc888dd021f71f0863010711dba8ee9ff817b99afa9a7b6e223c9bd073b9",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:cae2221bb720eae3f08de4fdd367959171e4ae0ff0f4e16055e2f421dd7ee7c0"
-    },
-    {
-      "version": "sha256-929a2454bbc1d5c086f2f37836cd1230e5fa258f026e1a5c9cc7b475ff77d766",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:be5f29e0b0f2e55477381665ad65d827aa56062620612906f7068964e22f902c"
-    },
-    {
-      "version": "sha256-9402cd2677bc6165e7dc70c85ad66de95eeca879b82f0d47bb48059db408c008",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:0d0c7f506cbf0987bf2321624caaee28adfd3e85c1b425af0eb13b20ac0de3c6"
-    },
-    {
-      "version": "sha256-984997d82894de00e8be3d4346d9ee16b5deb62c54b4a334a42fde01aa7c9fd6",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:fa2396a68e531a06320e5024502ba8bbd456cfab014c30b2f5f03a505182a24b"
-    },
-    {
-      "version": "sha256-99a00c39f8de232ae6843cc4df1f14707b9a4012f06575fc94fb881fdc4cde59",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:71c6e26ac7ca061cbade12ce124a2879cce76d84e984802e2b3d36958bb6b658"
-    },
-    {
-      "version": "sha256-99c106f89f78329344ea3c0027ca4e32c35b2e641d0300b36372704eae80711f",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:efbef33bcb22151d68b3cc175e8bd4edca8ade0bd5b2f8588fd69171e4d68df6"
-    },
-    {
-      "version": "sha256-9a16997b3f76b3c3babb2457a22464242fdd8a5383d4b1b74ac0a469c928bc29",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:66663828fc90aed19c900606106ec63c02f86a4f25d085bebdeca279107cb3b9"
-    },
-    {
-      "version": "sha256-9ec784259c89057b962c764ec5a80cbcffecad56f6abb744ccc4545d8f1ad4ea",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:fa91adc07dd396f0ba8f059cd5be10f25603da24f885f26d031b42457c21f3f7"
-    },
-    {
-      "version": "sha256-a70ff17958a0e3d5ffc26a223780979dbe33f92d8041d6abb3c5bd9b6086babb.sig",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:76ea9165e7d320bf9d443c172a3d9c35a976cee3c3e23d0b8bdffeea084e40c8"
-    },
-    {
-      "version": "sha256-b1440b6e384d6ac7f219876fb5872edf99c99deee0e97d0c32af8c1e451b0ff1.sig",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:59908f31ea355f9dac82ebff90a3d776d14520490a6b96919587b6d8edc3a510"
-    },
-    {
-      "version": "sha256-b665190c53f0938d1c5be9d4f36b602ecc8bdd3d60db00ebaa469c75519de030.sig",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:bbe56cf7ac8463a79be1f906941411ca63321ba0ce28095b98028b922b490526"
-    },
-    {
-      "version": "sha256-bb9475ea74de9befca2730bd56e4c97a1d333fb5cc250382dcf39ba92a974f8a",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:8e2b0a22780e76ce8f321d94fe729bec81e162efda7b4094f2b1b01a5d5d9216"
-    },
-    {
-      "version": "sha256-bf18dfdfafee1d8e6c0b84445bd42e500ac72c564cd634638ada0dbfd977a45c.sig",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:56e44d646ce1581378e8f9f40a14ebb1c1577aa89bd470e2d0b8e872bcf9ac65"
-    },
-    {
-      "version": "sha256-bfd267ad4bda8f22075e2a33736de4bfbf20b84981d568be2514140daea95baa.sig",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:53a697085fad2d2d0a58167c993d24571c31d6bb50ea5d483eaab1696cd982ea"
-    },
-    {
-      "version": "sha256-c37ee10e045d1c294a790a8cd4116f9812cfbedd6bd4214a13650a6dcb70b055",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:c06e6af760a97fadcf3cb6ef8ab26e8bbef5616f4fd48838075d44e00dbb7d3d"
-    },
-    {
-      "version": "sha256-c7eceb54ecd5c5e944fff6eb255d90b6a987a4bea733d54c21cef5bbcb8d9ef0.sig",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:832b0618b1642bc6e05ce4925ac498298fa394425545d99ea6037e21fc7193ea"
-    },
-    {
-      "version": "sha256-cffd543df892b22fa1c997f0a6b984d00b9565b65bfdfc1e43f38de7d3e2bc3e",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:10f7621b6e156b4bb37c14dcef4b782a5b78ad6f20b2e6d48b306c2f98cb9f7d"
-    },
-    {
-      "version": "sha256-d012b79e6a7494c94577c7da2566fd31d12ae337b908cc724ed0df10d5ab1c36",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:ec87306e7bf009f4d992e7a98f2927b2429ae98f4350d8fcb7e3b1f08a589ecc"
-    },
-    {
-      "version": "sha256-d5b173d5bcfa2ac53a81f1b0b16e9ca6b4355f372a0551c5636ef54bae8c2810",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:483a90d73c15fd421d6dfa35e609825838718f51de8c95b20ea4498414ab1d0e"
-    },
-    {
-      "version": "sha256-dfbce2959ea91ad6855918bf6b41417b6f5b512b23d4bd67f78cc0a62d23f375",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:8d7cd514653b20fea55d9a46e6911bd01d271d1f0bc5693478340026faff890a"
-    },
-    {
-      "version": "sha256-e76ca5f507d29ca7d5aea38c49f384ea3da4b5b48873dfb77e8b3b2217bd824b",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:a307d77fbf7eabe1fa5e99282be3b38fd4a1c1cc7e19a1b1bd63e1985030d942"
-    },
-    {
-      "version": "sha256-e95a29a5a1777b6a43a200210a9d76c35ddcf1470cb0bb0e71e0401ac6d8aaf9",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:1376f05083278c9f0e46ebe184cdfe61620dc53b968caf7046d8a70c62267ce5"
-    },
-    {
-      "version": "sha256-f9ada1c47a52814cb1426d132f8b89db02c07e114555e4c8015f85bce09e2466",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:0f7f20f4ffbb40841bb1e40e04967b299b3a68bdafa1a2a4f06119f4c2e40afa"
-    },
-    {
-      "version": "sha256-fc39385b74aba58ed84cd03659bcde371f860378b6d90369d8c7d3e10c7f5295",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:930648697745c515ea8b6f8ec7d9066cf24b7017769cf53ba9885873564dd481"
-    },
-    {
-      "version": "sha256-fc717ff42f367f5bc5f0101880cd488d46acd56c7fd3a6094c78a414e58c183d",
-      "releaseTimestamp": "2026-11-20T09:25:46Z",
-      "digest": "sha256:1f318924be8ecee1310443a1edef16f9a0095a18db2ceb5251a004346a633822"
     }
-  ]
+  ],
+  "floating": {
+    "2": [
+      {
+        "digest": "sha256:5c0917dcb7056c862a1669d41bd084e64bec24361c742c8babf5413433bae7fa",
+        "seen": "2023-12-11T16:43:03Z"
+      }
+    ],
+    "2.3": [
+      {
+        "digest": "sha256:5c0917dcb7056c862a1669d41bd084e64bec24361c742c8babf5413433bae7fa",
+        "seen": "2023-12-11T16:43:03Z"
+      }
+    ],
+    "3": [
+      {
+        "digest": "sha256:e76ca5f507d29ca7d5aea38c49f384ea3da4b5b48873dfb77e8b3b2217bd824b",
+        "seen": "2025-08-08T02:53:24Z"
+      }
+    ],
+    "3.0": [
+      {
+        "digest": "sha256:401199adc2c5d76c99a54109f6f324f1a05966075455990e0eb1a498b800d3ab",
+        "seen": "2024-01-14T20:01:05Z"
+      }
+    ],
+    "3.1": [
+      {
+        "digest": "sha256:fc717ff42f367f5bc5f0101880cd488d46acd56c7fd3a6094c78a414e58c183d",
+        "seen": "2024-10-21T00:00:48Z"
+      }
+    ],
+    "3.2": [
+      {
+        "digest": "sha256:3942ad1e29b29592a7bc49272c8153d10afaa19d3d3dfbc1e0edfce15f48024a",
+        "seen": "2025-03-09T01:38:39Z"
+      }
+    ],
+    "3.3": [
+      {
+        "digest": "sha256:599582b028c862c365270a3e97c79dec73565f20efc5d194062b482a46fce54a",
+        "seen": "2025-03-16T04:30:24Z"
+      }
+    ],
+    "3.4": [
+      {
+        "digest": "sha256:145381b61008485ab578edc56fd1fcb826966d386096c608edc3a2c5a9626431",
+        "seen": "2025-03-16T22:09:11Z"
+      }
+    ],
+    "3.5": [
+      {
+        "digest": "sha256:1a582590167877ce74bb744fc106136d4ad413a11618fef3ed7ea9a84699e655",
+        "seen": "2025-05-10T00:06:32Z"
+      }
+    ],
+    "3.6": [
+      {
+        "digest": "sha256:e76ca5f507d29ca7d5aea38c49f384ea3da4b5b48873dfb77e8b3b2217bd824b",
+        "seen": "2025-08-08T02:53:24Z"
+      }
+    ],
+    "4": [
+      {
+        "digest": "sha256:c37ee10e045d1c294a790a8cd4116f9812cfbedd6bd4214a13650a6dcb70b055",
+        "seen": "2026-11-13T05:32:35Z"
+      }
+    ],
+    "4.0": [
+      {
+        "digest": "sha256:cffd543df892b22fa1c997f0a6b984d00b9565b65bfdfc1e43f38de7d3e2bc3e",
+        "seen": "2025-09-14T21:00:43Z"
+      }
+    ],
+    "4.1": [
+      {
+        "digest": "sha256:1d01039c168dd88308b670ff2823798f0acbdd1661870cbcb0f46ea46518344c",
+        "seen": "2025-10-13T15:31:46Z"
+      }
+    ],
+    "4.10": [
+      {
+        "digest": "sha256:0876f75e13fce1afbd10af19a79de1373f650b32a3080c95a4422b7cb9313ef0",
+        "seen": "2026-05-08T15:37:31Z"
+      }
+    ],
+    "4.11": [
+      {
+        "digest": "sha256:3f9d3df338d70dabb9b7d6a39bd82a773e819fd9e1397fa9fd4af648968c47f3",
+        "seen": "2026-06-27T13:23:57Z"
+      }
+    ],
+    "4.12": [
+      {
+        "digest": "sha256:f9ada1c47a52814cb1426d132f8b89db02c07e114555e4c8015f85bce09e2466",
+        "seen": "2026-07-06T04:07:51Z"
+      }
+    ],
+    "4.13": [
+      {
+        "digest": "sha256:5cede6008f8e3677edd56b4313102a755bbe06c3d975f115a9b33400e25d2f51",
+        "seen": "2026-07-25T21:31:22Z"
+      }
+    ],
+    "4.14": [
+      {
+        "digest": "sha256:99c106f89f78329344ea3c0027ca4e32c35b2e641d0300b36372704eae80711f",
+        "seen": "2026-10-21T12:51:55Z"
+      }
+    ],
+    "4.15": [
+      {
+        "digest": "sha256:984997d82894de00e8be3d4346d9ee16b5deb62c54b4a334a42fde01aa7c9fd6",
+        "seen": "2026-11-07T20:59:39Z"
+      }
+    ],
+    "4.16": [
+      {
+        "digest": "sha256:c37ee10e045d1c294a790a8cd4116f9812cfbedd6bd4214a13650a6dcb70b055",
+        "seen": "2026-11-13T05:32:35Z"
+      }
+    ],
+    "4.2": [
+      {
+        "digest": "sha256:216d2e02e48838743e89c48e898595e2621b17e01aed8907720f4df833d5bf6e",
+        "seen": "2025-11-16T23:05:38Z"
+      }
+    ],
+    "4.3": [
+      {
+        "digest": "sha256:00822205b2901d5ed04420bb0a6eafa815a628f6449317fe60058b08d339b58c",
+        "seen": "2025-11-26T04:41:06Z"
+      }
+    ],
+    "4.4": [
+      {
+        "digest": "sha256:d012b79e6a7494c94577c7da2566fd31d12ae337b908cc724ed0df10d5ab1c36",
+        "seen": "2025-12-19T04:55:52Z"
+      }
+    ],
+    "4.5": [
+      {
+        "digest": "sha256:4bc20751924975b6c06589efdb4bbf8db98768abcea361f0d6484873f707ccbc",
+        "seen": "2026-01-03T14:12:35Z"
+      }
+    ],
+    "4.6": [
+      {
+        "digest": "sha256:dfbce2959ea91ad6855918bf6b41417b6f5b512b23d4bd67f78cc0a62d23f375",
+        "seen": "2026-02-13T04:07:00Z"
+      }
+    ],
+    "4.7": [
+      {
+        "digest": "sha256:3979655b0e3adb3ab3fbbe56c3bf0fd11626c124956400cac753107b0a4e6ee6",
+        "seen": "2026-02-21T18:10:39Z"
+      }
+    ],
+    "4.8": [
+      {
+        "digest": "sha256:797fbc78ec85c807057cb8257be44c1a8bcfd2d47526f982023eb8e6a80a414c",
+        "seen": "2026-03-08T00:17:34Z"
+      }
+    ],
+    "4.9": [
+      {
+        "digest": "sha256:0408714b1117207b352e452e1c6f86e7ec20f6a9b374dc890ffa335bbd02af43",
+        "seen": "2026-04-29T02:24:45Z"
+      }
+    ],
+    "edge": [
+      {
+        "digest": "sha256:46bc03ac6137cf8eb64968b465bf4a7b4e02989eb44bbac66cd84d48e5fdc2db",
+        "seen": "2026-11-20T09:25:46Z"
+      }
+    ],
+    "latest": [
+      {
+        "digest": "sha256:c37ee10e045d1c294a790a8cd4116f9812cfbedd6bd4214a13650a6dcb70b055",
+        "seen": "2026-11-13T05:32:35Z"
+      }
+    ]
+  }
 }
