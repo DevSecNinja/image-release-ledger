@@ -459,16 +459,16 @@ def notify_retags(github: GitHub, ledgers: list[tuple[dict, dict]], apply: bool)
     instead of opening a duplicate.
     """
     pending = [
-        (image, entry, record)
+        (image, entry, number, record)
         for image, ledger in ledgers
         for entry in ledger["releases"]
-        for record in entry.get("retagged", [])
+        for number, record in enumerate(entry.get("retagged", []), 1)
         if not record.get("issue")
     ]
     if not pending:
         return 0
     if not apply:
-        for image, entry, record in pending:
+        for image, entry, _number, record in pending:
             print(f"would open an issue for {image['name']}:{entry['version']} ({record['to']})")
         return 0
     try:
@@ -477,7 +477,7 @@ def notify_retags(github: GitHub, ledgers: list[tuple[dict, dict]], apply: bool)
         print(f"::error::could not list issues, moved-tag notifications retry next run: {error}")
         return 1
     failed = 0
-    for image, entry, record in pending:
+    for image, entry, number, record in pending:
         title = "Tag moved: " + image["name"] + ":" + entry["version"]
         body = (
             f"The tag `{image['name']}:{entry['version']}` now points at another image.\n\n"
@@ -487,9 +487,11 @@ def notify_retags(github: GitHub, ledgers: list[tuple[dict, dict]], apply: bool)
             "A moved version tag can be a re-release or a supply-chain compromise. "
             "Check the upstream project before trusting the new digest."
         )
-        # A stable marker per transition, so a delivered alert whose ledger
-        # commit failed is recognised on the retry instead of posted again.
-        marker = f"<!-- ledger-transition {image['name']}:{entry['version']} {record['from']} {record['to']} -->"
+        # A stable marker per transition (its place in the append-only history),
+        # so a delivered alert whose ledger commit failed is recognised on the
+        # retry, while a repeated move such as A -> B -> A -> B still gets its own.
+        tag = f"{image['name']}:{entry['version']}"
+        marker = f"<!-- ledger-transition {tag} #{number} {record['from']} {record['to']} -->"
         body += "\n\n" + marker
         try:
             if title in by_title:
