@@ -273,6 +273,24 @@ class GitHub:
                 break
         return found
 
+    def open_issues_by_title(self) -> dict[str, str]:
+        """Title -> URL of every open issue (not pull request), all pages."""
+        titles: dict[str, str] = {}
+        for page in range(1, 51):
+            _, issues = self.rest("GET", f"repos/{self.repository}/issues?state=open&per_page=100&page={page}")
+            for issue in issues:
+                if not issue.get("pull_request"):
+                    titles.setdefault(issue["title"], issue.get("html_url", ""))
+            if len(issues) < 100:
+                return titles
+        raise LedgerError("more than 5000 open issues")
+
+    def comment_issue(self, url: str, body: str) -> None:
+        match = re.search(r"/issues/(\d+)$", url)
+        if not match:
+            raise LedgerError(f"not an issue URL: {url}")
+        self.rest("POST", f"repos/{self.repository}/issues/{match[1]}/comments", {"body": body}, ok=(201,))
+
     def open_issue(self, title: str, body: str) -> str:
         _, issue = self.rest("POST", f"repos/{self.repository}/issues", {"title": title, "body": body}, ok=(201,))
         return issue.get("html_url", "")
@@ -380,11 +398,10 @@ def notify_retags(github: GitHub, ledgers: list[tuple[dict, dict]], apply: bool)
             print(f"would open an issue for {image['name']}:{entry['version']} ({record['to']})")
         return 0
     try:
-        _, open_issues = github.rest("GET", f"repos/{github.repository}/issues?state=open&per_page=100")
+        by_title = github.open_issues_by_title()
     except (LedgerError, OSError) as error:
         print(f"::error::could not list issues, moved-tag notifications retry next run: {error}")
         return 1
-    by_title = {i["title"]: i.get("html_url", "") for i in open_issues if not i.get("pull_request")}
     failed = 0
     for image, entry, record in pending:
         title = "Tag moved: " + image["name"] + ":" + entry["version"]
@@ -397,8 +414,12 @@ def notify_retags(github: GitHub, ledgers: list[tuple[dict, dict]], apply: bool)
             "Check the upstream project before trusting the new digest."
         )
         try:
-            record["issue"] = by_title.get(title) or github.open_issue(title, body)
-            by_title[title] = record["issue"]
+            if title in by_title:
+                # Still open from an earlier move: add this transition to it.
+                github.comment_issue(by_title[title], body)
+                record["issue"] = by_title[title]
+            else:
+                record["issue"] = by_title[title] = github.open_issue(title, body)
             print(f"Moved-tag issue: {record['issue']}")
         except (LedgerError, OSError) as error:
             print(f"::error::could not open an issue for {image['name']}:{entry['version']}: {error}")
