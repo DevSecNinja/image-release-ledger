@@ -339,7 +339,7 @@ class RunTest(unittest.TestCase):
         self.assertIn("`ghcr.io/example/app:1.0.0`", text)
         (issue,) = issues
         self.assertEqual(issue["title"], "Tag moved: ghcr.io/example/app:1.0.0")
-        self.assertIn(f"<!-- ledger-transition ghcr.io/example/app:1.0.0 {digest(7)} {digest(1)} -->", issue["body"])
+        self.assertIn(f"<!-- ledger-transition ghcr.io/example/app:1.0.0 #1 {digest(7)} {digest(1)} -->", issue["body"])
         self.assertIn(f"First-seen digest (Renovate keeps using it): `{digest(7)}`", issue["body"])
 
     def test_a_failed_issue_is_committed_unnotified_and_retried_next_run(self):
@@ -376,7 +376,7 @@ class RunTest(unittest.TestCase):
 
     def test_a_delivered_transition_is_not_posted_again_after_a_failed_commit(self):
         routes, commits = self.routes(existing=self.existing(first_digest=digest(7)))
-        marker = f"<!-- ledger-transition ghcr.io/example/app:1.0.0 {digest(7)} {digest(1)} -->"
+        marker = f"<!-- ledger-transition ghcr.io/example/app:1.0.0 #1 {digest(7)} {digest(1)} -->"
         title = "Tag moved: ghcr.io/example/app:1.0.0"
         issues = self.issue_routes(
             routes, open_issues=[{"title": title, "html_url": "https://x/issues/1"}], issue_body=f"...\n\n{marker}"
@@ -384,6 +384,25 @@ class RunTest(unittest.TestCase):
         code, _fake, _out = self.run_ledger(routes, images="ghcr.io/example/app\n")
         self.assertEqual((code, issues, self.comments), (0, [], []))
         self.assertEqual(self.written(commits)["releases"][0]["retagged"][0]["issue"], "https://x/issues/1")
+
+    def test_a_repeated_move_gets_its_own_alert(self):
+        moved = self.existing(first_digest=digest(7))
+        issue = "https://x/issues/1"
+        moved["releases"][0]["retagged"] = [
+            {"from": digest(7), "to": digest(1), "seen": NOW, "issue": issue},
+            {"from": digest(1), "to": digest(7), "seen": NOW, "issue": issue},
+        ]
+        routes, commits = self.routes(existing=moved)
+        first = f"<!-- ledger-transition ghcr.io/example/app:1.0.0 #1 {digest(7)} {digest(1)} -->"
+        title = "Tag moved: ghcr.io/example/app:1.0.0"
+        self.issue_routes(routes, open_issues=[{"title": title, "html_url": issue}], issue_body=first)
+        code, _fake, _out = self.run_ledger(routes, images="ghcr.io/example/app\n")
+        self.assertEqual(code, 0)
+        (comment,) = self.comments
+        self.assertIn(
+            f"<!-- ledger-transition ghcr.io/example/app:1.0.0 #3 {digest(7)} {digest(1)} -->", comment["body"]
+        )
+        self.assertEqual(len(self.written(commits)["releases"][0]["retagged"]), 3)
 
     def test_an_open_issue_on_a_later_page_is_found(self):
         routes, commits = self.routes(existing=self.existing(first_digest=digest(7)))
