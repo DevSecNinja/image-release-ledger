@@ -14,6 +14,16 @@ The files live on the `data` branch. Rules:
 - A known tag is never changed: its timestamp never moves and its digest stays
   the first one seen, so a re-pushed (possibly hijacked) tag is not picked up.
 - A tag that disappears from the registry is kept and marked isDeprecated.
+- Version tags (x.y.z, optional pre-release) are re-checked on every run. If
+  one now points at another digest, its entry keeps the first digest and gets
+  a `retagged` record ({from, to, seen}); the run reports it in the job summary
+  and opens an issue. Rolling tags (latest, 4.16) move by design and are not
+  re-checked.
+- Signature and attestation tags (sha256-<digest>[.sig|.att|.sbom]) are not
+  versions and are left out.
+- When images.txt names the GitHub source repo, a new tag that has a release
+  records the release's `immutable` flag (GitHub immutable releases lock the
+  tag and assets). The release list is read once per run that has new tags.
 - Only when an image is added (its file does not exist yet) and images.txt
   names a `seed=github-releases:<owner>/<repo>` source do its existing tags
   take the date of the matching GitHub release instead (never later than now),
@@ -27,6 +37,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import copy
 import json
 import os
 import re
@@ -46,6 +57,10 @@ MANIFEST_ACCEPT = "application/vnd.oci.image.index.v1+json, application/vnd.dock
 IMAGE = re.compile(
     r"^(?P<host>[a-z0-9-]+(?:\.[a-z0-9-]+)+(?::\d+)?)/(?P<repo>[a-z0-9][a-z0-9._-]*(?:/[a-z0-9][a-z0-9._-]*)*)$"
 )
+# Exact versions: re-checked for moved tags. Rolling tags (latest, 4, 4.16) are not.
+VERSION_TAG = re.compile(r"^v?\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$")
+# Cosign signatures, attestations and SBOMs stored as tags: not versions.
+ARTIFACT_TAG = re.compile(r"^sha256-[0-9a-f]{64}(?:\.(?:sig|att|sbom))?$")
 SEED = re.compile(r"^github-releases:(?P<repo>[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)$")
 LINK_NEXT = re.compile(r'<([^>]+)>\s*;\s*rel="?next"?')
 
@@ -153,30 +168,52 @@ def update_image(
     tags: list[str],
     digest_of: Callable[[str], str],
     now: str,
-    seed_dates: dict[str, str] | None = None,
+    releases_info: dict[str, dict] | None = None,
     source_url: str | None = None,
-) -> dict:
-    """The image's new ledger. Only tags missing from `existing` are looked up."""
-    releases = {r["version"]: dict(r) for r in (existing or {}).get("releases", [])}
-    if existing is not None:
-        seed_dates = None
+) -> tuple[dict, list[dict]]:
+    """The image's new ledger and its new retag events.
+
+    New tags and exact version tags are looked up; other known tags are not.
+    `releases_info` maps a tag to its GitHub release ({"published_at",
+    "immutable"}); its date seeds tags only for a new image (`existing` None).
+    """
+    tags = [t for t in tags if not ARTIFACT_TAG.match(t)]
+    releases = {
+        r["version"]: copy.deepcopy(r)
+        for r in (existing or {}).get("releases", [])
+        if not ARTIFACT_TAG.match(r["version"])
+    }
+    seeding = existing is None
     current = set(tags)
+    events: list[dict] = []
     for tag in tags:
-        if tag in releases:
-            releases[tag].pop("isDeprecated", None)
+        entry = releases.get(tag)
+        if entry is not None:
+            entry.pop("isDeprecated", None)
+            if VERSION_TAG.match(tag):
+                digest = digest_of(tag)
+                history = entry.get("retagged", [])
+                last = history[-1]["to"] if history else entry["digest"]
+                if digest != last:
+                    record = {"from": last, "to": digest, "seen": now}
+                    entry["retagged"] = [*history, record]
+                    events.append({"tag": tag, **record})
             continue
         entry = {"version": tag, "releaseTimestamp": now, "digest": digest_of(tag)}
-        seeded = (seed_dates or {}).get(tag)
-        if seeded and seeded < now:
-            entry["releaseTimestamp"] = seeded
-            entry["seed"] = "github-release"
+        release = (releases_info or {}).get(tag)
+        if release:
+            if seeding and release.get("published_at") and release["published_at"] < now:
+                entry["releaseTimestamp"] = release["published_at"]
+                entry["seed"] = "github-release"
+            if isinstance(release.get("immutable"), bool):
+                entry["immutable"] = release["immutable"]
         releases[tag] = entry
     for tag, entry in releases.items():
         if tag not in current:
             entry["isDeprecated"] = True
     ledger = {"releases": sorted(releases.values(), key=lambda r: (r["releaseTimestamp"], r["version"]))}
     source_url = source_url or (existing or {}).get("sourceUrl")
-    return {"sourceUrl": source_url, **ledger} if source_url else ledger
+    return ({"sourceUrl": source_url, **ledger} if source_url else ledger), events
 
 
 def dump(ledger: dict) -> str:
@@ -220,20 +257,63 @@ class GitHub:
             return None
         return json.loads(base64.b64decode(payload["content"]))
 
-    def release_dates(self, repo: str) -> dict[str, str]:
-        """Tag name (with and without a leading v) -> published_at of each published release."""
-        dates: dict[str, str] = {}
+    def releases(self, repo: str) -> dict[str, dict]:
+        """Tag name (with and without a leading v) -> {published_at, immutable} of each published release."""
+        found: dict[str, dict] = {}
         for page in range(1, 11):
             _, releases = self.rest("GET", f"repos/{repo}/releases?per_page=100&page={page}")
             for release in releases:
                 if release.get("draft") or not release.get("published_at"):
                     continue
                 tag = release["tag_name"]
+                info = {"published_at": release["published_at"], "immutable": release.get("immutable")}
                 for name in (tag, tag.removeprefix("v")):
-                    dates.setdefault(name, release["published_at"])
+                    found.setdefault(name, info)
             if len(releases) < 100:
                 break
-        return dates
+        return found
+
+    def open_issues_by_title(self) -> dict[str, str]:
+        """Title -> URL of every open issue (not pull request), all pages."""
+        titles: dict[str, str] = {}
+        for page in range(1, 51):
+            _, issues = self.rest("GET", f"repos/{self.repository}/issues?state=open&per_page=100&page={page}")
+            for issue in issues:
+                if not issue.get("pull_request"):
+                    titles.setdefault(issue["title"], issue.get("html_url", ""))
+            if len(issues) < 100:
+                return titles
+        raise LedgerError("more than 5000 open issues")
+
+    @staticmethod
+    def issue_number(url: str) -> str:
+        match = re.search(r"/issues/(\d+)$", url)
+        if not match:
+            raise LedgerError(f"not an issue URL: {url}")
+        return match[1]
+
+    def issue_mentions(self, url: str, text: str) -> bool:
+        """Whether the issue's body or any of its comments contains `text`."""
+        number = self.issue_number(url)
+        _, issue = self.rest("GET", f"repos/{self.repository}/issues/{number}")
+        if text in (issue.get("body") or ""):
+            return True
+        for page in range(1, 51):
+            path = f"repos/{self.repository}/issues/{number}/comments?per_page=100&page={page}"
+            _, comments = self.rest("GET", path)
+            if any(text in (c.get("body") or "") for c in comments):
+                return True
+            if len(comments) < 100:
+                return False
+        raise LedgerError(f"issue {number} has more than 5000 comments")
+
+    def comment_issue(self, url: str, body: str) -> None:
+        path = f"repos/{self.repository}/issues/{self.issue_number(url)}/comments"
+        self.rest("POST", path, {"body": body}, ok=(201,))
+
+    def open_issue(self, title: str, body: str) -> str:
+        _, issue = self.rest("POST", f"repos/{self.repository}/issues", {"title": title, "body": body}, ok=(201,))
+        return issue.get("html_url", "")
 
     def commit(self, branch: str, head: str, files: dict[str, str], headline: str, body: str) -> str:
         additions = [{"path": p, "contents": base64.b64encode(c.encode()).decode()} for p, c in sorted(files.items())]
@@ -257,8 +337,8 @@ def ledger_path(image: dict) -> str:
 
 def run(images: list[dict], github: GitHub, transport: Transport, branch: str, now: str, apply: bool) -> int:
     head = github.branch_head(branch) if apply else ""
-    changed: dict[str, str] = {}
-    added: list[str] = []
+    results: list[tuple[dict, str, dict | None, dict, set[str]]] = []
+    events: list[dict] = []
     failures = 0
     for image in images:
         path = ledger_path(image)
@@ -266,31 +346,112 @@ def run(images: list[dict], github: GitHub, transport: Transport, branch: str, n
             existing = github.read_file(branch, path)
             registry = Registry(transport, image["host"])
             tags = registry.tags(image["repo"])
-            seed = github.release_dates(image["seed"]) if image["seed"] and existing is None else None
+            known = {r["version"] for r in (existing or {}).get("releases", [])}
+            new_tags = [t for t in tags if t not in known and not ARTIFACT_TAG.match(t)]
+            info = github.releases(image["seed"]) if image["seed"] and new_tags else None
             source = f"https://github.com/{image['seed']}" if image["seed"] else None
 
             def digest_of(tag: str, registry: Registry = registry, repo: str = image["repo"]) -> str:
                 return registry.digest(repo, tag)
 
-            ledger = update_image(existing, tags, digest_of, now, seed, source)
+            ledger, image_events = update_image(existing, tags, digest_of, now, info, source)
         except (LedgerError, ValueError, KeyError, OSError) as error:
             print(f"::error::{image['name']}: {error}")
             failures += 1
             continue
+        events += [{"image": image["name"], **e} for e in image_events]
+        results.append((image, path, existing, ledger, known))
+    for event in events:
+        print(f"::warning::{event['image']}:{event['tag']} moved from {event['from']} to {event['to']}")
+    write_summary(events)
+    # Before the commit, so the issue URLs are stored with the records; a record
+    # without one is retried on the next run.
+    failures += notify_retags(github, [(image, ledger) for image, _, _, ledger, _ in results], apply)
+    changed: dict[str, str] = {}
+    added: list[str] = []
+    for image, path, existing, ledger, known in results:
         if existing is None or dump(ledger) != dump(existing):
             changed[path] = dump(ledger)
-            known = {r["version"] for r in (existing or {}).get("releases", [])}
             added += [f"{image['name']}:{r['version']}" for r in ledger["releases"] if r["version"] not in known]
     if not changed:
         print("No new tags.")
     elif apply:
-        body = "\n".join(f"- {tag}" for tag in added[:200]) or "Deprecation flags only."
+        lines = [f"- {tag}" for tag in added[:200]] + [f"- retagged {e['image']}:{e['tag']}" for e in events]
+        body = "\n".join(lines) or "Deprecation flags and notifications only."
         oid = github.commit(branch, head, changed, f"chore(data): record {len(added)} first-seen tag(s)", body)
         print(f"Committed {len(changed)} file(s) to {branch}: {oid}")
     else:
         for path, content in changed.items():
             print(f"would write {path} ({len(json.loads(content)['releases'])} releases)")
     return 1 if failures else 0
+
+
+def write_summary(events: list[dict]) -> None:
+    summary = os.environ.get("GITHUB_STEP_SUMMARY")
+    if not events or not summary:
+        return
+    with open(summary, "a", encoding="utf-8") as handle:
+        handle.write("## Moved tags\n\n")
+        handle.writelines(
+            f"- `{e['image']}:{e['tag']}`: `{e['from']}` → `{e['to']}` (seen {e['seen']})\n" for e in events
+        )
+
+
+def notify_retags(github: GitHub, ledgers: list[tuple[dict, dict]], apply: bool) -> int:
+    """Open one issue per retag record that has none yet; returns the number of failures.
+
+    The issue URL is stored on the record (`issue`), so a failed request is
+    retried on the next run, and an open issue with the same title is reused
+    instead of opening a duplicate.
+    """
+    pending = [
+        (image, entry, number, record)
+        for image, ledger in ledgers
+        for entry in ledger["releases"]
+        for number, record in enumerate(entry.get("retagged", []), 1)
+        if not record.get("issue")
+    ]
+    if not pending:
+        return 0
+    if not apply:
+        for image, entry, _number, record in pending:
+            print(f"would open an issue for {image['name']}:{entry['version']} ({record['to']})")
+        return 0
+    try:
+        by_title = github.open_issues_by_title()
+    except (LedgerError, OSError) as error:
+        print(f"::error::could not list issues, moved-tag notifications retry next run: {error}")
+        return 1
+    failed = 0
+    for image, entry, number, record in pending:
+        title = "Tag moved: " + image["name"] + ":" + entry["version"]
+        body = (
+            f"The tag `{image['name']}:{entry['version']}` now points at another image.\n\n"
+            f"- First-seen digest (Renovate keeps using it): `{entry['digest']}`\n"
+            f"- Previous digest: `{record['from']}`\n"
+            f"- New digest: `{record['to']}`\n- Seen: {record['seen']}\n\n"
+            "A moved version tag can be a re-release or a supply-chain compromise. "
+            "Check the upstream project before trusting the new digest."
+        )
+        # A stable marker per transition (its place in the append-only history),
+        # so a delivered alert whose ledger commit failed is recognised on the
+        # retry, while a repeated move such as A -> B -> A -> B still gets its own.
+        tag = f"{image['name']}:{entry['version']}"
+        marker = f"<!-- ledger-transition {tag} #{number} {record['from']} {record['to']} -->"
+        body += "\n\n" + marker
+        try:
+            if title in by_title:
+                # Still open from an earlier move: add this transition to it once.
+                if not github.issue_mentions(by_title[title], marker):
+                    github.comment_issue(by_title[title], body)
+                record["issue"] = by_title[title]
+            else:
+                record["issue"] = by_title[title] = github.open_issue(title, body)
+            print(f"Moved-tag issue: {record['issue']}")
+        except (LedgerError, OSError) as error:
+            print(f"::error::could not open an issue for {image['name']}:{entry['version']}: {error}")
+            failed += 1
+    return failed
 
 
 def main(argv: list[str] | None = None) -> int:
