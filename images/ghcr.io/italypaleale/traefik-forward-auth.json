@@ -391,6 +391,11 @@
       "seed": "github-release"
     },
     {
+      "version": "4.15",
+      "releaseTimestamp": "2026-11-07T20:59:39Z",
+      "digest": "sha256:984997d82894de00e8be3d4346d9ee16b5deb62c54b4a334a42fde01aa7c9fd6"
+    },
+    {
       "version": "4.15.0",
       "releaseTimestamp": "2026-11-07T20:59:39Z",
       "digest": "sha256:984997d82894de00e8be3d4346d9ee16b5deb62c54b4a334a42fde01aa7c9fd6",
