@@ -19,8 +19,8 @@ See DevSecNinja/.github ADR 0005 for the cooldown this would replace.
    often, about twice a day on this repo, see "Schedule"). `scripts/ledger.py`
    lists the tags of every image in [`images.txt`](images.txt) with an
    anonymous registry token, keeps only the tags its `tags=` filter allows,
-   reads the manifest digest of each new tag and re-checks the digest of each
-   exact version tag.
+   reads the manifest digest of each new tag and re-checks the digest of the
+   newest exact version tags (`recheck=`, default 20).
 2. It writes `images/<registry>/<repository>.json` on the **`data`** branch:
 
    ```json
@@ -47,9 +47,11 @@ Rules:
 - A new tag gets the time it was first seen and its digest at that moment.
 - A known tag never changes. Its digest stays the first one seen, so a
   re-pushed (possibly hijacked) tag is not picked up.
-- **Moved tags.** Exact version tags (`x.y.z`, optional pre-release) are
-  re-checked on every run. If one now points at another digest, its entry
-  keeps the first digest and gets a `retagged` record:
+- **Moved tags.** The newest exact version tags (`x.y.z`, optional
+  pre-release) of each image are re-checked on every run: 20 by default, in
+  version order, set per image with `recheck=<n>` in `images.txt` (`0` turns
+  the check off). If one now points at another digest, its entry keeps the
+  first digest and gets a `retagged` record:
 
   ```json
   "retagged": [{ "from": "sha256:…", "to": "sha256:…", "seen": "2026-11-20T12:23:00Z" }]
@@ -127,15 +129,30 @@ Renovate's custom datasource ignores the extra fields (`seed`, `immutable`,
 - The `data` branch cannot be deleted or force-pushed (ruleset `data-branch`).
 - Failure is safe: if the job stops or an image or tag is missing, Renovate
   sees no new version, so updates stall instead of merging unsoaked versions.
+- **Bounded move alarm.** Only the newest `recheck` version tags per image
+  are re-checked for a moved digest. An older tag that moves still keeps its
+  first digest in the ledger, so Renovate never pins the moved image; the only
+  loss is the alarm issue for that tag. Renovate proposes recent versions, so
+  the newest 20 cover what it can pick. Raise `recheck=` for an image whose
+  older tags matter.
 
 ## Limits and schedule
 
+- **Requests per run.** Each image costs its tag-list pages, a manifest
+  request per new tag, one per re-checked version tag (newest 20) and one per
+  floating tag. For the 16 truenas-apps images that is about 360 manifest
+  requests a run instead of about 1,660 when every tag was re-checked.
+- **Pacing.** Registry requests are sequential, with a 0.1 s pause between
+  them.
 - **Registry limits.** A tag list is read in pages of 1,000, up to 500 pages
   per image. A 429 or 5xx response, including one to a token request, is
-  retried once after `Retry-After` (seconds or an HTTP date, capped at 60 s,
-  5 s when absent; ghcr.io names its limit, 44,000 requests a minute, only in
-  the response body). A second failure skips that image for the run, which
-  fails closed. An anonymous token that expires mid-run is renewed once.
+  retried up to twice: after `Retry-After` (seconds or an HTTP date), or else
+  after 5 s and then 10 s plus up to 1 s of random jitter, each wait capped
+  at 60 s. ghcr.io names its limit, 44,000 requests a minute, only in the
+  response body. If the registry still refuses, the image fails for the run,
+  and the run skips the remaining images on that registry rather than add
+  load (fails closed). An anonymous token that expires mid-run is renewed
+  once.
 - **Schedule.** GitHub delays scheduled workflows on quiet repositories: the
   6-hourly cron has run about every 12 hours here. That only delays new tags
   becoming visible; it never shortens a soak.

@@ -20,6 +20,8 @@ SPEC = importlib.util.spec_from_file_location(
 )
 ledger = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(ledger)
+# No real pauses in tests; pacing is tested with an explicit `pace`.
+ledger.PACE_SECONDS = 0
 
 NOW = "2026-11-20T08:00:00Z"
 REG = "https://ghcr.io/v2/example/app"
@@ -140,6 +142,19 @@ class RegistryTest(unittest.TestCase):
         self.assertEqual(ledger.retry_delay({"retry-after": "soon"}, now), ledger.DEFAULT_RETRY_SECONDS)
         self.assertEqual(ledger.retry_delay({}, now), ledger.DEFAULT_RETRY_SECONDS)
 
+    def test_without_retry_after_the_wait_doubles_with_jitter_and_is_capped(self):
+        self.assertEqual(ledger.retry_delay({}, attempt=1, jitter=0.5), ledger.DEFAULT_RETRY_SECONDS * 2 + 0.5)
+        self.assertEqual(ledger.retry_delay({}, attempt=10), ledger.MAX_RETRY_SECONDS)
+
+    def test_requests_are_paced_but_the_first_is_not(self):
+        fake = Fake({("HEAD", f"{REG}/manifests/1.0.0"): manifest(1), ("HEAD", f"{REG}/manifests/1.1.0"): manifest(2)})
+        waits = []
+        registry = ledger.Registry(fake, "ghcr.io", sleep=waits.append, pace=0.1)
+        registry.digest("example/app", "1.0.0")
+        registry.digest("example/app", "1.1.0")
+        # 401, token, HEAD, HEAD: three pauses, none before the first request.
+        self.assertEqual(waits, [0.1, 0.1, 0.1])
+
     def test_a_rate_limited_token_request_is_retried_once(self):
         answers = [(503, {"retry-after": "2"}, b""), (200, {}, b'{"token": "anon"}')]
         calls = []
@@ -157,13 +172,28 @@ class RegistryTest(unittest.TestCase):
         self.assertEqual(registry.digest("example/app", "1.0.0"), digest(5))
         self.assertEqual(waits, [2.0])
 
-    def test_a_second_rate_limit_fails_the_image_and_long_waits_are_capped(self):
+    def test_any_server_error_is_retried_and_ends_as_busy(self):
+        answers = [(500, {}, b""), manifest(6)]
+        fake = Fake({("HEAD", f"{REG}/manifests/1.0.0"): lambda _data: answers.pop(0)}, token_required=False)
+        waits = []
+        registry = ledger.Registry(fake, "ghcr.io", sleep=waits.append, jitter=lambda: 0.25)
+        self.assertEqual(registry.digest("example/app", "1.0.0"), digest(6))
+        self.assertEqual(waits, [ledger.DEFAULT_RETRY_SECONDS + 0.25])
+        always = Fake({("HEAD", f"{REG}/manifests/1.0.0"): (500, {}, b"")}, token_required=False)
+        with self.assertRaises(ledger.RegistryBusy):
+            ledger.Registry(always, "ghcr.io", sleep=lambda _s: None).digest("example/app", "1.0.0")
+
+    def test_version_order_ignores_the_v_prefix_and_puts_releases_after_prereleases(self):
+        tags = ["2.0.0", "v1.0.0", "2.0.0-rc.1", "1.10.0", "v1.9.0"]
+        self.assertEqual(sorted(tags, key=ledger.version_key), ["v1.0.0", "v1.9.0", "1.10.0", "2.0.0-rc.1", "2.0.0"])
+
+    def test_a_registry_that_keeps_refusing_fails_the_image_and_long_waits_are_capped(self):
         fake = Fake({("HEAD", f"{REG}/manifests/1.0.0"): (429, {"retry-after": "3600"}, b"")}, token_required=False)
         waits = []
-        with self.assertRaises(ledger.LedgerError):
+        with self.assertRaises(ledger.RegistryBusy):
             ledger.Registry(fake, "ghcr.io", sleep=waits.append).digest("example/app", "1.0.0")
-        self.assertEqual(waits, [ledger.MAX_RETRY_SECONDS])
-        self.assertEqual(len(fake.heads()), 2)
+        self.assertEqual(waits, [ledger.MAX_RETRY_SECONDS] * ledger.RETRIES)
+        self.assertEqual(len(fake.heads()), ledger.RETRIES + 1)
 
     def test_an_expired_token_is_renewed_once(self):
         calls = []
@@ -333,6 +363,38 @@ class MoreUpdateImageTest(unittest.TestCase):
         self.assertEqual(len(back["releases"][0]["retagged"]), 2)
         self.assertEqual(events[0]["to"], digest(1))
 
+    def test_only_the_newest_known_version_tags_are_rechecked(self):
+        tags = ["1.9.0", "1.10.0", "1.11.0", "2.0.0"]
+        existing = {"releases": [{"version": t, "releaseTimestamp": NOW, "digest": digest(1)} for t in tags]}
+        looked_up = []
+
+        def digest_of(tag):
+            looked_up.append(tag)
+            return digest(1)
+
+        result, _ = ledger.update_image(existing, [*tags, "2.1.0"], digest_of, NOW, recheck=2)
+        # Natural version order: 1.11.0 and 2.0.0 are the newest known tags; 2.1.0 is new.
+        self.assertEqual(sorted(looked_up), ["1.11.0", "2.0.0", "2.1.0"])
+        self.assertEqual(len(result["releases"]), 5)
+
+        looked_up.clear()
+        ledger.update_image(existing, tags, digest_of, NOW, recheck=0)
+        self.assertEqual(looked_up, [])
+        (image,) = ledger.parse_images("ghcr.io/a/b recheck=5\n")
+        self.assertEqual((image["recheck"], ledger.parse_images("ghcr.io/a/b\n")[0]["recheck"]), (5, 20))
+        with self.assertRaises(ledger.LedgerError):
+            ledger.parse_images("ghcr.io/a/b recheck=all\n")
+
+    def test_an_unchecked_older_tag_keeps_its_first_digest(self):
+        old = {"version": "1.0.0", "releaseTimestamp": "2026-10-01T00:00:00Z", "digest": digest(1)}
+        new = {"version": "2.0.0", "releaseTimestamp": NOW, "digest": digest(2)}
+        result, events = ledger.update_image(
+            {"releases": [old, new]}, ["1.0.0", "2.0.0"], lambda t: digest(9), NOW, recheck=1
+        )
+        by_tag = {r["version"]: r for r in result["releases"]}
+        self.assertEqual((by_tag["1.0.0"]["digest"], "retagged" in by_tag["1.0.0"]), (digest(1), False))
+        self.assertEqual([e["tag"] for e in events], ["2.0.0"])
+
     def test_signature_and_attestation_tags_are_left_out(self):
         sig = "sha256-" + "a" * 64
         existing = {"releases": [{"version": f"{sig}.sig", "releaseTimestamp": NOW, "digest": digest(1)}]}
@@ -361,7 +423,7 @@ class RunTest(unittest.TestCase):
             ("GET", f"{REG}/tags/list?n=1000"): tags_route(["1.0.0", "1.1.0"]),
             ("HEAD", f"{REG}/manifests/1.0.0"): manifest(1),
             ("HEAD", f"{REG}/manifests/1.1.0"): manifest(2),
-            ("GET", "https://ghcr.io/v2/example/broken/tags/list?n=1000"): (500, {}, b""),
+            ("GET", "https://ghcr.io/v2/example/broken/tags/list?n=1000"): (404, {}, b""),
             ("GET", f"{API}/repos/example/app/releases?per_page=100&page=1"): (
                 200,
                 {},
@@ -510,6 +572,18 @@ class RunTest(unittest.TestCase):
         code, _fake, _out = self.run_ledger(routes, images="ghcr.io/example/app\n")
         self.assertEqual((code, len(issues)), (0, 1))
         self.assertEqual(self.written(commits)["releases"][0]["retagged"][0]["issue"], "https://x/issues/9")
+
+    def test_a_rate_limiting_registry_skips_its_other_images_this_run(self):
+        routes, commits = self.routes()
+        routes[("GET", "https://ghcr.io/v2/example/busy/tags/list?n=1000")] = (429, {"retry-after": "0"}, b"")
+        code, fake, out = self.run_ledger(
+            routes, images="ghcr.io/example/busy\nghcr.io/example/app seed=github-releases:example/app\n"
+        )
+        self.assertEqual((code, commits), (1, []))
+        self.assertIn("::error::ghcr.io/example/app: skipped, ghcr.io is rate-limiting this run", out)
+        self.assertFalse(
+            any("example/app/" in url for _, url, _, _ in fake.calls if url.startswith("https://ghcr.io/v2"))
+        )
 
     def test_a_tag_filter_skips_other_tags_before_any_lookup(self):
         routes, commits = self.routes()

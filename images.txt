@@ -1,5 +1,5 @@
 # Images on registries without release dates (ghcr.io, lscr.io, quay.io, dhi.io, mcr.microsoft.com).
-# One per line: <registry>/<repository> [seed=github-releases:<owner>/<repo>] [soak-days=<n>] [tags=<regex>]
+# One per line: <registry>/<repository> [seed=github-releases:<owner>/<repo>] [soak-days=<n>] [tags=<regex>] [recheck=<n>]
 # seed names the GitHub source repo: when an image is added, its existing tags
 # take the date of the matching GitHub release instead of "now" (tags seen later
 # are first-seen), and each new tag records the release's immutable flag.
@@ -7,6 +7,8 @@
 # Renovate sees it.
 # tags is an anchored pattern (^...$, no spaces or #) of the tags to record;
 # others are never looked up. Use it for images with many CI tags.
+# recheck (default 20) is how many of the newest known version tags are
+# re-checked each run for a moved digest; 0 turns the check off.
 ghcr.io/italypaleale/traefik-forward-auth seed=github-releases:italypaleale/traefik-forward-auth
 ghcr.io/openclaw/openclaw seed=github-releases:openclaw/openclaw tags=^\d{4}\.\d+\.\d+$
 ghcr.io/alexta69/metube seed=github-releases:alexta69/metube tags=^\d{4}\.\d{2}\.\d{2}$
