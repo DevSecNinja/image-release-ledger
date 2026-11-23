@@ -131,11 +131,11 @@ Renovate's custom datasource ignores the extra fields (`seed`, `immutable`,
 ## Limits and schedule
 
 - **Registry limits.** A tag list is read in pages of 1,000, up to 500 pages
-  per image. A 429 or 5xx response is retried once after `Retry-After`
-  (capped at 60 s, 5 s when absent; ghcr.io names its limit, 44,000 requests a
-  minute, only in the response body). A second failure skips that image for
-  the run, which fails closed. An anonymous token that expires mid-run is
-  renewed once.
+  per image. A 429 or 5xx response, including one to a token request, is
+  retried once after `Retry-After` (seconds or an HTTP date, capped at 60 s,
+  5 s when absent; ghcr.io names its limit, 44,000 requests a minute, only in
+  the response body). A second failure skips that image for the run, which
+  fails closed. An anonymous token that expires mid-run is renewed once.
 - **Schedule.** GitHub delays scheduled workflows on quiet repositories: the
   6-hourly cron has run about every 12 hours here. That only delays new tags
   becoming visible; it never shortens a soak.

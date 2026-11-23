@@ -132,6 +132,31 @@ class RegistryTest(unittest.TestCase):
         self.assertEqual(registry.digest("example/app", "1.0.0"), digest(3))
         self.assertEqual(waits, [7.0])
 
+    def test_retry_after_accepts_seconds_or_an_http_date(self):
+        now = ledger.datetime(2026, 11, 23, 9, 0, 0, tzinfo=ledger.UTC)
+        self.assertEqual(ledger.retry_delay({"retry-after": "12"}, now), 12)
+        self.assertEqual(ledger.retry_delay({"retry-after": "Mon, 23 Nov 2026 09:00:30 GMT"}, now), 30)
+        self.assertEqual(ledger.retry_delay({"retry-after": "Mon, 23 Nov 2026 08:59:00 GMT"}, now), 0)
+        self.assertEqual(ledger.retry_delay({"retry-after": "soon"}, now), ledger.DEFAULT_RETRY_SECONDS)
+        self.assertEqual(ledger.retry_delay({}, now), ledger.DEFAULT_RETRY_SECONDS)
+
+    def test_a_rate_limited_token_request_is_retried_once(self):
+        answers = [(503, {"retry-after": "2"}, b""), (200, {}, b'{"token": "anon"}')]
+        calls = []
+
+        def transport(method, url, headers, data):
+            calls.append(url)
+            if url.startswith("https://ghcr.io/token"):
+                return answers.pop(0)
+            if headers.get("Authorization") != "Bearer anon":
+                return 401, {"www-authenticate": CHALLENGE}, b""
+            return manifest(5)
+
+        waits = []
+        registry = ledger.Registry(transport, "ghcr.io", sleep=waits.append)
+        self.assertEqual(registry.digest("example/app", "1.0.0"), digest(5))
+        self.assertEqual(waits, [2.0])
+
     def test_a_second_rate_limit_fails_the_image_and_long_waits_are_capped(self):
         fake = Fake({("HEAD", f"{REG}/manifests/1.0.0"): (429, {"retry-after": "3600"}, b"")}, token_required=False)
         waits = []

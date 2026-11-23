@@ -49,6 +49,7 @@ from __future__ import annotations
 import argparse
 import base64
 import copy
+import email.utils
 import json
 import os
 import re
@@ -159,11 +160,17 @@ def keep_ledger(existing: dict | None, pattern: re.Pattern[str] | None) -> dict 
     return kept
 
 
-def retry_delay(headers: dict[str, str]) -> float:
+def retry_delay(headers: dict[str, str], now: datetime | None = None) -> float:
+    """Seconds to wait before a retry: Retry-After as seconds or an HTTP date, capped."""
+    value = headers.get("retry-after", "").strip()
     try:
-        seconds = float(headers.get("retry-after", DEFAULT_RETRY_SECONDS))
+        seconds = float(value)
     except ValueError:
-        seconds = DEFAULT_RETRY_SECONDS
+        try:
+            when = email.utils.parsedate_to_datetime(value)
+            seconds = (when - (now or datetime.now(UTC))).total_seconds()
+        except (TypeError, ValueError):
+            seconds = DEFAULT_RETRY_SECONDS
     return min(max(seconds, 0), MAX_RETRY_SECONDS)
 
 
@@ -182,7 +189,11 @@ class Registry:
         if not challenge.lower().startswith("bearer") or not realm.startswith("https://"):
             raise LedgerError(f"{self.host}/{repo}: unsupported auth challenge {challenge!r}")
         params.setdefault("scope", f"repository:{repo}:pull")
-        status, _, body = self.transport("GET", f"{realm}?{urllib.parse.urlencode(params)}", {}, None)
+        url = f"{realm}?{urllib.parse.urlencode(params)}"
+        status, headers, body = self.transport("GET", url, {}, None)
+        if status in RETRY_STATUSES:
+            self.sleep(retry_delay(headers))
+            status, headers, body = self.transport("GET", url, {}, None)
         if status != 200:
             raise LedgerError(f"{self.host}/{repo}: token request failed with HTTP {status}")
         payload = json.loads(body)
