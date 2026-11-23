@@ -8,3 +8,8 @@
 # tags is an anchored pattern (^...$, no spaces or #) of the tags to record;
 # others are never looked up. Use it for images with many CI tags.
 ghcr.io/italypaleale/traefik-forward-auth seed=github-releases:italypaleale/traefik-forward-auth
+ghcr.io/openclaw/openclaw seed=github-releases:openclaw/openclaw tags=^\d{4}\.\d+\.\d+$
+ghcr.io/alexta69/metube seed=github-releases:alexta69/metube tags=^\d{4}\.\d{2}\.\d{2}$
+ghcr.io/karakeep-app/karakeep seed=github-releases:karakeep-app/karakeep tags=^\d+\.\d+\.\d+$
+ghcr.io/meeb/tubesync seed=github-releases:meeb/tubesync tags=^v\d+\.\d+\.\d+$
+ghcr.io/gethomepage/homepage seed=github-releases:gethomepage/homepage tags=^v\d+\.\d+\.\d+$
