@@ -1,0 +1,805 @@
+{
+  "sourceUrl": "https://github.com/alexta69/metube",
+  "releases": [
+    {
+      "version": "2025.11.29",
+      "releaseTimestamp": "2025-11-29T07:59:21Z",
+      "digest": "sha256:8e183a933152bccd735aac6fbe94dd6b379e21c35db991314c69fdb0e1951e7c",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2025.12.05",
+      "releaseTimestamp": "2025-12-05T09:45:02Z",
+      "digest": "sha256:fe87482a11a86071093438cfb53f6cdcd9c648c248bccc88f3535bd275166fc8",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2025.12.09",
+      "releaseTimestamp": "2025-12-09T00:16:11Z",
+      "digest": "sha256:153c71f0d7ec031d8e1a3c5dfc501745c2557867a6c40d8c2ce9ab829e5a8708",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2025.12.14",
+      "releaseTimestamp": "2025-12-14T18:24:33Z",
+      "digest": "sha256:9a2e1292c574dd1c2a2b51ead3e23fd143e071a38d0dc8d2f81ffcb4d265ba11",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2025.12.25",
+      "releaseTimestamp": "2025-12-25T19:34:19Z",
+      "digest": "sha256:4a5db42d55669d5e6584224d2bd7efcd11cc3c7aeb05d5d0ae479598256a3d27",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2025.12.26",
+      "releaseTimestamp": "2025-12-26T15:50:07Z",
+      "digest": "sha256:cdd71831e2568a55dfa0212d7eabb6882ee91ac152fefe9d718e62a72e220d3a",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2025.12.27",
+      "releaseTimestamp": "2025-12-27T10:24:02Z",
+      "digest": "sha256:f99c77ae35b21316a5a91bf5fcf9637670a4c87d7f4439dee329c9a3579eb78a",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2025.12.30",
+      "releaseTimestamp": "2025-12-30T20:45:58Z",
+      "digest": "sha256:ad242a4808f72a760b9a56e8d0b89785d3b7e8e57588bde67b4f0111ac0fdc27",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.01.01",
+      "releaseTimestamp": "2026-01-01T21:28:41Z",
+      "digest": "sha256:23157d3750bb7eb7edf8d02187210b836bb2bb7dcdfcf14e23bc5609a1f6790d",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.01.02",
+      "releaseTimestamp": "2026-01-02T06:27:23Z",
+      "digest": "sha256:3c5e59886f404583196a45aa3e3fa9fb7b06e16fcdb71d2db5159b7c4e51b38a",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.01.08",
+      "releaseTimestamp": "2026-01-08T20:15:57Z",
+      "digest": "sha256:f0c60368e9da7617168372750f47ec627f6d2cb36e3504ab2d79e5b8c48139be",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.01.09",
+      "releaseTimestamp": "2026-01-09T13:05:08Z",
+      "digest": "sha256:377a91533b087a38949d96dd7eeb501634749bdda5b4fb1f854c4163334f6a71",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.01.10",
+      "releaseTimestamp": "2026-01-10T16:29:55Z",
+      "digest": "sha256:9b9091cb1dfd44447d569c35c7086b1d9e3618e41239c210112789c1c5f624aa",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.01.11",
+      "releaseTimestamp": "2026-01-11T18:43:56Z",
+      "digest": "sha256:dbbf9a25660b6255cc0726a00c06cf2968941803e29813e1d23863919794713c",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.01.29",
+      "releaseTimestamp": "2026-01-29T21:17:12Z",
+      "digest": "sha256:fb7a7e38d5a66e90f12eab87604935968a0f91f6cc8a36f4eab3650556073299",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.01.30",
+      "releaseTimestamp": "2026-01-30T00:17:52Z",
+      "digest": "sha256:86a2c0afcbf9b192fa858923377fe423438ac9504d28c3a32439b6b037352ece",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.02.01",
+      "releaseTimestamp": "2026-02-01T00:20:00Z",
+      "digest": "sha256:6c353248e1db1232e6c3db138c7ed492a516f736c25740e705ed96a5f67c5643",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.02.03",
+      "releaseTimestamp": "2026-02-03T21:49:49Z",
+      "digest": "sha256:54397e60511244e2251a06d9ee89e3492d945142eb1b938a402b8a1217da8bd2",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.02.04",
+      "releaseTimestamp": "2026-02-04T20:01:18Z",
+      "digest": "sha256:11cd9cafd08dacda155ce12449bf59004b981055f85526f09d023a86164cfc37",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.02.06",
+      "releaseTimestamp": "2026-02-06T14:20:34Z",
+      "digest": "sha256:bad4aed6c6fdabd507856273468bc2e575fbefd80b34ace638958f4d03d5747b",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.02.07",
+      "releaseTimestamp": "2026-02-07T16:24:37Z",
+      "digest": "sha256:a2d698f9457ffe81c7101fa722a699dabd547420498f66f8c437a3cd5eed2abc",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.02.08",
+      "releaseTimestamp": "2026-02-08T17:01:37Z",
+      "digest": "sha256:e9871bd269a246927d01db7b1d84a92409211e49735a41bd59fee0d185f7d65c",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.02.12",
+      "releaseTimestamp": "2026-02-12T21:05:49Z",
+      "digest": "sha256:c54dbe4ea8e8537145b372d35009d7f30d4cac4ecf30edd691205a7e93bf8da0",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.02.13",
+      "releaseTimestamp": "2026-02-13T15:18:17Z",
+      "digest": "sha256:0a8a575017b92818bae78813317119d7adfc531e5301f56e5bb0a78f8382d6b6",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.02.14",
+      "releaseTimestamp": "2026-02-14T07:49:11Z",
+      "digest": "sha256:eddc5430c1e3299f2df3a3c413af7b50fdbcbb12c7065fe32d29b4bc83557aac",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.02.19",
+      "releaseTimestamp": "2026-02-19T08:24:04Z",
+      "digest": "sha256:4bad68f5d369b3e1deda1edd47f42801e76aa545e72df3405998c0f4c2227f13",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.02.22",
+      "releaseTimestamp": "2026-02-22T00:58:45Z",
+      "digest": "sha256:7a10c8a53a50a2c3c6e5599cab16b6be62a99a9ce9e0e48769328c6ce59b30c9",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.02.27",
+      "releaseTimestamp": "2026-02-27T11:47:02Z",
+      "digest": "sha256:993402261882aa3d26b80085e8d4d5730e7de617231e274bf8c6667a86d21ba8",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.03.02",
+      "releaseTimestamp": "2026-03-02T19:19:10Z",
+      "digest": "sha256:8eb586bd8ac0ab007328be767c636acf4bd7e8776b501a8ad9b6907b58ad3a7d",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.03.03",
+      "releaseTimestamp": "2026-03-03T19:15:55Z",
+      "digest": "sha256:2abd785e515a632562deafd3cb97d318c7acc63b5cec0657b36f257d0254d8e4",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.03.06",
+      "releaseTimestamp": "2026-03-06T13:52:56Z",
+      "digest": "sha256:065d6f9fd49210bdf54fa272017502a70b7483d98824953d01a22f82b0527855",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.03.07",
+      "releaseTimestamp": "2026-03-07T14:14:57Z",
+      "digest": "sha256:9a09f929b4b6e2e218e121033cf384628b87dd40f52f6e0c7aee9aec991b6101",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.03.08",
+      "releaseTimestamp": "2026-03-08T20:28:19Z",
+      "digest": "sha256:3de82b0a8c1339a501e0b6ac00e8fa65676144c9ef78f7cc0b6003348d01a97f",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.03.13",
+      "releaseTimestamp": "2026-03-13T17:58:16Z",
+      "digest": "sha256:984b2dd65d8f7975fdee5231190d79573ca7450ceb07927a334003d42b9cb874",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.03.14",
+      "releaseTimestamp": "2026-03-14T10:13:48Z",
+      "digest": "sha256:e0c6be80a4030d26919566df58cf5af27dfead188a3435cf3602ac55e46ee303",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.03.15",
+      "releaseTimestamp": "2026-03-15T19:15:57Z",
+      "digest": "sha256:37e2b858622b6f9d8892875cc4669875539788413d0a024b09ab180d428fcb3a",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.03.18",
+      "releaseTimestamp": "2026-03-18T00:23:58Z",
+      "digest": "sha256:863a15cae1b83e293729e032993d5a06e2f86af6419be6f6dc26624b313bc1c2",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.03.20",
+      "releaseTimestamp": "2026-03-20T11:23:11Z",
+      "digest": "sha256:a060959ed7afedb8f36bfa5ad3c8fd7963b89ac7fc23ffbd7f0b2dff2a63512d",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.03.21",
+      "releaseTimestamp": "2026-03-21T10:54:02Z",
+      "digest": "sha256:afd3fa2b229e3e6d4c8750618fe148af33a1f70b32af4441ecbd2d08f29d8221",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.04.01",
+      "releaseTimestamp": "2026-04-01T11:43:17Z",
+      "digest": "sha256:987ff075e4585ce5dab9a4d06bdbcca2254943f060b1a310a39b7ce4203feecf",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.04.02",
+      "releaseTimestamp": "2026-04-02T08:04:54Z",
+      "digest": "sha256:db96c7de57a2563d360a0167253181773f53fc3e667de402daf31c28d4b285a0",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.04.03",
+      "releaseTimestamp": "2026-04-03T10:44:26Z",
+      "digest": "sha256:4a773d993edf3d3d03ccb6c91e3bcca221ae634a008417be95921062c6a4a864",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.04.04",
+      "releaseTimestamp": "2026-04-04T07:36:44Z",
+      "digest": "sha256:27b7155264c6b572017259bf3016a118cf5bf852529ec92653eb22966d2a58f9",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.04.05",
+      "releaseTimestamp": "2026-04-05T07:35:57Z",
+      "digest": "sha256:55d4c89fec18669ff56486fe3569eda0d4534319f6bfc46d8c506224e8e735b3",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.04.09",
+      "releaseTimestamp": "2026-04-09T18:11:25Z",
+      "digest": "sha256:2ad2f7b064afc87184ce45466634048fd5c690de7c0f776bdbdf98de430173e5",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.04.10",
+      "releaseTimestamp": "2026-04-10T05:21:08Z",
+      "digest": "sha256:391721502556c3ae97e47c3370b71131f8df67ef66d2d92758852b8b2e8836a1",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.04.12",
+      "releaseTimestamp": "2026-04-12T20:17:18Z",
+      "digest": "sha256:9edc1efacf804f717febeac9f0c61c425cf6d83337048d3702225a0ebad40e4a",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.04.13",
+      "releaseTimestamp": "2026-04-13T16:38:48Z",
+      "digest": "sha256:8a363a67e998cf0c3acd120224b59ee2d529a9a5347438eb4e3a177ce143a5bd",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.04.16",
+      "releaseTimestamp": "2026-04-16T19:41:16Z",
+      "digest": "sha256:14429994706c96025772b071fe4e35a43759fd4bf2a18e8d24c3ca7675257959",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.04.18",
+      "releaseTimestamp": "2026-04-18T05:57:11Z",
+      "digest": "sha256:fa3535e8e529eda86939e56370bbaad1a64dd900f3da596983963f9b2d297251",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.04.21",
+      "releaseTimestamp": "2026-04-21T13:31:21Z",
+      "digest": "sha256:8f0f1bf7b47b001ba596f18a61c0c6da1bba1e8270e9bf68f549ac0fcfeb4b61",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.04.26",
+      "releaseTimestamp": "2026-04-26T20:19:12Z",
+      "digest": "sha256:ee9a49b477215d33a8c330e9b9bb5c70588e265637cba9ff3888b75b87c00bf0",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.04.28",
+      "releaseTimestamp": "2026-04-28T19:12:13Z",
+      "digest": "sha256:caf21da7d83a4003b429ef1126e9c1499f36f8401a1f8a7b158f70b94ade8edd",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.05.29",
+      "releaseTimestamp": "2026-05-29T11:55:42Z",
+      "digest": "sha256:eba7a85e71f9b49f1a699e7fd90f3cef855af25fa2395c1c241af39ec48e4b1a",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.05.30",
+      "releaseTimestamp": "2026-05-30T12:45:25Z",
+      "digest": "sha256:c5ed53d2e9f3aff3982a599aac74388d36879722b1a553a9ae0200346a321ec9",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.06.06",
+      "releaseTimestamp": "2026-06-06T06:52:53Z",
+      "digest": "sha256:acf201148260de39b7eeb316f3cd611088e4a707ff4a3f1ebf460fa72054c6e5",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.06.10",
+      "releaseTimestamp": "2026-06-10T00:46:03Z",
+      "digest": "sha256:891ccbb5f025e622c8d9d516b2ec56b8ec79b988be38e5c9958c4b7a83fa1883",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.06.13",
+      "releaseTimestamp": "2026-06-13T14:50:41Z",
+      "digest": "sha256:b18205945425c24627344aa9ac7505d65314260be45b010f2324dd1cb2e9c73c",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.06.16",
+      "releaseTimestamp": "2026-06-16T19:08:51Z",
+      "digest": "sha256:bdb699227ff252d389072263ff619f09b3a9f323d2de2087880af972d656c029",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.06.18",
+      "releaseTimestamp": "2026-06-18T03:55:54Z",
+      "digest": "sha256:9bb4b82e76b45dc6f19b14f55b12c77333a02448b2f3791eb1f163ae451733bf",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.06.20",
+      "releaseTimestamp": "2026-06-20T07:05:00Z",
+      "digest": "sha256:a07754cef9632f59d947f5dc0833e8e085476e5e2e999966216453139257db3e",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.06.28",
+      "releaseTimestamp": "2026-06-28T18:23:18Z",
+      "digest": "sha256:4659722cfddbcf2012b8f5172d7b85c00303f590f26282d9070b4d5562fa3216",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.07.09",
+      "releaseTimestamp": "2026-07-09T05:27:35Z",
+      "digest": "sha256:f645777f83ffca94d461fa069d6fcf6ceccdc7798136ee48edf02d018c825180",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.07.10",
+      "releaseTimestamp": "2026-07-10T07:00:04Z",
+      "digest": "sha256:3ac9c2ccff659b3063dcd4ddfdae1e92fd5c64e88bb2f4a58b9855d655a7acd8",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.07.12",
+      "releaseTimestamp": "2026-07-12T17:44:58Z",
+      "digest": "sha256:eca2c82993604c2c4a0d7db7f39a685870c9893775836c7cd4e78cd2d2c8fc4c",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.07.13",
+      "releaseTimestamp": "2026-07-13T20:18:14Z",
+      "digest": "sha256:a5fce53f6d4192964d34c59d19a0e2fd322867dd1da95eddf9b59694376fc968",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.07.16",
+      "releaseTimestamp": "2026-07-16T20:16:59Z",
+      "digest": "sha256:03695ec518f7421a3b41c300e5dd117b724b8ab35e5dd0cdfd2c8d98e45e6e4f",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.07.18",
+      "releaseTimestamp": "2026-07-18T06:34:21Z",
+      "digest": "sha256:98e1c8f37b009954ed1a663908f9c7fb102153d98bc06b5d51926381d1a3641c",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.07.05",
+      "releaseTimestamp": "2026-07-18T13:41:00Z",
+      "digest": "sha256:48c8700bccd51f828606464ad12147b76f5ce7ef1d9ed935bd933f5e8c816fe9",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.07.21",
+      "releaseTimestamp": "2026-07-21T05:01:22Z",
+      "digest": "sha256:b0a27dc1505460d2eaf9a6713b486a01d11733043622e49a2572ee5cbe9f0503",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.07.24",
+      "releaseTimestamp": "2026-07-24T09:22:14Z",
+      "digest": "sha256:3b3b847a125e78037983d3a27c76212e2fc7a0c3a813591ec0de53613e0be874",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.07.27",
+      "releaseTimestamp": "2026-07-27T20:02:32Z",
+      "digest": "sha256:b6e945b63df6357bc16c7bfcb1b4479856b2087f6d8a5e59f0d3f4996a707e12",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.08.04",
+      "releaseTimestamp": "2026-08-04T19:59:29Z",
+      "digest": "sha256:9c23af6491bea0761400d7f80f25cfe001847c55b66d20e32ceb17f9527afd29",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.08.15",
+      "releaseTimestamp": "2026-08-15T14:47:18Z",
+      "digest": "sha256:8dba4bff3bba68420fbb65b1dffb9c9685c77f290a8ecf015c73e2be50a523d9",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.08.16",
+      "releaseTimestamp": "2026-08-16T07:40:07Z",
+      "digest": "sha256:b4639459a65b08c382cb475a37af58bca783fa69e98733c1e3ec77804520e29f",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.08.17",
+      "releaseTimestamp": "2026-08-17T07:48:27Z",
+      "digest": "sha256:b4400ee6454c0663a93815dbbde59a02b3fdf244d5186e6c1870429034b4ccb3",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.08.18",
+      "releaseTimestamp": "2026-08-18T14:09:56Z",
+      "digest": "sha256:20cdbbf51b8051214ab92baa551683357532d2bebf70c3a0e1ec54f072cce999",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.08.20",
+      "releaseTimestamp": "2026-08-20T00:52:52Z",
+      "digest": "sha256:fb5b91a66db83e1d2ef9c1f2c6a1cd6bbc64eaa8e78a2fafdcea1e93011340a6",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.08.21",
+      "releaseTimestamp": "2026-08-21T08:08:59Z",
+      "digest": "sha256:c2920f86f888b5398e5a964e135417fe11418823988399e6ec230293dcc0bb31",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.08.28",
+      "releaseTimestamp": "2026-08-28T06:44:49Z",
+      "digest": "sha256:397778fccf13d83adf9325fe813b260617a082d1772aff6d678c5b9256dd01fb",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.09.15",
+      "releaseTimestamp": "2026-09-15T20:20:52Z",
+      "digest": "sha256:5ebff7a547bf175e614c024053e5602a0b9193586a20c107dd47d571c391e635",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.09.20",
+      "releaseTimestamp": "2026-09-20T07:38:35Z",
+      "digest": "sha256:36ebbfdcdfe6ee286e2b231d91c78759bb629cd283c6f75b75e1657fda2134f4",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.09.23",
+      "releaseTimestamp": "2026-09-23T18:20:26Z",
+      "digest": "sha256:fdc49cbebf04e72e298043b927a0c1e2aa9df1992258e63013eebba58b25b26e",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.09.25",
+      "releaseTimestamp": "2026-09-25T07:01:44Z",
+      "digest": "sha256:549f4b0eeb13b01ecae2a20b50153d17481b1d59b517de5ae0dddee03e058745",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.09.26",
+      "releaseTimestamp": "2026-09-26T07:50:19Z",
+      "digest": "sha256:8a72943fe6d29d23133aa4591117a423ec86708c227665e78a6e903554431bb4",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.09.27",
+      "releaseTimestamp": "2026-09-27T16:50:05Z",
+      "digest": "sha256:cd226eedd357697ab2efd4b5e7c5221e973326d210c1e3abc08687d58d97088c",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.09.28",
+      "releaseTimestamp": "2026-09-28T17:22:07Z",
+      "digest": "sha256:04608d1df751c523db1d3d15c05301cdb6f3cbcaab7c04d3967f1627dffa80be",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.09.29",
+      "releaseTimestamp": "2026-09-29T17:26:43Z",
+      "digest": "sha256:8e2fe9beeefc55a02f6e1d04cad0fc3c22e8f067d309188f016551dc99ec27b3",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.10.09",
+      "releaseTimestamp": "2026-10-09T08:08:38Z",
+      "digest": "sha256:df929ef2453fd75c1f1cbd8dafb309ee03ff18d8705c7c1e01642b1202d4a650",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.10.19",
+      "releaseTimestamp": "2026-10-19T17:42:52Z",
+      "digest": "sha256:67393366fb5a38ebd559596c6efe76833dbb647dd737ec1f55333d4da38d9a56",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.10.20",
+      "releaseTimestamp": "2026-10-20T16:54:19Z",
+      "digest": "sha256:392208fd46aba4479815aaeb71240a02e75fd3e06a8bcec32af78dfd666c7d2a",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.10.22",
+      "releaseTimestamp": "2026-10-22T00:19:47Z",
+      "digest": "sha256:7749cb1ee1efe0c56e32475fcf8648c278fb41fd158be13946a1759f7884654a",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.10.23",
+      "releaseTimestamp": "2026-10-23T13:54:22Z",
+      "digest": "sha256:367d9d1b5122f2e88263a689998f8b11c4e9a188c9cbdace0ace8bd197935ad8",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.10.25",
+      "releaseTimestamp": "2026-10-25T11:06:45Z",
+      "digest": "sha256:78560456793445f4449d8b9d92374350c652725aa76dc75f8682d43fc5ff9a5b",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.10.27",
+      "releaseTimestamp": "2026-10-27T00:18:43Z",
+      "digest": "sha256:845a67373a9f9e62b88e5f9067867202200d63db3615a051acbd77b09e86b9ce",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.11.01",
+      "releaseTimestamp": "2026-11-01T17:13:04Z",
+      "digest": "sha256:a97f455f4b56044debe1a5ce31ff01a9cb20e9e36322ba04f8dd2bb0539b9ec7",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.11.06",
+      "releaseTimestamp": "2026-11-06T06:37:09Z",
+      "digest": "sha256:96dfbf0d5b2944e4ee38f6ce1b34bb0e75a1a3c74eaefd93424ed11284cb72b2",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.11.10",
+      "releaseTimestamp": "2026-11-10T18:30:27Z",
+      "digest": "sha256:6654866e76eab4228530dc5ed828ccfd702d1ee810feab2d629028272b399e14",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.11.14",
+      "releaseTimestamp": "2026-11-14T20:11:06Z",
+      "digest": "sha256:55ce41ab9a78069dc42bd808b20a96aeef4199560a02698a2205ea8a2bc4fef1",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2026.11.22",
+      "releaseTimestamp": "2026-11-22T19:22:34Z",
+      "digest": "sha256:be802dfc2c7ac250a0b49c378d0aa5b154241a670864159183af0e0c26b89dd7",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "2025.07.31",
+      "releaseTimestamp": "2026-11-23T19:15:42Z",
+      "digest": "sha256:2f81ad0ca25d52a7f17d33164c7cf2dc6db299a2011b8bfddb68b3edc2523b7a"
+    },
+    {
+      "version": "2025.08.12",
+      "releaseTimestamp": "2026-11-23T19:15:42Z",
+      "digest": "sha256:8392d4ef2189bf26108f8c2c3e8b7d7a2414be413ec4e2a17a226b34ecea25fd"
+    },
+    {
+      "version": "2025.08.13",
+      "releaseTimestamp": "2026-11-23T19:15:42Z",
+      "digest": "sha256:b4344e4e1614513b96d6bd57669ae077d72c231f5b3866a45dfd1059badffd40"
+    },
+    {
+      "version": "2025.08.22",
+      "releaseTimestamp": "2026-11-23T19:15:42Z",
+      "digest": "sha256:3eb6cf27932d14a3ead8a6ba28f54c5d2fde22c0cf929a0362985bddbf0ea640"
+    },
+    {
+      "version": "2025.08.23",
+      "releaseTimestamp": "2026-11-23T19:15:42Z",
+      "digest": "sha256:c10988bd3ce121e1da50a9a0c7fbf8d5c1d4be6a21fe8da7bf47915974039edc"
+    },
+    {
+      "version": "2025.08.24",
+      "releaseTimestamp": "2026-11-23T19:15:42Z",
+      "digest": "sha256:dc591ebfc996b514475070b9a377e039759fb353e0ae36ea50fbecf7660f0ee4"
+    },
+    {
+      "version": "2025.08.25",
+      "releaseTimestamp": "2026-11-23T19:15:42Z",
+      "digest": "sha256:b81a5dccd39f2a0d88bacddc67140beb48d41f72188eb2612671f677d8ba6f98"
+    },
+    {
+      "version": "2025.08.26",
+      "releaseTimestamp": "2026-11-23T19:15:42Z",
+      "digest": "sha256:e78058f50537f81cbee21a8e491a6aefca31e59a8ee916a5f5aae9bd2e5110f2"
+    },
+    {
+      "version": "2025.08.28",
+      "releaseTimestamp": "2026-11-23T19:15:42Z",
+      "digest": "sha256:7e8b3357a585fa05b64987be74c305b987eb4d65262fd4b716c25e683683aafb"
+    },
+    {
+      "version": "2025.09.06",
+      "releaseTimestamp": "2026-11-23T19:15:42Z",
+      "digest": "sha256:df4b25db48351e58fe732b26a92e5d5b06734e1470894707c659fb1bafd3688e"
+    },
+    {
+      "version": "2025.09.24",
+      "releaseTimestamp": "2026-11-23T19:15:42Z",
+      "digest": "sha256:92195df44c5707116c3088ef813a4d51d08a196c2d423bbd5f0514fb098e945c"
+    },
+    {
+      "version": "2025.09.26",
+      "releaseTimestamp": "2026-11-23T19:15:42Z",
+      "digest": "sha256:740a4c962eff78c1c86c2db2fcd557e47831e4ef1d69f1160932119f30369d05"
+    },
+    {
+      "version": "2025.09.27",
+      "releaseTimestamp": "2026-11-23T19:15:42Z",
+      "digest": "sha256:024ba0677b09aa357459422e2c2e33d3be0ed6fcea65ec1d7beffac352ff8c02"
+    },
+    {
+      "version": "2025.09.28",
+      "releaseTimestamp": "2026-11-23T19:15:42Z",
+      "digest": "sha256:dfcc268c8069211a9f41822e41081a5b398daa96d71885bfef44c0ac6a5a0ff0"
+    },
+    {
+      "version": "2025.10.01",
+      "releaseTimestamp": "2026-11-23T19:15:42Z",
+      "digest": "sha256:27732bcb27fc926313cc7f0b5192bcb5667ae6a0097cf40e0c26c46b2f18d83a"
+    },
+    {
+      "version": "2025.10.15",
+      "releaseTimestamp": "2026-11-23T19:15:42Z",
+      "digest": "sha256:c854d983fb6ee969faa2b30dfbd95ba24d4cc28265b8f39e6529627e9ef64447"
+    },
+    {
+      "version": "2025.10.23",
+      "releaseTimestamp": "2026-11-23T19:15:42Z",
+      "digest": "sha256:46be73330a37503772249bee27d03dd2c831ab3d135c932abbc448fcbe7e57a6"
+    },
+    {
+      "version": "2025.11.13",
+      "releaseTimestamp": "2026-11-23T19:15:42Z",
+      "digest": "sha256:75c227ff12ffbcb3bcbfe9cb0b8ff067cde30de2771d7992f41d9680ba46fdd9"
+    },
+    {
+      "version": "2025.11.16",
+      "releaseTimestamp": "2026-11-23T19:15:42Z",
+      "digest": "sha256:017341a17b5837120b00e0f3cc0be084a572a9886828d018e8d45e8c22d550cf"
+    },
+    {
+      "version": "2025.11.28",
+      "releaseTimestamp": "2026-11-23T19:15:42Z",
+      "digest": "sha256:07d590fb3cbe6bb01a0b2a5c14107e186090008b7d704a64ada2c9952b333b3b"
+    }
+  ]
+}
