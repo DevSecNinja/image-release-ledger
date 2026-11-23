@@ -1,0 +1,263 @@
+{
+  "releases": [],
+  "floating": {
+    "14-vectorchord0.3.0-pgvector0.8.0": [
+      {
+        "digest": "sha256:11ced39d65a92a54d12890ced6a26cc2003f92697d6f0d4d944b98459dba7138",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "14-vectorchord0.3.0-pgvector0.8.1": [
+      {
+        "digest": "sha256:6f3e9d2c2177af16c2988ff71425d79d89ca630ec2f9c8db03209ab716542338",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "14-vectorchord0.4.1-pgvector0.8.0": [
+      {
+        "digest": "sha256:ac6b82963131db4edbbee79ec31205a8b1edb23eadf744a05c7608d73d307376",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "14-vectorchord0.4.2-pgvector0.8.0": [
+      {
+        "digest": "sha256:d422d5853ea078ae35b53d9469b526fde0b1267c172d3d49ff3b1ec3462d1fa3",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "14-vectorchord0.4.2-pgvector0.8.1": [
+      {
+        "digest": "sha256:72581adf2af0994bf79453722ce10d15014b082117fef3d581ef94d36117263c",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "14-vectorchord0.4.3-pgvector0.8.0": [
+      {
+        "digest": "sha256:da52bbead5d818adaa8077c8dcdaad0aaf93038c31ad8348b51f9f0ec1310a4d",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "14-vectorchord0.4.3-pgvector0.8.1": [
+      {
+        "digest": "sha256:dbf18b3ffea4a81434c65b71e20d27203baf903a0275f4341e4c16dfd901fd67",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "14-vectorchord0.5.3-pgvector0.8.1": [
+      {
+        "digest": "sha256:89817026d570de0dd4fdd29486a417bcdff31ce4010f8ddc8e8790f42eca710f",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "14-vectorchord1.1.1-pgvector0.8.5": [
+      {
+        "digest": "sha256:beb5368452aaff022cc4a7d724c35e04810e6548a5b4841a3e1372f7913c9863",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "14-vectorchord1.1.1-pgvector0.8.7": [
+      {
+        "digest": "sha256:a363c71004f469d61b049703935da4725f90db793ba2efa7e451e6313f0e8dac",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "15-vectorchord0.3.0-pgvector0.8.0": [
+      {
+        "digest": "sha256:02faff1839942057d235837a2273a82248cba8f56cd3f8c981f8cf9f969be914",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "15-vectorchord0.3.0-pgvector0.8.1": [
+      {
+        "digest": "sha256:61580f52acd3c73e9a360748a5938a46b55406940fb9ad5105452c492e3327e2",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "15-vectorchord0.4.1-pgvector0.8.0": [
+      {
+        "digest": "sha256:5f25e689d22ff79692cce6747c9e372630fda5f676e3ab29dbce1b895083b1b2",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "15-vectorchord0.4.2-pgvector0.8.0": [
+      {
+        "digest": "sha256:d7ed768649933f121451df3cea9ff846f1cd23aaa3b532a4dfdc0ff0571ffa99",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "15-vectorchord0.4.2-pgvector0.8.1": [
+      {
+        "digest": "sha256:a438e259cc93b27baafd106b4541663c932aa57c3206c982090c6112cc3ebb57",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "15-vectorchord0.4.3-pgvector0.8.0": [
+      {
+        "digest": "sha256:67a5a93981b55ab596c81b61a2f52930be8e321d7d7c34a90cb652effc95183f",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "15-vectorchord0.4.3-pgvector0.8.1": [
+      {
+        "digest": "sha256:91750f6aad0bc90224e33ef044cc1288d203d65e360fdbf16e6a97745139c9d4",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "15-vectorchord0.5.3-pgvector0.8.1": [
+      {
+        "digest": "sha256:ed327f9735360c162cc2efb26baf0fe83be3059e65050bdec604d271dc537f65",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "15-vectorchord1.1.1-pgvector0.8.5": [
+      {
+        "digest": "sha256:4f49617c07ea036e29a5b5e71135d4d9f95b0ef23e60df774fde54c070bcf2a9",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "15-vectorchord1.1.1-pgvector0.8.7": [
+      {
+        "digest": "sha256:969107ff805d96d20c2b18d6bde8f10fd0d6128cd479f6572f76bacae0d6c6f7",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "16-vectorchord0.3.0-pgvector0.8.0": [
+      {
+        "digest": "sha256:2e64486aa6422587618f548b671636d42944a8385abe240bce5b0082b8a34809",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "16-vectorchord0.3.0-pgvector0.8.1": [
+      {
+        "digest": "sha256:fbfbb6903bb98087454861f73335a193c8a76fd54e58616b7be8e0b2f70ba7a2",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "16-vectorchord0.4.1-pgvector0.8.0": [
+      {
+        "digest": "sha256:efeac619f6265c89c82878005207c8b7e699b78c2d97a211fbb6b7123f892651",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "16-vectorchord0.4.2-pgvector0.8.0": [
+      {
+        "digest": "sha256:cfff4721c77e3a70ce21cb796b01b3f8411e8327b02c727a345cc757c6f6dc1d",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "16-vectorchord0.4.2-pgvector0.8.1": [
+      {
+        "digest": "sha256:1b795746fdb0963579c3ba4f58e6dabdbf1e633c6ec26e4ee099317cc4f3fb42",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "16-vectorchord0.4.3-pgvector0.8.0": [
+      {
+        "digest": "sha256:d544539f5ebdc2e5dcf1432e1aa866f0c31097e49224559439a2f2f1e422c914",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "16-vectorchord0.4.3-pgvector0.8.1": [
+      {
+        "digest": "sha256:2c6e74ea2c5d4d784f5eece3d25c8d1c8872623537eb048483a913fcfb3587cc",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "16-vectorchord0.5.3-pgvector0.8.1": [
+      {
+        "digest": "sha256:e4de574912d821390f2099eaa18991e457554cc79695141596d5678d7d0380e7",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "16-vectorchord1.1.1-pgvector0.8.5": [
+      {
+        "digest": "sha256:0ac82f7f7f6b84dcdc2902852f041be3c6c9bb00d5354d95f872d30538cb7edf",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "16-vectorchord1.1.1-pgvector0.8.7": [
+      {
+        "digest": "sha256:bc8140e716c7e3a0984f3f79b551ccf7fb223289890f66f9c3f4b0df24911775",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "17-vectorchord0.3.0-pgvector0.8.0": [
+      {
+        "digest": "sha256:9a669d9a0e3c1d68a10b9ba86157531539ee0cdbd71627a26c20850b88ca89b1",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "17-vectorchord0.3.0-pgvector0.8.1": [
+      {
+        "digest": "sha256:8666dc7d9b6f26d5bd02228e4d95d74a77c3de7909c96bdbcdebf36cb795051e",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "17-vectorchord0.4.1-pgvector0.8.0": [
+      {
+        "digest": "sha256:dfad74757b7cda8c2da8f06910187c94b2b48d80276e048f2723673fe79404af",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "17-vectorchord0.4.2-pgvector0.8.0": [
+      {
+        "digest": "sha256:38eff426938bd27a20352133f7f6c61c0c702a6d4a6f5d9afc62f7a94d4b3a5b",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "17-vectorchord0.4.2-pgvector0.8.1": [
+      {
+        "digest": "sha256:c0cecefeea627c05a020cc7c442ed5faafed411b55afb451e18ccb698252be55",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "17-vectorchord0.4.3-pgvector0.8.0": [
+      {
+        "digest": "sha256:51f6abbfc720dde5cad9a39133d1c5247da8f073a449004da781c07b2cd9ee9c",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "17-vectorchord0.4.3-pgvector0.8.1": [
+      {
+        "digest": "sha256:79b95b795f0911e95ffa4d092a2162c4d81a984d5629bc8f786afe0bc0657671",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "17-vectorchord0.5.3-pgvector0.8.1": [
+      {
+        "digest": "sha256:de30761f0081f2adcdcdb3fdcfa2d53aa73badb3712f943bf84eaffc8fc706af",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "17-vectorchord1.1.1-pgvector0.8.5": [
+      {
+        "digest": "sha256:02ff0ed1d6fdf982d411d28d9a6c9d693be1fe5ac5aebae4f761dc5d767a2063",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "17-vectorchord1.1.1-pgvector0.8.7": [
+      {
+        "digest": "sha256:2b8f457726dcb8d5bf079fd1b71d3d11f9633614816ba924c08a6c4c238392cf",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "18-vectorchord0.5.3-pgvector0.8.1": [
+      {
+        "digest": "sha256:828081a755d3911a2d94f0a2be9f98570c07d52cf080fd310a9d6e4b83b73aa5",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "18-vectorchord1.1.1-pgvector0.8.5": [
+      {
+        "digest": "sha256:4c3a3696605d5e436ca35b703c4918c46fedf8ddd3597c5610ba91c1ee3b0dd1",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ],
+    "18-vectorchord1.1.1-pgvector0.8.7": [
+      {
+        "digest": "sha256:f7388adc1e3414800a71506528917f4f5615249f5fe7a872b1e1431e01b72ad7",
+        "seen": "2026-11-23T20:56:14Z"
+      }
+    ]
+  }
+}

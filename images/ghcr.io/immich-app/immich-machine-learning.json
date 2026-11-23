@@ -1,0 +1,744 @@
+{
+  "releases": [
+    {
+      "version": "v1.100.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:c47549bd4b35901d51b130b8cc85ba7ded5192b6bcaaf49b2e619e3f2ebb67b3"
+    },
+    {
+      "version": "v1.101.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:3dd967c91d167528d16ae074e85a28643748f97e09428efd71b246e1c7289640"
+    },
+    {
+      "version": "v1.102.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:1248eb6f6ce95419765d301ebbc94bf62d2de18e599c0277a4075e5ac73adee0"
+    },
+    {
+      "version": "v1.102.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:44aa4f5edf409e02a6d00d15d03b98eadd78c60eb97faa2559b5bf1b0047fb25"
+    },
+    {
+      "version": "v1.102.2-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:b5346363f069e1c3674dbc82fe437d52c6b465945859e5110a979404bc59a091"
+    },
+    {
+      "version": "v1.102.3-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:54e91e5d1c33149f6a67abed9705aafb566cf159223a488de7f529266c7dd4c3"
+    },
+    {
+      "version": "v1.103.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:17805659fecf8c442a60b0a882f2c66ce66b2ead46f49b8cc4c731f3f6ab1675"
+    },
+    {
+      "version": "v1.103.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:09f38ea6cb1dc998cb99b5ed3009783e9b362348d8768a2a9ed29e2a8b07d572"
+    },
+    {
+      "version": "v1.104.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:943e981e733620b88a740b04dc66828de2aa84dbff6184d250a2df91ace1be20"
+    },
+    {
+      "version": "v1.105.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:7208685c05a3143a24b15797ee14eece9782f6a877feed131fb24da621d5aff6"
+    },
+    {
+      "version": "v1.105.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:c6216a4d07dfd2f278e028442503e6727165e7dab0403cc4a99a12b8389cf7bd"
+    },
+    {
+      "version": "v1.106.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:8dd71f8b9f8b0a244f521ee3fbdef4a5694872ebd88cc7d07378fe51581f0fb4"
+    },
+    {
+      "version": "v1.106.2-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:849d3def9b848d8cf75973778819efbc5547709d31640828c8025ca419ef7094"
+    },
+    {
+      "version": "v1.106.3-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:2ee1226dbda3beb84ffc8ea1de3fe15baa754c653665c606354bfa4a4d880831"
+    },
+    {
+      "version": "v1.106.4-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:6e1a3ebe612f1812fb16eaf405813112e7abf6bdb390ec9ca3cdae603228f165"
+    },
+    {
+      "version": "v1.107.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:992a8dff0099967fdc4791bb8addfbbd4015ab439603a4b5c833a7a6a02f4f7d"
+    },
+    {
+      "version": "v1.107.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:bcb94e60a9cfd2197e8685399267d34162635d945385273ae28ec2e73a4ee5b8"
+    },
+    {
+      "version": "v1.107.2-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:30a6f43f349cd5fd7b6fdf36931b69d908b0faabec9e4f20828df82a3f16a683"
+    },
+    {
+      "version": "v1.108.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:23559bef1d8365277aaaec8ba4b8bdde24f0e4a9dfb3d4ce9c4f872acf88d94a"
+    },
+    {
+      "version": "v1.109.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:d08034da68d7bff67cb27448194afc897f1f63915c0b84881506d0cfb1a34343"
+    },
+    {
+      "version": "v1.109.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:da57e422bd36955d6d5dead3155d1463418ddb1c00fbd638cc78b836658f30a8"
+    },
+    {
+      "version": "v1.109.2-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:a8526a40a0c6ee94125af329a1059e89a9d458a76a99ea9eed677731fb8e8647"
+    },
+    {
+      "version": "v1.110.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:780c73291facdfb34128f70e9f13bc01c7f9170038e915e0c844d85b58a3b65d"
+    },
+    {
+      "version": "v1.111.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:fe2dc78086e1d1a8dd8b2ecf2c402675217a66fe92992d111b53287626edae01"
+    },
+    {
+      "version": "v1.112.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:b35faf363d2324abb9bb3f795051fa67bfc64cf0678f56c0629c37e5ad631688"
+    },
+    {
+      "version": "v1.113.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:8809d4b01fb0922010f3f216866587d45b37c827453fa3a21b7ec095b53d9583"
+    },
+    {
+      "version": "v1.113.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:37d72205311059b71daafa9316a707a6b7482a392bd245b4ed64e3ed1e4b56b1"
+    },
+    {
+      "version": "v1.114.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:f8f874c89f2a9978f2d22ef3c99c643b7831a3ed39ba1645ed4ae4523baabb13"
+    },
+    {
+      "version": "v1.115.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:128c418ada7c6987d0623c014f8e83df1c0107c98e4a3eccf7ecc5c696e31a7b"
+    },
+    {
+      "version": "v1.116.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:e31b99b114b7437d45503ced9a66d6309300c0f99f964015ea6454070b05488e"
+    },
+    {
+      "version": "v1.116.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:833f997340e1de74ffa90bde84b9b26523f76187a28f1f799a16cc72c53a8a04"
+    },
+    {
+      "version": "v1.116.2-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:539fc31bafda09314fb03d9ea6bc9dbcbd8d4d4f51f6caa770754f18919d8a50"
+    },
+    {
+      "version": "v1.117.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:127c51cfab03fb00a07349ed5e118520b870f7cb9fc1125e320f0704aa392ca9"
+    },
+    {
+      "version": "v1.118.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:6dc6feee3211c4b271aabd280005b30c7cba2f93703ed5c127df310dedafe8b7"
+    },
+    {
+      "version": "v1.118.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:7633fad2d0c92b002ec5f2228779da2464f607f6b40383a960503662f0722730"
+    },
+    {
+      "version": "v1.118.2-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:14d0b070968aae9ea1bcff81564f8de2bdfcce07d275828c80bf807f089c2a58"
+    },
+    {
+      "version": "v1.119.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:0113dd1dc395c6d43755254c92fb10b7589c744628c40aab7df2e5a1fbe62325"
+    },
+    {
+      "version": "v1.119.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:677f1845bca75deae593a9bc4172ad8cb668c92c39e6d3ea292456cdfab99892"
+    },
+    {
+      "version": "v1.120.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:e2308261e656e282b6b9376213c7beb8e4be219359478115ecf3501ae028c80c"
+    },
+    {
+      "version": "v1.120.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:c2d95ceaaab1b388a95f6f92058b9bae4e283d22de4e2e72a3a0264eb1dc3be7"
+    },
+    {
+      "version": "v1.120.2-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:62450b0344d8cf1fb468e6435d1901207efcb68e59cb5f15b6db327540c71390"
+    },
+    {
+      "version": "v1.121.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:d5ed294419b11cb5eb746bb47628ade057a38d27031be89ab83866a74712bae6"
+    },
+    {
+      "version": "v1.122.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:8c74be7c73e8f8f262d331af25645c347c6ab56839ed104eb4ee09936494e26e"
+    },
+    {
+      "version": "v1.122.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:a5d10aed48665d0db17c4db46bdbf3b4a16641f179efe69418c7decd0a119562"
+    },
+    {
+      "version": "v1.122.2-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:0ca2d1c2694f727b34526496db067b1f402e56c8dc7665504d3a9058921c29c5"
+    },
+    {
+      "version": "v1.122.3-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:c605fde46367b8a47cc748a1c7c1ffc741b965031eb8f701507f3a978bc3f0c4"
+    },
+    {
+      "version": "v1.123.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:a1d919be9427ab3a6f26ebf63dd132a539e766ab7bac64200e5d187ca3fba068"
+    },
+    {
+      "version": "v1.124.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:589dc8a4b2cddada399cd7dc55425b304ff487b7d1e5097d61c85e5c21c7ba92"
+    },
+    {
+      "version": "v1.124.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:311b74b9abaf4fdc22f4b4a4e8d3157e361d375829cec3ebf1e3bd95873499db"
+    },
+    {
+      "version": "v1.124.2-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:ade3c07adaf64ce658956ab21b7a93845fcad668e0ed813bf40f8a5c9802be9d"
+    },
+    {
+      "version": "v1.125.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:8270c727d5d3d49ebe75fa0aed6c776218671f4f0c70a214e0f42df12410dfe2"
+    },
+    {
+      "version": "v1.125.2-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:457cf70f7203a4ac4d52511c96d622be7dfd0e8f96f20b7a3cf61ddd20555298"
+    },
+    {
+      "version": "v1.125.3-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:ec10b33991c2035dc7fa60660e3a8788375779fd8124eeb1b59e45117d024a6b"
+    },
+    {
+      "version": "v1.125.5-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:754b18c2161c6028414b3e33a4d24c56d234d16d8557a89d6a1c74b449938184"
+    },
+    {
+      "version": "v1.125.6-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:8909004714c08e9573c5e5a8c761fdb1afe240b1a343a63829ba534a25f21dee"
+    },
+    {
+      "version": "v1.125.7-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:2ff49f7354c1b38103757a267117b1a41345b5279abb57440e0e738652204236"
+    },
+    {
+      "version": "v1.126.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:b50d3564a18752c45b675381f81cddc8c1aa0cad619717af26b5749234a88c51"
+    },
+    {
+      "version": "v1.126.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:0eab7904f965ff76192c7679a00ad87527224d285b9ca4fec30cba0c401ec5e1"
+    },
+    {
+      "version": "v1.127.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:a3a8de80dac556a31aad53a0694be828abc4a5b80a38e8368eda30e7082257eb"
+    },
+    {
+      "version": "v1.128.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:e70d5b0e98bcec9da2190a5c5534c38888f3fb729fd17cd3256cec81decb79e8"
+    },
+    {
+      "version": "v1.129.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:c4344fbd86915ae9ff30c695256d4c188f90ef9af0fd8070d227564b7b6908bf"
+    },
+    {
+      "version": "v1.130.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:b642ec20935a51406d321e7b0bf9a96c482285dd402198dcb410dac83463e49c"
+    },
+    {
+      "version": "v1.130.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:bbb0c59b6ffd548dc9162d6851a65f1b9a31697793eff8afbfca32c3b3b15fd4"
+    },
+    {
+      "version": "v1.130.2-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:0525eb92721786d34d7e129d3175f198ac2690583cf790724510c20da27bcca3"
+    },
+    {
+      "version": "v1.130.3-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:40889fe0f413f5a368b5d38fbc8d364a9a9f416654645bfcfa09e709e562573f"
+    },
+    {
+      "version": "v1.131.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:4d7be517ae0991769606988d59c762f385eb165629fc82eb786a81b1ea06de50"
+    },
+    {
+      "version": "v1.131.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:b11298ac4257437fd325f952b33094336a8bf3a93ba8fe118d0c189b67b703cf"
+    },
+    {
+      "version": "v1.131.2-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:d27938d3eeab1a17cb99a17e2b0e8e23f52d9f244e35eea84a81760813bbf05b"
+    },
+    {
+      "version": "v1.131.3-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:0e3702a223f7e30b83051b613223de911ecbe1d1a7d072d793c24ccf07db66d9"
+    },
+    {
+      "version": "v1.132.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:4571d407f800ff683559ce3cdf9cf586be0071cf35f9d2f33fedc28c6d0f3ff4"
+    },
+    {
+      "version": "v1.132.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:3c8cce8cc01e706344f340fdc3221f8322c1636455b8958137e95decd5065d27"
+    },
+    {
+      "version": "v1.132.3-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:faf4208b1f49e3b943583f4546d9bc72e6101d6b97c1959db8212db84a49ad11"
+    },
+    {
+      "version": "v1.133.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:b3158b836068994ed98d81a5704d98f9bf0471989a3c076235577e77ddbd884c"
+    },
+    {
+      "version": "v1.133.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:72612583fb3b7b7f0adcc6a1a1766571573f4ff4d2bcc77c6ef28440a444a728"
+    },
+    {
+      "version": "v1.134.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:ec23f98efe6d3b88c600142951eeecbef0056a87844d0f5bea843fd0e29a58e3"
+    },
+    {
+      "version": "v1.135.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:33ff45c9e82391a29fdf259b59fdb29b27861f6b07d3a2d49e43bd99d0f2c6f1"
+    },
+    {
+      "version": "v1.135.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:ea64c070ef0189f6ba7d766b2aadd8611eb320ddc0bcd3fa90c211bd3ee4ffe1"
+    },
+    {
+      "version": "v1.135.2-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:4d76995904be2a332c7192c1d7af6408c5dc7e4e505c7c9e72c584058bf15326"
+    },
+    {
+      "version": "v1.135.3-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:9334b516111e6945cb1220cfeb772e44a48c67c114c9c3cb3faa597d081048ed"
+    },
+    {
+      "version": "v1.136.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:2d97a3f0be01b17b99246bd06699aa53d65157d503a51741d74f7fa4373a3944"
+    },
+    {
+      "version": "v1.137.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:6ef263e4afbc8f9d0a91570e0829a18a5ff1bd9075041895959dac15b0c87caf"
+    },
+    {
+      "version": "v1.137.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:8e3c49ff6fb9ece642e4b29714229b9229cfc5d7cbf7e9a535f188c439fb2b48"
+    },
+    {
+      "version": "v1.137.3-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:8691608a564b208889b30a9257e1530410b4d59e5f0d9c4b15dbdc0a60902d5f"
+    },
+    {
+      "version": "v1.138.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:c7d234f4edcd45c259eda2cebfbf3106ab16880ce41e90ccd2c3ee64bb50e79d"
+    },
+    {
+      "version": "v1.138.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:e6cb2260af56bc4b826a5de9aa5b0ca25bb3a2a340e41c3f306c96c5f393acbd"
+    },
+    {
+      "version": "v1.139.2-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:e16ede0cb0f9c31a0bd8832294e9d5eaecd674b044beef5bb259a8d00fcf0d04"
+    },
+    {
+      "version": "v1.139.3-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:10bf1c82f3b5a60db8d6230d26f15e5252955e00650de983bbb16de778b901a9"
+    },
+    {
+      "version": "v1.139.4-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:ea961762f59c2ffe11fc71d2a6908e80eae6205f4ae29295e1c308af3f257822"
+    },
+    {
+      "version": "v1.140.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:1cfc3e162aac864496f05d1b8b4794a4af8129e19eb6a216c10b9a405931e7d5"
+    },
+    {
+      "version": "v1.140.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:1f8c8f8ebad1e770e96e1f4cd9b9b6c1cf97a081e7218c491b50dbb2c772f642"
+    },
+    {
+      "version": "v1.141.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:25c54329d0956490d21331a78bce0b83c5faf373d0613c24bf1aabc9189d273e"
+    },
+    {
+      "version": "v1.142.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:01e879c2bedc89ac419bb12e5ff365f38a653b5d0a042ac51c3c6128ef4056bc"
+    },
+    {
+      "version": "v1.142.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:0bea53b6eda85bc66b152517e2a8d2b8c6c8f6b71cc67985c8ca0ebd8ef87705"
+    },
+    {
+      "version": "v1.143.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:1afd2513292e2266408610695d30bc3fac5ead3a19472cc65b8ce5fece8e408d"
+    },
+    {
+      "version": "v1.143.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:3b02d7b2d3157f5910d74e1f9868804153925b5fd45025ee911a6c6c9f0a46db"
+    },
+    {
+      "version": "v1.144.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:6fb31e35add68ecabc45cf118859f1cfb3058f1098cd7ae007b2226a82bc2608"
+    },
+    {
+      "version": "v1.94.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:b815da9ce11f4f50f0e55b3a459b5a3b16711ff60896034e184b12413af20261"
+    },
+    {
+      "version": "v1.94.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:974f6361295417ac7c77803307b87326189947919ad862a85c1e0b6055ce3301"
+    },
+    {
+      "version": "v1.95.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:2ce539cd18306b9fab21cc6e0f58f3b69d660f0fc593323693b4dda7d5131019"
+    },
+    {
+      "version": "v1.95.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:38c21fb6e94db1489b507963fa60cd7d6b3040a546bd0fab60b8a0dd434bc501"
+    },
+    {
+      "version": "v1.96.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:8c2f1ecb26f9919c8fa29e6f648b9191b172da24207873588d50d3f8855c731d"
+    },
+    {
+      "version": "v1.97.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:34e28a8cfe730fdbc5d9aebdd6138e8e2ec95a96ac28b61abf5a352fe991c1f6"
+    },
+    {
+      "version": "v1.98.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:89b8a5b4bb99d2b995c801993b12e31d14a82e4cbe1c7c371da3ce20ab2b858f"
+    },
+    {
+      "version": "v1.98.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:1ab4c3f28c69823c690a8600228f73142a9af44b512a27d68162d68799031db6"
+    },
+    {
+      "version": "v1.98.2-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:0f876e81ddfe38c46532cd8aadaba148a653d4543b49024c12c22af24a7d9e2c"
+    },
+    {
+      "version": "v1.99.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:01799596c7f40495887d4027df1c0f4c144c7cd6ab34937ef2cc14d246470095"
+    },
+    {
+      "version": "v2.0.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:bcc4ad7ea45401fd11695f2bd86c4511662c862f01f33275cc7ed3eab35add85"
+    },
+    {
+      "version": "v2.0.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:1a5a49530275ee49553b8135646631c64b62e7d22614004db8f765013761b0ba"
+    },
+    {
+      "version": "v2.1.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:7588fcae4bf1a67f4e5104fce4450c76a04f8694b04107298d566b7bcc39c011"
+    },
+    {
+      "version": "v2.2.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:0cbaebf8431295c69c784e61c3e5f2e8667662ec08df02427795aae9abe235f0"
+    },
+    {
+      "version": "v2.2.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:b91fd52230636794c5078289bb0dcfd3172b4e8f60b4907556e4b3b61591cac3"
+    },
+    {
+      "version": "v2.2.2-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:516e8bbb5611879f7c0324d81fa5f637cae2e4bbd80db8449504d692a3c9052c"
+    },
+    {
+      "version": "v2.2.3-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:b9429116a442b3a887f3fe77b7d938d7239764065ce70eb65a7ac3620baa4d5b"
+    },
+    {
+      "version": "v2.3.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:51cbdb2fdb5110d4cf12ce88ad79cbe898d7666f914335371c2c2c38352c67da"
+    },
+    {
+      "version": "v2.3.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:b717d8afc7d9d4d7e2abf29f0aa33aa2b42c8bdcd78b9c88cf267360a9a8d53c"
+    },
+    {
+      "version": "v2.4.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:5975e2c3ae59279bbc825e6e66287af40aa8fd00ac01b15ca72eb5e364259c3f"
+    },
+    {
+      "version": "v2.4.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:1c6c703477072b8878b5285d2186af7861f941458a55f2d994158bef373ef010"
+    },
+    {
+      "version": "v2.5.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:f37faec433c5a286204a7b9c34a429683b3127d394eb379a1566e2580fcac76b"
+    },
+    {
+      "version": "v2.5.2-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:ee58fc4d486f6e4247a9c065b140a7eb7114fe41b1d5a63c0be0040a26a0674c"
+    },
+    {
+      "version": "v2.5.3-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:3d158338445644423b186b0e8dddd0a447ac75b0672de7104cc5a848316cf0d1"
+    },
+    {
+      "version": "v2.5.5-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:4029c1212e7d0d80fd247420a5e49dfa4c62d648af06c49e2038b87716e5f4fd"
+    },
+    {
+      "version": "v2.5.6-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:fec6fd64c322b962a7f9830be805096c569b658d99b7732c43e0d7ea472b6e8f"
+    },
+    {
+      "version": "v2.6.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:9bff14ddc43225afff9c73e04fc6b78e8f24a8378fe395111dcb2ab2621f1e0d"
+    },
+    {
+      "version": "v2.6.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:bd5aa51a9f9a17eebf17daa7731b3bacd71a4aa542ce424d3adb06552b40e905"
+    },
+    {
+      "version": "v2.6.2-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:cdfbf1f042cc40149a9f2d416e8fd9ee526230c80e684652abe2595f6b39a25a"
+    },
+    {
+      "version": "v2.6.3-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:428b319762c5c0f39218162bd24cab38f48d369c580389e9897c8ab92807cf7a"
+    },
+    {
+      "version": "v2.7.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:6a1fcbe2215b9e382006ce861a2837f8305ae8421840525a4fda996f23287f7f"
+    },
+    {
+      "version": "v2.7.2-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:bdb10023d63ae7bdf41de9d9626f6e930574b393f07483743a0e042d71112cc5"
+    },
+    {
+      "version": "v2.7.3-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:1bc97a21569291daa291a004f3ce36c03e593709afbaee6c60eb6b2b44d31485"
+    },
+    {
+      "version": "v2.7.4-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:a11f3a2075f7615bc4e628f52a673a7c791b686eff609992db09bcb06aabf552"
+    },
+    {
+      "version": "v2.7.5-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:71cd5a681823c4b818f4b24b3f05816eccc3d085559e7615f695bde77e64f1f2"
+    },
+    {
+      "version": "v3.0.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:9abb73aff96dc3a9aa28cfa090d1556708890811d3b8b9b6bacfb14436037a21"
+    },
+    {
+      "version": "v3.0.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:d5561b55333f88ac4fe240f846c89f498693b0a9cedef6b1c45fcca0c7969cc4"
+    },
+    {
+      "version": "v3.0.2-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:6b3c1f779df2e0f93be57bb2ad15681a43b7731cb325e8e66be7d984eca1949d"
+    },
+    {
+      "version": "v3.0.3-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:42295f06067186ee62f8bc20379c72a263e600b8ad22dc9fb22385712d00944e"
+    },
+    {
+      "version": "v3.1.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:4b6ef958e7749fc548377bb23ee219c09c74da8decee080d76dc6a388c39b013"
+    },
+    {
+      "version": "v3.2.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:6387b84ab42da139191c3db686faead6555ab8cac6466d1d20be955735961b98"
+    },
+    {
+      "version": "v3.2.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:0f8a5a4ee83989cbfffc69d0d81c4714894f5dc27bbb75cbe3ee31a73353557d"
+    },
+    {
+      "version": "v3.2.2-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:4013ec28ccf6344d7ae24554743a116d7f61124b98858f5646a401d5c5df12e2"
+    },
+    {
+      "version": "v3.2.4-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:ee28c9419670b7f4c17765fb089527eff977deb8e8fb83e714aa1fa57aa89736"
+    },
+    {
+      "version": "v3.3.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:a79670d05f8da90c86f8074afe1beaf51abee53c58692ad45cae2efd9afd4aca"
+    },
+    {
+      "version": "v3.3.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:9f5ea923b763435592280e2f5e051a62f1a33d6d14e87620fc15453c27a12ae0"
+    },
+    {
+      "version": "v3.3.3-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:43b6b964c6cc458b624ec9b7ed2af0231e19e3bcfaaa68fba8a2668353c48251"
+    },
+    {
+      "version": "v3.3.4-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:dd558de9694484185e47cbd35d8caa7da1aa46766f65d4f6ab011a1a0d51f781"
+    },
+    {
+      "version": "v3.3.5-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:1dbac7f811b51b80c55ee0cf678e0089d3532c798f14a65747d5d7b473a4f9d6"
+    },
+    {
+      "version": "v3.3.6-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:035c30de002da9d4d4ae3872107bb9d8e195ead1c1f9fd470a2b0149ed37aec1"
+    },
+    {
+      "version": "v3.4.0-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:4744421230e2cd9b34621dd6a03cd7c10b228d4c3756242c0b25b23b258a66b1"
+    },
+    {
+      "version": "v3.4.1-openvino",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:97f60b06c5938c326d3ba416bcf24bc94d233f34554c05f3b76336f98ffd5ea9"
+    }
+  ]
+}

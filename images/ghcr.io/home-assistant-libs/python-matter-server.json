@@ -1,0 +1,264 @@
+{
+  "releases": [
+    {
+      "version": "3.5.2",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:091dd1834a415ba9ac4dfb0266cec76f75cc91c8e63854bf751bc25aa7b9261d"
+    },
+    {
+      "version": "3.6.0",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:9e4502019fbfa49d45898d93428996d286495de7cd957842ee8a9fb583fa4421"
+    },
+    {
+      "version": "3.6.1",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:92c2a89c8506467022a38326802760ce9a99c55d5268a20aba4218800002c64a"
+    },
+    {
+      "version": "3.6.2",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:106130ad27540d6e1eb8159de16582174d4af7a6a0e7f0ce6015905deb422fff"
+    },
+    {
+      "version": "3.6.3",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:ae7c36666e650098aff4845bc9008229feae30c243818089a071c94b9fdf8c06"
+    },
+    {
+      "version": "3.6.4",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:6e3458882cada12996a5553c403afaa411b306b388a0d19f5ee21a9bfb68a294"
+    },
+    {
+      "version": "3.7.0",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:9ceb522e9733dca8749a012af297691042807e1f6672fb613e925c5936ac7e09"
+    },
+    {
+      "version": "4.0.1",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:1f32aafb3a79780fdf896f30bf7feaf674a0928036238ff68ec0516eee5b1c5a"
+    },
+    {
+      "version": "4.0.2",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:f56613284edb88284282364ce969b40ae26c0385e01b90368decff0ec742db24"
+    },
+    {
+      "version": "5.0.0",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:081ace976667898257801cd0dd715944e04c861f6b8619ff378f3f73963e7675"
+    },
+    {
+      "version": "5.0.1",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:bce1675bac7aa535838f6713e9fa1bd27a9ba1bfc89d9027220994c3ca62134e"
+    },
+    {
+      "version": "5.0.2",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:07aa058264d02ae976430ce7a2d10fc182a8ea9fa6cf88a03e3889940c6b877c"
+    },
+    {
+      "version": "5.0.3",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:5e3ae59e67385b65bfa2649f02760c5387820561bb64eb55068199c3809ba21c"
+    },
+    {
+      "version": "5.1.0",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:e5c28ea243bbc2765bb38ef1e243dda12d13d7f4917c9321903ebe65cd787f77"
+    },
+    {
+      "version": "5.1.1",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:08f1f319b30bbef1677943de6a3719ccc666922ae447fa5cc66f8a8c31f9f534"
+    },
+    {
+      "version": "5.1.2",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:458d06d23c72a5c9af12af92c147fb4671ab9eb969f4be6baa2d3b723e25945b"
+    },
+    {
+      "version": "5.1.3",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:fa417cdd0b7d68dea818b26827a40b655b1d8f5d3f30c1af49609894f25c928a"
+    },
+    {
+      "version": "5.1.4",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:9d4d366b14aca2534a90f8867b6e46e803ec814cd2966d4a41c78afdcc1b4f97"
+    },
+    {
+      "version": "5.10.0",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:9f703534a1397bf066859327455d7c0d8e144339be439d3f9efcff0e8779c247"
+    },
+    {
+      "version": "5.2.1",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:47dd99f0f13a7561d0982cd499138bd25dff5c1c9f3c11907694c86a8f769a0f"
+    },
+    {
+      "version": "5.3.0",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:49c467f08c3ab1ce8af6a79213dc67cf7c478e48503ce55856a42bfb6159e6b6"
+    },
+    {
+      "version": "5.3.1",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:0c2774d427455b0c3f954351b5052c22eb26b690db9fc5b64dab7be3ca327912"
+    },
+    {
+      "version": "5.4.0",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:f60a4dc296fef4c46336f1bd5a440be149907df56cb5fa8ac2bcecdf40993b15"
+    },
+    {
+      "version": "5.4.1",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:d310256357899effea4799f743518831e5934f8eee26a10785ca71f536191023"
+    },
+    {
+      "version": "5.5.0",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:4e0fbcfcf124deccb96250eb253d88e937fee7fc790ac7ce29ba86ab9a6a4d03"
+    },
+    {
+      "version": "5.5.1",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:bc36952222ba16e7126853be11d0c70838f6a94fe495f7f9776e9fabe74c3bcc"
+    },
+    {
+      "version": "5.5.2",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:5a566583deddc0a8c8cb18fa48ca99317a8e863db0108a987fb80acc892b272e"
+    },
+    {
+      "version": "5.5.3",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:8d2aca6b7cb97061e7f16a64a634f7cacf485ef63a49373d5423924d072a4524"
+    },
+    {
+      "version": "5.6.0",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:efa2b9fde4f5f07dae1553be13878b13f3b8c3c3bc1c65c69bc505bfc8d42075"
+    },
+    {
+      "version": "5.7.0",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:268eaddb8a904b322a9bded86a20fd00b9b119280c4bdb0bf1c67aec2d3c2dc1"
+    },
+    {
+      "version": "5.8.0",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:764f35295701e9ed9eb0dd99f3112d5ba1db0067ea7d0ae05ccd49db823e7839"
+    },
+    {
+      "version": "5.8.1",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:aab82f903670b7bf4f72eb24c7d5b3520c854fe272f196e32b354c63f02d8724"
+    },
+    {
+      "version": "5.9.0",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:f857a093129151ac300cfc1d57bd6c3f65917e00d214d8d78e752174357e30ee"
+    },
+    {
+      "version": "6.0.0",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:1971cbc3b1d850beda8043b0a870c3d1b35ba858f1b6af670bdbc2aa62e092eb"
+    },
+    {
+      "version": "6.0.1",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:adbf98bfae90d87540d040ccaeb4e94a7bd26cfc944ade7ac68cee43aeede7de"
+    },
+    {
+      "version": "6.1.0",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:0891ebfe863fdcfbbd08e26963b5a2ef3e711924e33f02e1c7060c3272986713"
+    },
+    {
+      "version": "6.1.1",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:8238dc1eb7a82e26faef77fabcd81da180bba3a0bd79c9d12327e8cf82e14a5c"
+    },
+    {
+      "version": "6.1.2",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:173f651f4dac7ac0f817fc4062acb5c3a8c0e648a78578a6f7912111a58738b4"
+    },
+    {
+      "version": "6.2.0",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:7677fcd6d88d413ab85184e58aadc8bdb89f77794fec2db192041c0743410d85"
+    },
+    {
+      "version": "6.2.1",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:e74b1146bef08d66e189451994b4c926195aae315831a4b8ffe06aae0876367d"
+    },
+    {
+      "version": "6.2.2",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:91e16c750eda7846ac811186d343950ac581fb94440530b47b29fa5e2b219d93"
+    },
+    {
+      "version": "6.3.0",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:ac6f5cf1649fa6bdfde7dce6218e9bc126119cc9b324019ad389872e83f5c093"
+    },
+    {
+      "version": "6.4.0",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:111c2005163dbb27f077dd4fb578c13ad046c44a440fb2f028dfb383db5c33b9"
+    },
+    {
+      "version": "6.5.0",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:daa19739159920078b9f080c5df6c5496df99ecc6291e7930f2806951885dabc"
+    },
+    {
+      "version": "6.5.1",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:dfb5dcbbee4bfe074f4fc8bd56123665dc4002f32adfa44ca055b374e8e432a6"
+    },
+    {
+      "version": "6.5.2",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:fe55fda33be6290bb0d7da11a685e479ec2ddb2f16d02a7837719cee6a56916a"
+    },
+    {
+      "version": "6.6.0",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:e291154e44accc5284ec14fbc52a32764a8286deb68b4d3b91b280ad644715d8"
+    },
+    {
+      "version": "6.6.1",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:2057a36093e8a0e5a9d6c391a2be64401944783a6263e26c992b7790033304b5"
+    },
+    {
+      "version": "7.0.0",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:1e371d6936c179fec67896180a8697448c2ccec628078f709bb4b271b040701b"
+    },
+    {
+      "version": "7.0.1",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:828c1cd3f957bb0287a099a439505457a25f5d65ed34281acf19cfbf537fe346"
+    },
+    {
+      "version": "8.0.0",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:8fd1ea29ab5eca1c5e87cb983c9797b469ad315f6667c73a28b2c4c23a75923c"
+    },
+    {
+      "version": "8.1.0",
+      "releaseTimestamp": "2026-11-23T20:56:14Z",
+      "digest": "sha256:170aa093ce91c76cde4cc390918307590f0f5558fcec93f913af3cb019e6562a"
+    }
+  ]
+}

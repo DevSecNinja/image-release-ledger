@@ -1,0 +1,159 @@
+{
+  "sourceUrl": "https://github.com/blakeblackshear/frigate",
+  "releases": [
+    {
+      "version": "0.12.0",
+      "releaseTimestamp": "2023-04-08T15:29:05Z",
+      "digest": "sha256:c862771e38e8a4b62a80bc79be35b24bde3e8c067fd46d3a732ff2e3f39b857f",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "0.12.1",
+      "releaseTimestamp": "2023-06-11T13:36:14Z",
+      "digest": "sha256:bb7f7e76a13eccef0b12704e5851cc774a12af1f12df387d6a70a796a3e938c3",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "0.13.0",
+      "releaseTimestamp": "2024-01-31T01:24:15Z",
+      "digest": "sha256:7a5244e4c8dce0af2222a9c3199dd3042eeaa0c2f645b85ec10153a213954b08",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "0.13.1",
+      "releaseTimestamp": "2024-01-31T23:34:59Z",
+      "digest": "sha256:ee3cd964f19f3b7aa48cc512423c4378478dd97214f66b16741ac3c1d799d407",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "0.13.2",
+      "releaseTimestamp": "2024-02-17T14:54:01Z",
+      "digest": "sha256:2906991ccad85035b176941f9dedfd35088ff710c39d45ef1baa9a49f2b16734",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "0.14.0",
+      "releaseTimestamp": "2024-08-08T13:18:42Z",
+      "digest": "sha256:416fa4cc44fd1e40abf522ddb01defa83f2fefeca2337425c1fe1574b7f4bb14",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "0.14.1",
+      "releaseTimestamp": "2024-08-29T22:32:51Z",
+      "digest": "sha256:22e3d0b486df52c3d669682254c2b1bf4205fa6ad8bd8f8c9f7fe76b1517005d",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "0.15.0",
+      "releaseTimestamp": "2025-02-08T18:45:30Z",
+      "digest": "sha256:dc77295ccc5a7258510ab6b1d9d5b7a339027305e2d29224338534febc4d1e89",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "0.15.1",
+      "releaseTimestamp": "2025-04-15T01:30:05Z",
+      "digest": "sha256:c4e02d2c511847eebbda8e0e370b41c78e7b51247353de79340e06c3e95f11be",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "0.15.2",
+      "releaseTimestamp": "2025-07-12T01:14:56Z",
+      "digest": "sha256:44745918b0124253890b389e41ed9e24553bd156ab3f9e2b06723c0dfed2af8c",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "0.16.0",
+      "releaseTimestamp": "2025-08-16T12:30:27Z",
+      "digest": "sha256:c2d49a6fedcca8928db1eccfa8018c8138b25dfe7d506a7ea499aebc3c799b0b",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "0.16.1",
+      "releaseTimestamp": "2025-09-04T11:07:15Z",
+      "digest": "sha256:cb6624b9075f76ece626139eedca7e728cab1456a5f8c351afbf877320826bc1",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "0.16.2",
+      "releaseTimestamp": "2025-10-15T11:30:52Z",
+      "digest": "sha256:4041ad318224500cf9513c513b1bb927d9dd252f63bbd3d11c92006c1172c86c",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "0.16.3",
+      "releaseTimestamp": "2025-12-06T18:15:00Z",
+      "digest": "sha256:cf4305d9f1c673d71c4d0fab30ca56ca05ac91168711a74ee7867a4691a7ad02",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "0.16.4",
+      "releaseTimestamp": "2026-01-29T00:42:14Z",
+      "digest": "sha256:1f8dbaaa4c7c2855c2aef711842d13b0c20bfdc3f28ad88faf66aa1bc219b108",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "0.17.0",
+      "releaseTimestamp": "2026-02-27T03:03:01Z",
+      "digest": "sha256:5be5ce3b79f8b09a52957afea9d4a23ad62c9f077a05d9047e3404eb78c304a8",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "0.17.1",
+      "releaseTimestamp": "2026-03-22T20:29:09Z",
+      "digest": "sha256:1724960349dad0bd2ae8ec884171a6fd5755a4dc242a0e66cadbda9c0e85c99b",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "0.17.2",
+      "releaseTimestamp": "2026-06-28T12:12:11Z",
+      "digest": "sha256:d4351369984d4a9e2a49ac59736f6490856a7ea11f7790040746d21496967010",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "0.18.0",
+      "releaseTimestamp": "2026-09-12T13:17:35Z",
+      "digest": "sha256:9678a83a76e4730ac7d9ea7428370e32ae656d6b312aaad30d6c69f3fef14d35",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "0.18.1",
+      "releaseTimestamp": "2026-10-13T22:51:16Z",
+      "digest": "sha256:ae4ee2505e4dba6313b02bf5e8eea6c35fb1119f7087b9f684082be0a9fa0a71",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "0.18.2",
+      "releaseTimestamp": "2026-10-15T22:41:47Z",
+      "digest": "sha256:fd60f99ffd4eb6c42360ed4e14953e270586f239309ab3983e55b2e97ffac09a",
+      "seed": "github-release",
+      "immutable": false
+    },
+    {
+      "version": "0.18.3",
+      "releaseTimestamp": "2026-11-19T02:26:02Z",
+      "digest": "sha256:d1a3e0008557bb3f3314d442ecd4ba68e9b16ab7872d64612649f7a6e5156635",
+      "seed": "github-release",
+      "immutable": false
+    }
+  ]
+}
