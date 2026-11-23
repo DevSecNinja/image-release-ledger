@@ -15,10 +15,12 @@ See DevSecNinja/.github ADR 0005 for the cooldown this would replace.
 
 ## How it works
 
-1. `.github/workflows/ledger.yml` runs every 6 hours. `scripts/ledger.py`
+1. `.github/workflows/ledger.yml` runs every 6 hours (GitHub may run it less
+   often, about twice a day on this repo, see "Schedule"). `scripts/ledger.py`
    lists the tags of every image in [`images.txt`](images.txt) with an
-   anonymous registry token, reads the manifest digest of each new tag and
-   re-checks the digest of each exact version tag.
+   anonymous registry token, keeps only the tags its `tags=` filter allows,
+   reads the manifest digest of each new tag and re-checks the digest of each
+   exact version tag.
 2. It writes `images/<registry>/<repository>.json` on the **`data`** branch:
 
    ```json
@@ -79,6 +81,15 @@ Rules:
   that has new tags.
 - Signature and attestation tags (`sha256-<digest>[.sig|.att|.sbom]`) are not
   versions and are left out.
+- **Tag filter:** `tags=<regex>` in `images.txt` (anchored with `^` and `$`)
+  limits an image to the tags Renovate should consider, for example
+  `tags=^v\d+\.\d+\.\d+$`. Other tags are never looked up, stored or shown to
+  Renovate. Use it for images that publish many CI tags (`commit-…`, `pr-…`):
+  without it every tag costs a manifest request on every run. The filter must
+  match the tag the consuming repo pins today. Narrowing a filter drops the
+  entries outside it; if a tag matches again later it counts as first seen
+  then, so a filter change can only lengthen a soak. The pattern can't contain
+  spaces or `#`.
 - A tag that disappears from the registry stays, marked `isDeprecated`.
 - **Seed:** only when an image is added, its existing tags take the date of
   the matching GitHub release (`seed=github-releases:<owner>/<repo>` in
@@ -117,12 +128,24 @@ Renovate's custom datasource ignores the extra fields (`seed`, `immutable`,
 - Failure is safe: if the job stops or an image or tag is missing, Renovate
   sees no new version, so updates stall instead of merging unsoaked versions.
 
+## Limits and schedule
+
+- **Registry limits.** A tag list is read in pages of 1,000, up to 500 pages
+  per image. A 429 or 5xx response is retried once after `Retry-After`
+  (capped at 60 s, 5 s when absent; ghcr.io names its limit, 44,000 requests a
+  minute, only in the response body). A second failure skips that image for
+  the run, which fails closed. An anonymous token that expires mid-run is
+  renewed once.
+- **Schedule.** GitHub delays scheduled workflows on quiet repositories: the
+  6-hourly cron has run about every 12 hours here. That only delays new tags
+  becoming visible; it never shortens a soak.
+
 ## Adding an image
 
 Add a line to `images.txt` (with a `seed=` source if the project publishes
-GitHub releases), then point the image's Renovate rule at
-`custom.first-seen`. Docker Hub images don't belong here: Renovate already has
-their release dates.
+GitHub releases, and a `tags=` filter if it publishes many tags Renovate
+doesn't need), then point the image's Renovate rule at `custom.first-seen`.
+Docker Hub images don't belong here: Renovate already has their release dates.
 
 ## Development
 
