@@ -15,3 +15,13 @@ ghcr.io/alexta69/metube seed=github-releases:alexta69/metube tags=^\d{4}\.\d{2}\
 ghcr.io/karakeep-app/karakeep seed=github-releases:karakeep-app/karakeep tags=^\d+\.\d+\.\d+$
 ghcr.io/meeb/tubesync seed=github-releases:meeb/tubesync tags=^v\d+\.\d+\.\d+$
 ghcr.io/gethomepage/homepage seed=github-releases:gethomepage/homepage tags=^v\d+\.\d+\.\d+$
+ghcr.io/esphome/esphome seed=github-releases:esphome/esphome tags=^\d{4}\.\d+\.\d+$
+ghcr.io/blakeblackshear/frigate seed=github-releases:blakeblackshear/frigate tags=^\d+\.\d+\.\d+$
+ghcr.io/home-assistant/home-assistant seed=github-releases:home-assistant/core tags=^\d{4}\.\d+\.\d+$
+ghcr.io/immich-app/immich-server tags=^v\d+\.\d+\.\d+$
+ghcr.io/immich-app/immich-machine-learning tags=^v\d+\.\d+\.\d+-openvino$
+ghcr.io/immich-app/postgres tags=^\d+-vectorchord[\d.]+-pgvector[\d.]+$
+quay.io/prometheuscommunity/postgres-exporter seed=github-releases:prometheus-community/postgres_exporter tags=^v\d+\.\d+\.\d+$
+ghcr.io/home-assistant-libs/python-matter-server tags=^\d+\.\d+\.\d+$
+ghcr.io/coleifer/sqlite-web tags=^\d+\.\d+\.\d+$
+ghcr.io/bitwarden/lite seed=github-releases:bitwarden/self-host tags=^\d{4}\.\d+\.\d+$
