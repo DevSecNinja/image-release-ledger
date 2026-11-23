@@ -27,6 +27,11 @@ The files live on the `data` branch. Rules:
   digests for these tags.
 - Signature and attestation tags (sha256-<digest>[.sig|.att|.sbom]) are not
   versions and are left out.
+- `tags=<regex>` (images.txt option, anchored with ^ and $) limits an image to
+  the tags Renovate should consider. Other tags are never looked up, stored or
+  exposed, which keeps images with tens of thousands of CI tags cheap. An entry
+  that no longer matches is dropped; if it matches again later it is recorded
+  as first seen then, so changing the filter can only make the soak longer.
 - When images.txt names the GitHub source repo, a new tag that has a release
   records the release's `immutable` flag (GitHub immutable releases lock the
   tag and assets). The release list is read once per run that has new tags.
@@ -44,10 +49,12 @@ from __future__ import annotations
 import argparse
 import base64
 import copy
+import email.utils
 import json
 import os
 import re
 import sys
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -71,6 +78,12 @@ SOAK = re.compile(r"^\d{1,3}$")
 DEFAULT_SOAK_DAYS = 14
 SEED = re.compile(r"^github-releases:(?P<repo>[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)$")
 LINK_NEXT = re.compile(r'<([^>]+)>\s*;\s*rel="?next"?')
+# immich-machine-learning alone lists about 230 pages of 1,000 tags.
+MAX_TAG_PAGES = 500
+# Rate limits and transient registry errors: wait (Retry-After, capped) and retry once.
+RETRY_STATUSES = frozenset({429, 502, 503, 504})
+DEFAULT_RETRY_SECONDS = 5
+MAX_RETRY_SECONDS = 60
 
 Response = tuple[int, dict[str, str], bytes]
 Transport = Callable[[str, str, dict[str, str], bytes | None], Response]
@@ -106,7 +119,7 @@ def parse_images(text: str) -> list[dict]:
         match = IMAGE.match(name)
         if not match or match["host"] == "docker.io" or ".." in name:
             raise LedgerError(f"images.txt line {number}: {name!r} is not a non-Docker-Hub image with a registry host")
-        image = {"name": name, "host": match["host"], "repo": match["repo"], "seed": None}
+        image = {"name": name, "host": match["host"], "repo": match["repo"], "seed": None, "tags": None}
         image["soak_days"] = DEFAULT_SOAK_DAYS
         for option in options:
             key, _, value = option.partition("=")
@@ -114,18 +127,60 @@ def parse_images(text: str) -> list[dict]:
                 image["seed"] = SEED.match(value)["repo"]
             elif key == "soak-days" and SOAK.match(value):
                 image["soak_days"] = int(value)
+            elif key == "tags":
+                image["tags"] = tag_filter(value, number)
             else:
                 raise LedgerError(f"images.txt line {number}: unknown option {option!r}")
         images.append(image)
     return images
 
 
+def tag_filter(value: str, number: int) -> re.Pattern[str]:
+    """A `tags=` pattern: anchored at both ends, so it can't match by accident."""
+    if not (value.startswith("^") and value.endswith("$")) or len(value) < 3:
+        raise LedgerError(f"images.txt line {number}: tags= must be anchored with ^ and $")
+    try:
+        return re.compile(value)
+    except re.error as error:
+        raise LedgerError(f"images.txt line {number}: tags= is not a valid pattern: {error}") from error
+
+
+def keep_tags(tags: list[str], pattern: re.Pattern[str] | None) -> list[str]:
+    return tags if pattern is None else [t for t in tags if pattern.fullmatch(t)]
+
+
+def keep_ledger(existing: dict | None, pattern: re.Pattern[str] | None) -> dict | None:
+    """`existing` without the entries outside the image's `tags=` filter."""
+    if existing is None or pattern is None:
+        return existing
+    kept = dict(existing)
+    kept["releases"] = [r for r in existing.get("releases", []) if pattern.fullmatch(r["version"])]
+    if "floating" in existing:
+        kept["floating"] = {t: h for t, h in existing["floating"].items() if pattern.fullmatch(t)}
+    return kept
+
+
+def retry_delay(headers: dict[str, str], now: datetime | None = None) -> float:
+    """Seconds to wait before a retry: Retry-After as seconds or an HTTP date, capped."""
+    value = headers.get("retry-after", "").strip()
+    try:
+        seconds = float(value)
+    except ValueError:
+        try:
+            when = email.utils.parsedate_to_datetime(value)
+            seconds = (when - (now or datetime.now(UTC))).total_seconds()
+        except (TypeError, ValueError):
+            seconds = DEFAULT_RETRY_SECONDS
+    return min(max(seconds, 0), MAX_RETRY_SECONDS)
+
+
 class Registry:
     """OCI distribution API with anonymous bearer tokens."""
 
-    def __init__(self, transport: Transport, host: str):
+    def __init__(self, transport: Transport, host: str, sleep: Callable[[float], None] = time.sleep):
         self.transport = transport
         self.host = host
+        self.sleep = sleep
         self.tokens: dict[str, str] = {}
 
     def _token(self, repo: str, challenge: str) -> str:
@@ -134,7 +189,11 @@ class Registry:
         if not challenge.lower().startswith("bearer") or not realm.startswith("https://"):
             raise LedgerError(f"{self.host}/{repo}: unsupported auth challenge {challenge!r}")
         params.setdefault("scope", f"repository:{repo}:pull")
-        status, _, body = self.transport("GET", f"{realm}?{urllib.parse.urlencode(params)}", {}, None)
+        url = f"{realm}?{urllib.parse.urlencode(params)}"
+        status, headers, body = self.transport("GET", url, {}, None)
+        if status in RETRY_STATUSES:
+            self.sleep(retry_delay(headers))
+            status, headers, body = self.transport("GET", url, {}, None)
         if status != 200:
             raise LedgerError(f"{self.host}/{repo}: token request failed with HTTP {status}")
         payload = json.loads(body)
@@ -143,18 +202,24 @@ class Registry:
             raise LedgerError(f"{self.host}/{repo}: token response has no token")
         return token
 
-    def _request(self, method: str, url: str, repo: str, headers: dict[str, str]) -> Response:
+    def _request(
+        self, method: str, url: str, repo: str, headers: dict[str, str], renewed: bool = False, retried: bool = False
+    ) -> Response:
         auth = {"Authorization": f"Bearer {self.tokens[repo]}"} if repo in self.tokens else {}
         status, response_headers, body = self.transport(method, url, {**headers, **auth}, None)
-        if status == 401 and repo not in self.tokens:
+        if status == 401 and not renewed:
+            # No token yet, or an anonymous token that expired during a long run: fetch one, once.
             self.tokens[repo] = self._token(repo, response_headers.get("www-authenticate", ""))
-            return self._request(method, url, repo, headers)
+            return self._request(method, url, repo, headers, renewed=True, retried=retried)
+        if status in RETRY_STATUSES and not retried:
+            self.sleep(retry_delay(response_headers))
+            return self._request(method, url, repo, headers, renewed=renewed, retried=True)
         return status, response_headers, body
 
     def tags(self, repo: str) -> list[str]:
         url = f"https://{self.host}/v2/{repo}/tags/list?n=1000"
         tags: list[str] = []
-        for _ in range(100):
+        for _ in range(MAX_TAG_PAGES):
             status, headers, body = self._request("GET", url, repo, {"Accept": "application/json"})
             if status != 200:
                 raise LedgerError(f"{self.host}/{repo}: tag list failed with HTTP {status}")
@@ -163,7 +228,7 @@ class Registry:
             if not link:
                 return tags
             url = urllib.parse.urljoin(url, link.group(1))
-        raise LedgerError(f"{self.host}/{repo}: tag list has more than 100 pages")
+        raise LedgerError(f"{self.host}/{repo}: tag list has more than {MAX_TAG_PAGES} pages")
 
     def digest(self, repo: str, tag: str) -> str:
         url = f"https://{self.host}/v2/{repo}/manifests/{urllib.parse.quote(tag, safe='')}"
@@ -396,9 +461,10 @@ def run(images: list[dict], github: GitHub, transport: Transport, branch: str, n
     for image in images:
         path = ledger_path(image)
         try:
-            existing = github.read_file(branch, path)
+            stored = github.read_file(branch, path)
+            existing = keep_ledger(stored, image.get("tags"))
             registry = Registry(transport, image["host"])
-            tags = registry.tags(image["repo"])
+            tags = keep_tags(registry.tags(image["repo"]), image.get("tags"))
             known = {r["version"] for r in (existing or {}).get("releases", [])}
             known |= set((existing or {}).get("floating", {}))
             new_tags = [t for t in tags if t not in known and not ARTIFACT_TAG.match(t)]
@@ -414,7 +480,7 @@ def run(images: list[dict], github: GitHub, transport: Transport, branch: str, n
             failures += 1
             continue
         events += [{"image": image["name"], **e} for e in image_events]
-        results.append((image, path, existing, ledger, known))
+        results.append((image, path, stored, ledger, known))
     for event in events:
         print(f"::warning::{event['image']}:{event['tag']} moved from {event['from']} to {event['to']}")
     write_summary(events)
@@ -423,8 +489,8 @@ def run(images: list[dict], github: GitHub, transport: Transport, branch: str, n
     failures += notify_retags(github, [(image, ledger) for image, _, _, ledger, _ in results], apply)
     changed: dict[str, str] = {}
     added: list[str] = []
-    for image, path, existing, ledger, known in results:
-        if existing is None or dump(ledger) != dump(existing):
+    for image, path, stored, ledger, known in results:
+        if stored is None or dump(ledger) != dump(stored):
             changed[path] = dump(ledger)
             added += [f"{image['name']}:{r['version']}" for r in ledger["releases"] if r["version"] not in known]
     if not changed:

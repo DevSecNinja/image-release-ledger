@@ -82,6 +82,15 @@ class ParseImagesTest(unittest.TestCase):
             with self.subTest(line=line), self.assertRaises(ledger.LedgerError):
                 ledger.parse_images(line)
 
+    def test_a_tag_filter_must_be_an_anchored_valid_pattern(self):
+        (image,) = ledger.parse_images(r"ghcr.io/a/b tags=^v\d+\.\d+\.\d+$" + "\n")
+        self.assertTrue(image["tags"].fullmatch("v1.2.3"))
+        self.assertFalse(image["tags"].fullmatch("commit-abc"))
+        self.assertIsNone(ledger.parse_images("ghcr.io/a/b\n")[0]["tags"])
+        for bad in [r"tags=v\d+", r"tags=^v\d+", r"tags=v\d+$", "tags=^(v$", "tags=", "tags=^$"]:
+            with self.subTest(bad=bad), self.assertRaises(ledger.LedgerError):
+                ledger.parse_images(f"ghcr.io/a/b {bad}\n")
+
 
 class RegistryTest(unittest.TestCase):
     def test_fetches_an_anonymous_token_once_and_follows_pages(self):
@@ -105,6 +114,85 @@ class RegistryTest(unittest.TestCase):
         fake = Fake({("HEAD", f"{REG}/manifests/1.0.0"): (200, {}, b"")})
         with self.assertRaises(ledger.LedgerError):
             ledger.Registry(fake, "ghcr.io").digest("example/app", "1.0.0")
+
+    def test_follows_more_than_a_hundred_pages(self):
+        routes = {}
+        for page in range(150):
+            url = f"{REG}/tags/list?n=1000" if page == 0 else f"{REG}/tags/list?last=t{page - 1}&n=1000"
+            link = f'</v2/example/app/tags/list?last=t{page}&n=1000>; rel="next"' if page < 149 else None
+            routes[("GET", url)] = tags_route([f"t{page}"], link)
+        tags = ledger.Registry(Fake(routes), "ghcr.io").tags("example/app")
+        self.assertEqual(len(tags), 150)
+
+    def test_a_rate_limit_waits_for_retry_after_and_retries_once(self):
+        answers = [(429, {"retry-after": "7"}, b""), manifest(3)]
+        fake = Fake({("HEAD", f"{REG}/manifests/1.0.0"): lambda _data: answers.pop(0)})
+        waits = []
+        registry = ledger.Registry(fake, "ghcr.io", sleep=waits.append)
+        self.assertEqual(registry.digest("example/app", "1.0.0"), digest(3))
+        self.assertEqual(waits, [7.0])
+
+    def test_retry_after_accepts_seconds_or_an_http_date(self):
+        now = ledger.datetime(2026, 11, 23, 9, 0, 0, tzinfo=ledger.UTC)
+        self.assertEqual(ledger.retry_delay({"retry-after": "12"}, now), 12)
+        self.assertEqual(ledger.retry_delay({"retry-after": "Mon, 23 Nov 2026 09:00:30 GMT"}, now), 30)
+        self.assertEqual(ledger.retry_delay({"retry-after": "Mon, 23 Nov 2026 08:59:00 GMT"}, now), 0)
+        self.assertEqual(ledger.retry_delay({"retry-after": "soon"}, now), ledger.DEFAULT_RETRY_SECONDS)
+        self.assertEqual(ledger.retry_delay({}, now), ledger.DEFAULT_RETRY_SECONDS)
+
+    def test_a_rate_limited_token_request_is_retried_once(self):
+        answers = [(503, {"retry-after": "2"}, b""), (200, {}, b'{"token": "anon"}')]
+        calls = []
+
+        def transport(method, url, headers, data):
+            calls.append(url)
+            if url.startswith("https://ghcr.io/token"):
+                return answers.pop(0)
+            if headers.get("Authorization") != "Bearer anon":
+                return 401, {"www-authenticate": CHALLENGE}, b""
+            return manifest(5)
+
+        waits = []
+        registry = ledger.Registry(transport, "ghcr.io", sleep=waits.append)
+        self.assertEqual(registry.digest("example/app", "1.0.0"), digest(5))
+        self.assertEqual(waits, [2.0])
+
+    def test_a_second_rate_limit_fails_the_image_and_long_waits_are_capped(self):
+        fake = Fake({("HEAD", f"{REG}/manifests/1.0.0"): (429, {"retry-after": "3600"}, b"")}, token_required=False)
+        waits = []
+        with self.assertRaises(ledger.LedgerError):
+            ledger.Registry(fake, "ghcr.io", sleep=waits.append).digest("example/app", "1.0.0")
+        self.assertEqual(waits, [ledger.MAX_RETRY_SECONDS])
+        self.assertEqual(len(fake.heads()), 2)
+
+    def test_an_expired_token_is_renewed_once(self):
+        calls = []
+
+        def transport(method, url, headers, data):
+            calls.append(url)
+            if url.startswith("https://ghcr.io/token"):
+                return 200, {}, b'{"token": "fresh"}'
+            if headers.get("Authorization") != "Bearer fresh":
+                return 401, {"www-authenticate": CHALLENGE}, b""
+            return manifest(4)
+
+        registry = ledger.Registry(transport, "ghcr.io")
+        registry.tokens["example/app"] = "expired"
+        self.assertEqual(registry.digest("example/app", "1.0.0"), digest(4))
+        self.assertEqual(sum(u.startswith("https://ghcr.io/token") for u in calls), 1)
+
+    def test_a_token_that_keeps_failing_is_not_renewed_forever(self):
+        calls = []
+
+        def transport(method, url, headers, data):
+            calls.append(url)
+            if url.startswith("https://ghcr.io/token"):
+                return 200, {}, b'{"token": "anon"}'
+            return 401, {"www-authenticate": CHALLENGE}, b""
+
+        with self.assertRaises(ledger.LedgerError):
+            ledger.Registry(transport, "ghcr.io").digest("example/app", "1.0.0")
+        self.assertEqual(sum(u.startswith("https://ghcr.io/token") for u in calls), 1)
 
 
 def update(*args, **kwargs):
@@ -422,6 +510,26 @@ class RunTest(unittest.TestCase):
         code, _fake, _out = self.run_ledger(routes, images="ghcr.io/example/app\n")
         self.assertEqual((code, len(issues)), (0, 1))
         self.assertEqual(self.written(commits)["releases"][0]["retagged"][0]["issue"], "https://x/issues/9")
+
+    def test_a_tag_filter_skips_other_tags_before_any_lookup(self):
+        routes, commits = self.routes()
+        routes[("GET", f"{REG}/tags/list?n=1000")] = tags_route(["1.0.0", "1.1.0", "commit-abc", "latest"])
+        code, fake, _out = self.run_ledger(routes, images="ghcr.io/example/app tags=^1\\.1\\.\\d+$\n")
+        self.assertEqual(code, 0)
+        self.assertEqual(fake.heads(), [f"{REG}/manifests/1.1.0"])
+        written = self.written(commits)
+        self.assertEqual([r["version"] for r in written["releases"]], ["1.1.0"])
+        self.assertNotIn("floating", written)
+
+    def test_a_narrower_filter_drops_stored_entries_outside_it(self):
+        stored = self.existing()
+        stored["floating"] = {"latest": [{"digest": digest(2), "seen": NOW}]}
+        routes, commits = self.routes(existing=stored)
+        code, _fake, _out = self.run_ledger(routes, images="ghcr.io/example/app tags=^1\\.1\\.\\d+$\n")
+        self.assertEqual(code, 0)
+        written = self.written(commits)
+        self.assertEqual(written["releases"], [{"version": "1.1.0", "releaseTimestamp": NOW, "digest": digest(2)}])
+        self.assertNotIn("latest", written.get("floating", {}))
 
     def setUp(self):
         self.comments = []
