@@ -14,10 +14,12 @@ The files live on the `data` branch. Rules:
 - A known tag is never changed: its timestamp never moves and its digest stays
   the first one seen, so a re-pushed (possibly hijacked) tag is not picked up.
 - A tag that disappears from the registry is kept and marked isDeprecated.
-- Version tags (x.y.z, optional pre-release) are re-checked on every run. If
-  one now points at another digest, its entry keeps the first digest and gets
-  a `retagged` record ({from, to, seen}); the run reports it in the job summary
-  and opens an issue.
+- Version tags (x.y.z, optional pre-release) are re-checked on every run, but
+  only the newest `recheck` of them per image (images.txt option, default 20).
+  If one now points at another digest, its entry keeps the first digest and
+  gets a `retagged` record ({from, to, seen}); the run reports it in the job
+  summary and opens an issue. Older tags keep their first digest either way;
+  only the alarm is skipped for them.
 - Floating tags (latest, beta, 4, 4.16) move by design. Each keeps a digest
   history under the top-level `floating` key, where a digest is "seen" at the
   earliest time it appeared under any tag of the image. `releases` exposes a
@@ -52,6 +54,7 @@ import copy
 import email.utils
 import json
 import os
+import random
 import re
 import sys
 import time
@@ -76,14 +79,21 @@ VERSION_TAG = re.compile(r"^v?\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$")
 ARTIFACT_TAG = re.compile(r"^sha256-[0-9a-f]{64}(?:\.(?:sig|att|sbom))?$")
 SOAK = re.compile(r"^\d{1,3}$")
 DEFAULT_SOAK_DAYS = 14
+# Known version tags re-checked for a move per run: the newest N by version.
+DEFAULT_RECHECK = 20
 SEED = re.compile(r"^github-releases:(?P<repo>[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)$")
 LINK_NEXT = re.compile(r'<([^>]+)>\s*;\s*rel="?next"?')
 # immich-machine-learning alone lists about 230 pages of 1,000 tags.
 MAX_TAG_PAGES = 500
-# Rate limits and transient registry errors: wait (Retry-After, capped) and retry once.
+# Rate limits and transient registry errors: wait (Retry-After, or exponential
+# backoff with jitter, capped) and retry up to RETRIES times. After that the
+# run skips the remaining images on that registry instead of adding load.
 RETRY_STATUSES = frozenset({429, 502, 503, 504})
+RETRIES = 2
 DEFAULT_RETRY_SECONDS = 5
 MAX_RETRY_SECONDS = 60
+# Pause between registry requests, so a run never bursts.
+PACE_SECONDS = 0.1
 
 Response = tuple[int, dict[str, str], bytes]
 Transport = Callable[[str, str, dict[str, str], bytes | None], Response]
@@ -91,6 +101,10 @@ Transport = Callable[[str, str, dict[str, str], bytes | None], Response]
 
 class LedgerError(Exception):
     pass
+
+
+class RegistryBusy(LedgerError):
+    """The registry still rate-limits or fails after every retry."""
 
 
 def urllib_transport(method: str, url: str, headers: dict[str, str], data: bytes | None) -> Response:
@@ -121,12 +135,15 @@ def parse_images(text: str) -> list[dict]:
             raise LedgerError(f"images.txt line {number}: {name!r} is not a non-Docker-Hub image with a registry host")
         image = {"name": name, "host": match["host"], "repo": match["repo"], "seed": None, "tags": None}
         image["soak_days"] = DEFAULT_SOAK_DAYS
+        image["recheck"] = DEFAULT_RECHECK
         for option in options:
             key, _, value = option.partition("=")
             if key == "seed" and SEED.match(value):
                 image["seed"] = SEED.match(value)["repo"]
             elif key == "soak-days" and SOAK.match(value):
                 image["soak_days"] = int(value)
+            elif key == "recheck" and SOAK.match(value):
+                image["recheck"] = int(value)
             elif key == "tags":
                 image["tags"] = tag_filter(value, number)
             else:
@@ -160,8 +177,12 @@ def keep_ledger(existing: dict | None, pattern: re.Pattern[str] | None) -> dict 
     return kept
 
 
-def retry_delay(headers: dict[str, str], now: datetime | None = None) -> float:
-    """Seconds to wait before a retry: Retry-After as seconds or an HTTP date, capped."""
+def retry_delay(headers: dict[str, str], now: datetime | None = None, attempt: int = 0, jitter: float = 0.0) -> float:
+    """Seconds to wait before retry `attempt` (0-based), capped.
+
+    Retry-After (seconds or an HTTP date) wins; without it the wait doubles
+    per attempt from DEFAULT_RETRY_SECONDS, plus `jitter`.
+    """
     value = headers.get("retry-after", "").strip()
     try:
         seconds = float(value)
@@ -170,18 +191,47 @@ def retry_delay(headers: dict[str, str], now: datetime | None = None) -> float:
             when = email.utils.parsedate_to_datetime(value)
             seconds = (when - (now or datetime.now(UTC))).total_seconds()
         except (TypeError, ValueError):
-            seconds = DEFAULT_RETRY_SECONDS
+            seconds = DEFAULT_RETRY_SECONDS * 2**attempt + jitter
     return min(max(seconds, 0), MAX_RETRY_SECONDS)
 
 
-class Registry:
-    """OCI distribution API with anonymous bearer tokens."""
+def version_key(tag: str) -> list:
+    """Natural sort key: 2026.10.2 after 2026.9.1, v0.19.0 after v0.9.1."""
+    return [int(part) if part.isdigit() else part for part in re.split(r"(\d+)", tag)]
 
-    def __init__(self, transport: Transport, host: str, sleep: Callable[[float], None] = time.sleep):
+
+class Registry:
+    """OCI distribution API with anonymous bearer tokens, paced and with bounded retries."""
+
+    def __init__(
+        self,
+        transport: Transport,
+        host: str,
+        sleep: Callable[[float], None] = time.sleep,
+        pace: float | None = None,
+        jitter: Callable[[], float] = random.random,
+    ):
         self.transport = transport
         self.host = host
         self.sleep = sleep
+        self.pace = PACE_SECONDS if pace is None else pace
+        self.jitter = jitter
+        self.sent = 0
         self.tokens: dict[str, str] = {}
+
+    def _send(self, method: str, url: str, headers: dict[str, str]) -> Response:
+        """One request, after a pause if this isn't the first; retried on 429/5xx."""
+        for attempt in range(RETRIES + 1):
+            if self.sent and self.pace:
+                self.sleep(self.pace)
+            self.sent += 1
+            status, response_headers, body = self.transport(method, url, headers, None)
+            if status not in RETRY_STATUSES:
+                return status, response_headers, body
+            if attempt == RETRIES:
+                raise RegistryBusy(f"{self.host}: HTTP {status} after {RETRIES} retries")
+            self.sleep(retry_delay(response_headers, attempt=attempt, jitter=self.jitter()))
+        raise AssertionError("unreachable")
 
     def _token(self, repo: str, challenge: str) -> str:
         params = dict(re.findall(r'(\w+)="([^"]*)"', challenge))
@@ -189,11 +239,7 @@ class Registry:
         if not challenge.lower().startswith("bearer") or not realm.startswith("https://"):
             raise LedgerError(f"{self.host}/{repo}: unsupported auth challenge {challenge!r}")
         params.setdefault("scope", f"repository:{repo}:pull")
-        url = f"{realm}?{urllib.parse.urlencode(params)}"
-        status, headers, body = self.transport("GET", url, {}, None)
-        if status in RETRY_STATUSES:
-            self.sleep(retry_delay(headers))
-            status, headers, body = self.transport("GET", url, {}, None)
+        status, _, body = self._send("GET", f"{realm}?{urllib.parse.urlencode(params)}", {})
         if status != 200:
             raise LedgerError(f"{self.host}/{repo}: token request failed with HTTP {status}")
         payload = json.loads(body)
@@ -202,18 +248,13 @@ class Registry:
             raise LedgerError(f"{self.host}/{repo}: token response has no token")
         return token
 
-    def _request(
-        self, method: str, url: str, repo: str, headers: dict[str, str], renewed: bool = False, retried: bool = False
-    ) -> Response:
+    def _request(self, method: str, url: str, repo: str, headers: dict[str, str], renewed: bool = False) -> Response:
         auth = {"Authorization": f"Bearer {self.tokens[repo]}"} if repo in self.tokens else {}
-        status, response_headers, body = self.transport(method, url, {**headers, **auth}, None)
+        status, response_headers, body = self._send(method, url, {**headers, **auth})
         if status == 401 and not renewed:
             # No token yet, or an anonymous token that expired during a long run: fetch one, once.
             self.tokens[repo] = self._token(repo, response_headers.get("www-authenticate", ""))
-            return self._request(method, url, repo, headers, renewed=True, retried=retried)
-        if status in RETRY_STATUSES and not retried:
-            self.sleep(retry_delay(response_headers))
-            return self._request(method, url, repo, headers, renewed=renewed, retried=True)
+            return self._request(method, url, repo, headers, renewed=True)
         return status, response_headers, body
 
     def tags(self, repo: str) -> list[str]:
@@ -253,12 +294,14 @@ def update_image(
     releases_info: dict[str, dict] | None = None,
     source_url: str | None = None,
     soak_days: int = DEFAULT_SOAK_DAYS,
+    recheck: int = DEFAULT_RECHECK,
 ) -> tuple[dict, list[dict]]:
     """The image's new ledger and its new retag events.
 
-    New tags, exact version tags and floating tags are looked up; nothing else.
-    `releases_info` maps a tag to its GitHub release ({"published_at",
-    "immutable"}); its date seeds tags only for a new image (`existing` None).
+    New tags, the newest `recheck` known exact version tags and floating tags
+    are looked up; nothing else. `releases_info` maps a tag to its GitHub
+    release ({"published_at", "immutable"}); its date seeds tags only for a
+    new image (`existing` None).
     """
     tags = [t for t in tags if not ARTIFACT_TAG.match(t)]
     releases = {}
@@ -274,10 +317,15 @@ def update_image(
     seeding = existing is None
     current = set(tags)
     events: list[dict] = []
+    known = sorted((t for t in tags if VERSION_TAG.match(t) and t in releases), key=version_key)
+    rechecked = set(known[-recheck:]) if recheck else set()
     for tag in (t for t in tags if VERSION_TAG.match(t)):
         entry = releases.get(tag)
         if entry is not None:
             entry.pop("isDeprecated", None)
+            if tag not in rechecked:
+                # Older tag: its first digest still stands; only the move alarm is skipped.
+                continue
             digest = digest_of(tag)
             history = entry.get("retagged", [])
             last = history[-1]["to"] if history else entry["digest"]
@@ -458,8 +506,14 @@ def run(images: list[dict], github: GitHub, transport: Transport, branch: str, n
     results: list[tuple[dict, str, dict | None, dict, set[str]]] = []
     events: list[dict] = []
     failures = 0
+    busy: set[str] = set()
     for image in images:
         path = ledger_path(image)
+        if image["host"] in busy:
+            # The registry kept refusing earlier in this run: don't add load. Fails closed.
+            print(f"::error::{image['name']}: skipped, {image['host']} is rate-limiting this run")
+            failures += 1
+            continue
         try:
             stored = github.read_file(branch, path)
             existing = keep_ledger(stored, image.get("tags"))
@@ -474,8 +528,12 @@ def run(images: list[dict], github: GitHub, transport: Transport, branch: str, n
             def digest_of(tag: str, registry: Registry = registry, repo: str = image["repo"]) -> str:
                 return registry.digest(repo, tag)
 
-            ledger, image_events = update_image(existing, tags, digest_of, now, info, source, image["soak_days"])
+            ledger, image_events = update_image(
+                existing, tags, digest_of, now, info, source, image["soak_days"], image.get("recheck", DEFAULT_RECHECK)
+            )
         except (LedgerError, ValueError, KeyError, OSError) as error:
+            if isinstance(error, RegistryBusy):
+                busy.add(image["host"])
             print(f"::error::{image['name']}: {error}")
             failures += 1
             continue
