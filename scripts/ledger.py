@@ -85,10 +85,11 @@ SEED = re.compile(r"^github-releases:(?P<repo>[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)$"
 LINK_NEXT = re.compile(r'<([^>]+)>\s*;\s*rel="?next"?')
 # immich-machine-learning alone lists about 230 pages of 1,000 tags.
 MAX_TAG_PAGES = 500
-# Rate limits and transient registry errors: wait (Retry-After, or exponential
-# backoff with jitter, capped) and retry up to RETRIES times. After that the
-# run skips the remaining images on that registry instead of adding load.
-RETRY_STATUSES = frozenset({429, 502, 503, 504})
+# Rate limits and transient registry errors (429 and every 5xx): wait
+# (Retry-After, or exponential backoff with jitter, capped) and retry up to
+# RETRIES times. After that the run skips the remaining images on that
+# registry instead of adding load.
+RETRY_STATUSES = frozenset({429})
 RETRIES = 2
 DEFAULT_RETRY_SECONDS = 5
 MAX_RETRY_SECONDS = 60
@@ -195,9 +196,23 @@ def retry_delay(headers: dict[str, str], now: datetime | None = None, attempt: i
     return min(max(seconds, 0), MAX_RETRY_SECONDS)
 
 
-def version_key(tag: str) -> list:
-    """Natural sort key: 2026.10.2 after 2026.9.1, v0.19.0 after v0.9.1."""
-    return [int(part) if part.isdigit() else part for part in re.split(r"(\d+)", tag)]
+def version_key(tag: str) -> tuple:
+    """Version order for exact tags: the `v` prefix is ignored, numbers compare
+    numerically, and a release sorts after its pre-releases (2.0.0-rc.1 < 2.0.0)."""
+    match = re.fullmatch(r"v?(\d+)\.(\d+)\.(\d+)(?:-(.+))?", tag)
+    if not match:
+        return ((), 0, natural_key(tag))
+    numbers = tuple(int(n) for n in match.group(1, 2, 3))
+    suffix = match.group(4)
+    return (numbers, 1 if suffix is None else 0, natural_key(suffix or ""))
+
+
+def natural_key(text: str) -> list:
+    return [int(part) if part.isdigit() else part for part in re.split(r"(\d+)", text)]
+
+
+def retryable(status: int) -> bool:
+    return status in RETRY_STATUSES or 500 <= status < 600
 
 
 class Registry:
@@ -226,7 +241,7 @@ class Registry:
                 self.sleep(self.pace)
             self.sent += 1
             status, response_headers, body = self.transport(method, url, headers, None)
-            if status not in RETRY_STATUSES:
+            if not retryable(status):
                 return status, response_headers, body
             if attempt == RETRIES:
                 raise RegistryBusy(f"{self.host}: HTTP {status} after {RETRIES} retries")

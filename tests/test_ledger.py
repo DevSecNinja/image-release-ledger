@@ -172,6 +172,21 @@ class RegistryTest(unittest.TestCase):
         self.assertEqual(registry.digest("example/app", "1.0.0"), digest(5))
         self.assertEqual(waits, [2.0])
 
+    def test_any_server_error_is_retried_and_ends_as_busy(self):
+        answers = [(500, {}, b""), manifest(6)]
+        fake = Fake({("HEAD", f"{REG}/manifests/1.0.0"): lambda _data: answers.pop(0)}, token_required=False)
+        waits = []
+        registry = ledger.Registry(fake, "ghcr.io", sleep=waits.append, jitter=lambda: 0.25)
+        self.assertEqual(registry.digest("example/app", "1.0.0"), digest(6))
+        self.assertEqual(waits, [ledger.DEFAULT_RETRY_SECONDS + 0.25])
+        always = Fake({("HEAD", f"{REG}/manifests/1.0.0"): (500, {}, b"")}, token_required=False)
+        with self.assertRaises(ledger.RegistryBusy):
+            ledger.Registry(always, "ghcr.io", sleep=lambda _s: None).digest("example/app", "1.0.0")
+
+    def test_version_order_ignores_the_v_prefix_and_puts_releases_after_prereleases(self):
+        tags = ["2.0.0", "v1.0.0", "2.0.0-rc.1", "1.10.0", "v1.9.0"]
+        self.assertEqual(sorted(tags, key=ledger.version_key), ["v1.0.0", "v1.9.0", "1.10.0", "2.0.0-rc.1", "2.0.0"])
+
     def test_a_registry_that_keeps_refusing_fails_the_image_and_long_waits_are_capped(self):
         fake = Fake({("HEAD", f"{REG}/manifests/1.0.0"): (429, {"retry-after": "3600"}, b"")}, token_required=False)
         waits = []
@@ -408,7 +423,7 @@ class RunTest(unittest.TestCase):
             ("GET", f"{REG}/tags/list?n=1000"): tags_route(["1.0.0", "1.1.0"]),
             ("HEAD", f"{REG}/manifests/1.0.0"): manifest(1),
             ("HEAD", f"{REG}/manifests/1.1.0"): manifest(2),
-            ("GET", "https://ghcr.io/v2/example/broken/tags/list?n=1000"): (500, {}, b""),
+            ("GET", "https://ghcr.io/v2/example/broken/tags/list?n=1000"): (404, {}, b""),
             ("GET", f"{API}/repos/example/app/releases?per_page=100&page=1"): (
                 200,
                 {},
