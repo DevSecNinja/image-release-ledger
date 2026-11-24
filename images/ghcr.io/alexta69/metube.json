@@ -800,6 +800,12 @@
       "version": "2025.11.28",
       "releaseTimestamp": "2026-11-23T19:15:42Z",
       "digest": "sha256:07d590fb3cbe6bb01a0b2a5c14107e186090008b7d704a64ada2c9952b333b3b"
+    },
+    {
+      "version": "2026.11.24",
+      "releaseTimestamp": "2026-11-24T10:05:52Z",
+      "digest": "sha256:c423654da5b9d29b02a8092713607b906d63d17fd7e0a2f52228218a0d3e2a7b",
+      "immutable": false
     }
   ]
 }
