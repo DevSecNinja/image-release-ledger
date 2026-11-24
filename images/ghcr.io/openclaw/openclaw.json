@@ -796,6 +796,12 @@
       "version": "2026.7.33",
       "releaseTimestamp": "2026-11-23T19:15:42Z",
       "digest": "sha256:9569b46c2880d68e3bb903b3183ac8f9b20fe2e7fa1e060b81d22d5fa0261465"
+    },
+    {
+      "version": "2026.11.8",
+      "releaseTimestamp": "2026-11-24T22:36:28Z",
+      "digest": "sha256:a6996b9e91074cd88d7bd5c05cdacf61b4e2b974b16cbeffcd456731ff10f760",
+      "immutable": false
     }
   ]
 }

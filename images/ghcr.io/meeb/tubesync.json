@@ -237,6 +237,12 @@
       "releaseTimestamp": "2026-11-24T10:05:52Z",
       "digest": "sha256:2a9d14e5ffd58cd9d0e5ce98950cff3aa4741d938be56f148dcddb200ba8e802",
       "immutable": false
+    },
+    {
+      "version": "v0.19.3",
+      "releaseTimestamp": "2026-11-24T22:36:28Z",
+      "digest": "sha256:3f0617e817ff992aec6e920ebe63ad18d82e17bafa4a82e38e3a37c2ed402c1b",
+      "immutable": false
     }
   ]
 }
